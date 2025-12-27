@@ -1,0 +1,229 @@
+/**
+ * TableDetector - Detects and caches table structures
+ * Performance optimized: Uses WeakMap for caching, lazy detection
+ */
+class TableDetector {
+  constructor() {
+    // Cache table structures to avoid re-parsing
+    this.tableCache = new WeakMap();
+    // Cache cell positions for quick lookup
+    this.cellPositionCache = new WeakMap();
+  }
+
+  /**
+   * Find the table element containing a cell
+   * @param {HTMLElement} cell - td or th element
+   * @returns {HTMLTableElement|null}
+   */
+  getTableFromCell(cell) {
+    return cell.closest('table');
+  }
+
+  /**
+   * Check if an element is a table cell
+   * @param {HTMLElement} element
+   * @returns {boolean}
+   */
+  isTableCell(element) {
+    if (!element) return false;
+    const tagName = element.tagName?.toUpperCase();
+    return tagName === 'TD' || tagName === 'TH';
+  }
+
+  /**
+   * Find the closest table cell from an element
+   * @param {HTMLElement} element
+   * @returns {HTMLTableCellElement|null}
+   */
+  findCell(element) {
+    if (!element) return null;
+    return element.closest('td, th');
+  }
+
+  /**
+   * Get table structure (cached)
+   * @param {HTMLTableElement} table
+   * @returns {Object} Table structure info
+   */
+  getTableStructure(table) {
+    if (this.tableCache.has(table)) {
+      return this.tableCache.get(table);
+    }
+
+    const structure = this._parseTableStructure(table);
+    this.tableCache.set(table, structure);
+    return structure;
+  }
+
+  /**
+   * Parse table structure
+   * @private
+   */
+  _parseTableStructure(table) {
+    const rows = Array.from(table.rows);
+    const structure = {
+      rows: rows.length,
+      cols: 0,
+      cells: [],
+      grid: [] // 2D grid accounting for colspan/rowspan
+    };
+
+    if (rows.length === 0) return structure;
+
+    // Calculate max columns considering colspan
+    let maxCols = 0;
+    rows.forEach(row => {
+      let colCount = 0;
+      Array.from(row.cells).forEach(cell => {
+        colCount += cell.colSpan || 1;
+      });
+      maxCols = Math.max(maxCols, colCount);
+    });
+    structure.cols = maxCols;
+
+    // Build grid accounting for colspan and rowspan
+    const grid = Array(rows.length).fill(null).map(() => Array(maxCols).fill(null));
+
+    rows.forEach((row, rowIndex) => {
+      let colIndex = 0;
+      Array.from(row.cells).forEach(cell => {
+        // Find next available column
+        while (colIndex < maxCols && grid[rowIndex][colIndex] !== null) {
+          colIndex++;
+        }
+
+        const colspan = cell.colSpan || 1;
+        const rowspan = cell.rowSpan || 1;
+
+        // Fill grid with cell reference
+        for (let r = 0; r < rowspan && rowIndex + r < rows.length; r++) {
+          for (let c = 0; c < colspan && colIndex + c < maxCols; c++) {
+            grid[rowIndex + r][colIndex + c] = {
+              cell,
+              isOrigin: r === 0 && c === 0,
+              originRow: rowIndex,
+              originCol: colIndex
+            };
+          }
+        }
+
+        // Cache cell position
+        this.cellPositionCache.set(cell, {
+          row: rowIndex,
+          col: colIndex,
+          rowspan,
+          colspan
+        });
+
+        structure.cells.push(cell);
+        colIndex += colspan;
+      });
+    });
+
+    structure.grid = grid;
+    return structure;
+  }
+
+  /**
+   * Get cell position in table
+   * @param {HTMLTableCellElement} cell
+   * @returns {Object|null} {row, col, rowspan, colspan}
+   */
+  getCellPosition(cell) {
+    if (this.cellPositionCache.has(cell)) {
+      return this.cellPositionCache.get(cell);
+    }
+
+    const table = this.getTableFromCell(cell);
+    if (!table) return null;
+
+    // This will populate the cache
+    this.getTableStructure(table);
+    return this.cellPositionCache.get(cell) || null;
+  }
+
+  /**
+   * Get all cells in a row
+   * @param {HTMLTableCellElement} cell - Any cell in the row
+   * @returns {HTMLTableCellElement[]}
+   */
+  getRowCells(cell) {
+    const table = this.getTableFromCell(cell);
+    if (!table) return [cell];
+
+    const position = this.getCellPosition(cell);
+    if (!position) return [cell];
+
+    const structure = this.getTableStructure(table);
+    const rowCells = new Set();
+
+    // Get all cells that span into this row
+    structure.grid[position.row]?.forEach(gridCell => {
+      if (gridCell && gridCell.cell) {
+        rowCells.add(gridCell.cell);
+      }
+    });
+
+    return Array.from(rowCells);
+  }
+
+  /**
+   * Get all cells in a column
+   * @param {HTMLTableCellElement} cell - Any cell in the column
+   * @returns {HTMLTableCellElement[]}
+   */
+  getColumnCells(cell) {
+    const table = this.getTableFromCell(cell);
+    if (!table) return [cell];
+
+    const position = this.getCellPosition(cell);
+    if (!position) return [cell];
+
+    const structure = this.getTableStructure(table);
+    const colCells = new Set();
+
+    // Get all cells that span into this column
+    structure.grid.forEach(row => {
+      const gridCell = row[position.col];
+      if (gridCell && gridCell.cell) {
+        colCells.add(gridCell.cell);
+      }
+    });
+
+    return Array.from(colCells);
+  }
+
+  /**
+   * Get all cells in a table
+   * @param {HTMLTableElement} table
+   * @returns {HTMLTableCellElement[]}
+   */
+  getAllCells(table) {
+    const structure = this.getTableStructure(table);
+    return structure.cells;
+  }
+
+  /**
+   * Clear cache for a specific table or all
+   * @param {HTMLTableElement} [table] - If not provided, clears all
+   */
+  clearCache(table) {
+    if (table) {
+      this.tableCache.delete(table);
+      // Can't easily clear cellPositionCache for specific table
+      // but WeakMap will handle GC
+    }
+  }
+
+  /**
+   * Find all tables in the document
+   * @returns {HTMLTableElement[]}
+   */
+  findAllTables() {
+    return Array.from(document.querySelectorAll('table'));
+  }
+}
+
+// Export for use in other modules
+window.SuperTables = window.SuperTables || {};
+window.SuperTables.TableDetector = TableDetector;

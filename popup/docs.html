@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SuperTables - Documentation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #217346 0%, #1a5c38 100%);
+      color: #fff;
+      padding: 32px 40px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .header-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .header-text h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .header-text p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .content {
+      padding: 40px;
+    }
+
+    .section {
+      margin-bottom: 36px;
+    }
+
+    .section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e8f5e9;
+    }
+
+    .section-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #217346 0%, #2e9959 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .section-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a5c38;
+    }
+
+    .shortcuts-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .shortcuts-table th,
+    .shortcuts-table td {
+      padding: 14px 18px;
+      text-align: left;
+    }
+
+    .shortcuts-table th {
+      background: #f8faf9;
+      font-weight: 600;
+      color: #555;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .shortcuts-table td {
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+    }
+
+    .shortcuts-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .shortcuts-table tr:hover td {
+      background: #f8faf9;
+    }
+
+    .shortcuts-table .action-name {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .key-combo {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .kbd {
+      background: linear-gradient(180deg, #217346 0%, #1a5c38 100%);
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', 'Monaco', monospace;
+      box-shadow: 0 2px 4px rgba(33, 115, 70, 0.3);
+    }
+
+    .kbd.secondary {
+      background: linear-gradient(180deg, #666 0%, #555 100%);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .plus {
+      color: #999;
+      font-weight: 500;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: #f8faf9;
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid #217346;
+    }
+
+    .feature-card h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #217346;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feature-card h4 svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .feature-card p {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .feature-card .kbd {
+      font-size: 11px;
+      padding: 3px 7px;
+    }
+
+    .stats-preview {
+      background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    .stat-item.clickable {
+      cursor: pointer;
+      padding: 8px 12px;
+      margin: -8px -12px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    .stat-item.clickable:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .stats-desc {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 16px;
+      line-height: 1.7;
+    }
+
+    .stats-desc strong {
+      color: #217346;
+    }
+
+    .stats-note {
+      font-size: 13px;
+      color: #888;
+      margin-top: 12px;
+    }
+
+    .stats-modes {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .stats-mode-card {
+      background: #f8faf9;
+      border-radius: 10px;
+      padding: 16px 20px;
+      border-left: 4px solid #217346;
+    }
+
+    .stats-mode-card.text-mode {
+      border-left-color: #2196f3;
+    }
+
+    .stats-mode-card h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #217346;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stats-mode-card.text-mode h4 {
+      color: #1976d2;
+    }
+
+    .stats-mode-card h4 svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .stats-mode-card p {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .stats-previews {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .stats-preview-label {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stats-preview.text-mode {
+      background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+    }
+
+    .text-stat-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+    }
+
+    .text-stat-rank {
+      font-size: 12px;
+      color: #90caf9;
+      font-weight: 600;
+      min-width: 28px;
+    }
+
+    .text-stat-text {
+      font-size: 14px;
+      color: #fff;
+      flex: 1;
+    }
+
+    .text-stat-count {
+      font-size: 13px;
+      color: #90caf9;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    .stats-toggle-info {
+      font-size: 13px;
+      color: #666;
+      margin-top: 12px;
+      padding: 12px 16px;
+      background: #f5f5f5;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stats-toggle-info svg {
+      width: 18px;
+      height: 18px;
+      fill: #217346;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 600px) {
+      .stats-modes {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .practice-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .practice-item {
+      background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+      border-radius: 12px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .practice-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 5px;
+      background: linear-gradient(180deg, #217346 0%, #4caf50 100%);
+    }
+
+    .practice-number {
+      position: absolute;
+      right: 20px;
+      top: 16px;
+      font-size: 48px;
+      font-weight: 700;
+      color: rgba(33, 115, 70, 0.1);
+      line-height: 1;
+    }
+
+    .practice-item h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a5c38;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .practice-item h4 .emoji {
+      font-size: 20px;
+    }
+
+    .practice-item > p {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.7;
+      position: relative;
+    }
+
+    .practice-item .steps {
+      margin-top: 12px;
+      padding-left: 20px;
+    }
+
+    .practice-item .steps li {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 6px;
+      line-height: 1.6;
+    }
+
+    .practice-item .steps li strong {
+      color: #217346;
+    }
+
+    .highlight-box {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .highlight-box svg {
+      width: 20px;
+      height: 20px;
+      fill: #856404;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .highlight-box p {
+      font-size: 13px;
+      color: #856404;
+      line-height: 1.6;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 24px 40px;
+      border-top: 1px solid #eee;
+      color: #888;
+      font-size: 13px;
+    }
+
+    .footer a {
+      color: #217346;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer .kbd {
+      font-size: 10px;
+      padding: 2px 6px;
+    }
+
+    @media (max-width: 600px) {
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header {
+        padding: 24px;
+      }
+
+      .content {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-logo">
+        <img src="../icons/icon128.png" alt="SuperTables">
+      </div>
+      <div class="header-text">
+        <h1 id="doc-title">SuperTables Documentation</h1>
+        <p id="doc-subtitle">Select table cells like Excel</p>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/></svg>
+          </div>
+          <h2 class="section-title" id="section-shortcuts">Keyboard Shortcuts</h2>
+        </div>
+        <table class="shortcuts-table">
+          <thead>
+            <tr>
+              <th id="th-action">Action</th>
+              <th id="th-shortcut">Shortcut</th>
+              <th id="th-desc">Description</th>
+            </tr>
+          </thead>
+          <tbody id="shortcuts-body"></tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 5h2V3c-1.1 0-2 .9-2 2zm0 8h2v-2H3v2zm4 8h2v-2H7v2zM3 9h2V7H3v2zm10-6h-2v2h2V3zm6 0v2h2c0-1.1-.9-2-2-2zM5 21v-2H3c0 1.1.9 2 2 2zm-2-4h2v-2H3v2zM9 3H7v2h2V3zm2 18h2v-2h-2v2zm8-8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2zm0-12h2V7h-2v2zm0 8h2v-2h-2v2zm-4 4h2v-2h-2v2zm0-16h2V3h-2v2z"/></svg>
+          </div>
+          <h2 class="section-title" id="section-multiselect">Multi-Select & Range Selection</h2>
+        </div>
+        <div class="feature-grid" id="feature-grid"></div>
+        <div class="highlight-box">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          <p id="highlight-tip"></p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+          </div>
+          <h2 class="section-title" id="section-stats">Statistics Panel</h2>
+        </div>
+        <p class="stats-desc" id="stats-desc"></p>
+        <div class="stats-modes" id="stats-modes"></div>
+        <div class="stats-previews">
+          <div>
+            <div class="stats-preview-label" id="stats-preview-label-numeric"></div>
+            <div class="stats-preview" id="stats-preview"></div>
+          </div>
+          <div>
+            <div class="stats-preview-label" id="stats-preview-label-text"></div>
+            <div class="stats-preview text-mode" id="stats-preview-text"></div>
+          </div>
+        </div>
+        <div class="stats-toggle-info" id="stats-toggle-info">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          <span id="stats-toggle-text"></span>
+        </div>
+        <p class="stats-note" id="stats-note"></p>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          </div>
+          <h2 class="section-title" id="section-practices">Best Practices</h2>
+        </div>
+        <div class="practice-list" id="practice-list"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>SuperTables v1.0.0 by <a href="#">wangxin</a> · <span id="footer-tip"></span> <span class="kbd">Esc</span></p>
+    </div>
+  </div>
+
+  <script src="docs.js"></script>
+</body>
+</html>

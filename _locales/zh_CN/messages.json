@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "SuperTables",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "像Excel一样选择网页表格 - 选择、复制、分析任意网页上的表格数据",
+    "description": "Extension description"
+  }
+}
