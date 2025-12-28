@@ -1,10 +1,18 @@
-# SuperTables
+<p align="center">
+  <img src="icons/logo.png" alt="SuperTables Logo" width="128" height="128">
+</p>
 
-[![Chrome Web Store](https://img.shields.io/badge/Chrome-拡張機能-green)](https://github.com/wxkingstar/SuperTables)
-[![Version](https://img.shields.io/badge/バージョン-1.0.0-blue)](https://github.com/wxkingstar/SuperTables)
-[![License](https://img.shields.io/badge/ライセンス-MIT-green)](LICENSE)
+<h1 align="center">SuperTables</h1>
 
-**言語 / Language / 语言**: [English](README.md) | [简体中文](README_zh-CN.md) | 日本語
+<p align="center">
+  <a href="https://github.com/wxkingstar/SuperTables"><img src="https://img.shields.io/badge/Chrome-拡張機能-green" alt="Chrome Web Store"></a>
+  <a href="https://github.com/wxkingstar/SuperTables"><img src="https://img.shields.io/badge/バージョン-1.0.0-blue" alt="Version"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/ライセンス-MIT-green" alt="License"></a>
+</p>
+
+<p align="center">
+  <b>言語 / Language / 语言</b>: <a href="README.md">English</a> | <a href="README_zh-CN.md">简体中文</a> | 日本語
+</p>
 
 ---
 
