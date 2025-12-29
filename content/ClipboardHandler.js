@@ -3,8 +3,48 @@
  * Supports both plain text (TSV) and HTML formats
  */
 class ClipboardHandler {
+  // Translations for toast messages
+  static messages = {
+    en: { copied: 'Copied' },
+    zh: { copied: '已复制' },
+    ja: { copied: 'コピーしました' }
+  };
+
   constructor(selectionManager) {
     this.selectionManager = selectionManager;
+    this.locale = this._detectLanguage();
+  }
+
+  /**
+   * Detect system language
+   * @returns {string} Language code (en, zh, ja)
+   * @private
+   */
+  _detectLanguage() {
+    const lang = navigator.language || navigator.userLanguage || 'en';
+    const shortLang = lang.split('-')[0].toLowerCase();
+
+    if (ClipboardHandler.messages[shortLang]) {
+      return shortLang;
+    }
+
+    // Map zh-TW, zh-HK to zh
+    if (lang.startsWith('zh')) {
+      return 'zh';
+    }
+
+    return 'en';
+  }
+
+  /**
+   * Get translation
+   * @param {string} key
+   * @returns {string}
+   * @private
+   */
+  _t(key) {
+    const messages = ClipboardHandler.messages[this.locale] || ClipboardHandler.messages.en;
+    return messages[key] || ClipboardHandler.messages.en[key] || key;
   }
 
   /**
@@ -138,6 +178,62 @@ class ClipboardHandler {
         }, 150);
       }, 150);
     });
+
+    // Show toast notification in center of page
+    this._showToast(this._t('copied'));
+  }
+
+  /**
+   * Show a toast notification in the center of the page
+   * @param {string} message - The message to display
+   * @private
+   */
+  _showToast(message) {
+    // Remove existing toast if any
+    const existingToast = document.getElementById('supertables-toast');
+    if (existingToast) {
+      existingToast.remove();
+    }
+
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.id = 'supertables-toast';
+    toast.textContent = message;
+
+    // Apply styles
+    Object.assign(toast.style, {
+      position: 'fixed',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      backgroundColor: 'rgba(33, 115, 70, 0.85)',
+      color: 'white',
+      padding: '12px 24px',
+      borderRadius: '8px',
+      fontSize: '16px',
+      fontWeight: '500',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+      zIndex: '2147483647',
+      opacity: '0',
+      transition: 'opacity 0.2s ease-in-out',
+      pointerEvents: 'none'
+    });
+
+    document.body.appendChild(toast);
+
+    // Trigger fade in
+    requestAnimationFrame(() => {
+      toast.style.opacity = '1';
+    });
+
+    // Fade out and remove after delay
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => {
+        toast.remove();
+      }, 200);
+    }, 1000);
   }
 }
 
