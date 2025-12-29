@@ -260,9 +260,12 @@ class SettingsManager {
       const modifiers = shortcut.modifiers || [];
       const needsCmd = modifiers.includes('cmd');
       const needsAlt = modifiers.includes('alt');
+      // Note: Shift is ignored here because it's used for range selection,
+      // not for determining the selection mode
       const needsShift = modifiers.includes('shift');
 
-      if (needsCmd === state.cmd && needsAlt === state.alt && needsShift === state.shift) {
+      // Match cmd and alt, but ignore shift state (shift is for range selection)
+      if (needsCmd === state.cmd && needsAlt === state.alt && (!needsShift || needsShift === state.shift)) {
         return mode.result;
       }
     }

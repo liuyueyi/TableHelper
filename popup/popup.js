@@ -215,10 +215,19 @@
       e.preventDefault();
       e.stopPropagation();
 
+      // Check if shift is pressed - it's reserved for range selection
+      if (e.shiftKey) {
+        input.value = i18n.t('shiftReserved');
+        input.classList.add('error');
+        recordedModifiers = [];
+        return;
+      }
+
+      input.classList.remove('error');
+
       const modifiers = [];
       if (isMac ? e.metaKey : e.ctrlKey) modifiers.push('cmd');
       if (e.altKey) modifiers.push('alt');
-      if (e.shiftKey) modifiers.push('shift');
 
       if (modifiers.length === 0) {
         input.value = i18n.t('pressModifier');
@@ -304,7 +313,7 @@
   function cancelEditingShortcut(item) {
     item.classList.remove('editing');
     const input = item.querySelector('.shortcut-input');
-    input.classList.remove('recording');
+    input.classList.remove('recording', 'error');
 
     // Remove event listeners
     if (input._keyHandler) {

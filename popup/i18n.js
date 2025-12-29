@@ -55,6 +55,7 @@ const i18n = {
       shortcutSaved: 'Shortcut saved',
       pressModifier: 'Press modifier keys...',
       invalidShortcut: 'Invalid shortcut',
+      shiftReserved: 'Shift is reserved for range selection',
 
       // Documentation
       usageDoc: 'Usage Guide',
@@ -111,6 +112,7 @@ const i18n = {
       shortcutSaved: '快捷键已保存',
       pressModifier: '请按修饰键...',
       invalidShortcut: '无效的快捷键',
+      shiftReserved: 'Shift 键已被用于连续选择，不可设置',
 
       // Documentation
       usageDoc: '使用文档',
@@ -167,6 +169,7 @@ const i18n = {
       shortcutSaved: 'ショートカットを保存しました',
       pressModifier: '修飾キーを押してください...',
       invalidShortcut: '無効なショートカット',
+      shiftReserved: 'Shiftキーは範囲選択に予約されています',
 
       // Documentation
       usageDoc: '使用ガイド',

@@ -912,6 +912,39 @@
   };
 
   /**
+   * Handle table structure changes (AJAX updates)
+   * Clean up stale selections when table content changes
+   */
+  tableDetector.onTableChange = (table) => {
+    // Check if we have selections in this table
+    if (selectionManager.selectedTable === table) {
+      // Get current selection and filter out cells no longer in DOM
+      const currentCells = selectionManager.getSelectedCells();
+      const validCells = currentCells.filter(cell => document.body.contains(cell));
+
+      if (validCells.length !== currentCells.length) {
+        // Some cells were removed, clear and reselect valid ones
+        selectionManager.clearSelection(false);
+        validCells.forEach(cell => {
+          selectionManager._addCell(cell);
+        });
+        selectionManager._notifyChange();
+      }
+
+      // Reset anchor if it's no longer valid
+      if (anchorCell && !document.body.contains(anchorCell)) {
+        anchorCell = validCells.length > 0 ? validCells[0] : null;
+      }
+    }
+
+    // Clear hover preview as the structure changed
+    clearHoverPreview();
+    if (hoveredCell && !document.body.contains(hoveredCell)) {
+      hoveredCell = null;
+    }
+  };
+
+  /**
    * Excel download callback
    */
   statsPanel.onDownloadClick = () => {

@@ -8,6 +8,94 @@ class TableDetector {
     this.tableCache = new WeakMap();
     // Cache cell positions for quick lookup
     this.cellPositionCache = new WeakMap();
+    // Track observed tables for MutationObserver
+    this.observedTables = new WeakMap();
+    // Callback when table structure changes
+    this.onTableChange = null;
+  }
+
+  /**
+   * Start observing a table for DOM changes
+   * @param {HTMLTableElement} table
+   */
+  _observeTable(table) {
+    if (this.observedTables.has(table)) return;
+
+    // Tags that represent table structure
+    const structuralTags = new Set(['TR', 'TD', 'TH', 'TBODY', 'THEAD', 'TFOOT', 'COLGROUP', 'COL']);
+
+    const observer = new MutationObserver((mutations) => {
+      // Check if structure actually changed (not just text content or other DOM changes)
+      let structureChanged = false;
+
+      for (const mutation of mutations) {
+        if (mutation.type === 'childList') {
+          // Only care about structural elements being added/removed
+          const checkNodes = (nodes) => {
+            for (const node of nodes) {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                const tagName = node.tagName?.toUpperCase();
+                if (structuralTags.has(tagName)) {
+                  return true;
+                }
+                // Also check if the node contains structural elements
+                if (node.querySelector && node.querySelector('tr, td, th, tbody, thead, tfoot')) {
+                  return true;
+                }
+              }
+            }
+            return false;
+          };
+
+          if (checkNodes(mutation.addedNodes) || checkNodes(mutation.removedNodes)) {
+            structureChanged = true;
+            break;
+          }
+        } else if (mutation.type === 'attributes') {
+          // colspan/rowspan changed on a cell
+          const attr = mutation.attributeName;
+          if (attr === 'colspan' || attr === 'rowspan') {
+            structureChanged = true;
+            break;
+          }
+        }
+      }
+
+      if (structureChanged) {
+        this._invalidateTableCache(table);
+      }
+    });
+
+    observer.observe(table, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['colspan', 'rowspan']
+    });
+
+    this.observedTables.set(table, observer);
+  }
+
+  /**
+   * Invalidate cache for a specific table
+   * @param {HTMLTableElement} table
+   */
+  _invalidateTableCache(table) {
+    // Get old structure to clear cell position cache
+    const oldStructure = this.tableCache.get(table);
+    if (oldStructure && oldStructure.cells) {
+      oldStructure.cells.forEach(cell => {
+        this.cellPositionCache.delete(cell);
+      });
+    }
+
+    // Clear table cache
+    this.tableCache.delete(table);
+
+    // Notify listeners
+    if (this.onTableChange) {
+      this.onTableChange(table);
+    }
   }
 
   /**
@@ -52,6 +140,10 @@ class TableDetector {
 
     const structure = this._parseTableStructure(table);
     this.tableCache.set(table, structure);
+
+    // Start observing this table for changes
+    this._observeTable(table);
+
     return structure;
   }
 
