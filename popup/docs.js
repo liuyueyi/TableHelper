@@ -42,7 +42,9 @@
     '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L11 13.17l6.59-6.59L19 8l-9 9z"/></svg>',
     '<svg viewBox="0 0 24 24"><path d="M10 10.02h5V21h-5zM17 21h3c1.1 0 2-.9 2-2v-9h-5v11zm3-18H5c-1.1 0-2 .9-2 2v3h19V5c0-1.1-.9-2-2-2zM3 19c0 1.1.9 2 2 2h3V10H3v9z"/></svg>',
     '<svg viewBox="0 0 24 24"><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm16 14H5v-3h14v3zm0-5H5v-3h14v3zm0-5H5V5h14v4z"/></svg>',
-    '<svg viewBox="0 0 24 24"><path d="M7 5h2V3H7v2zm0 8h2v-2H7v2zm0 8h2v-2H7v2zm4-4h2v-2h-2v2zm0 4h2v-2h-2v2zm-8 0h2v-2H3v2zm0-4h2v-2H3v2zm0-4h2v-2H3v2zm0-4h2V7H3v2zm0-4h2V3H3v2zm8 8h2v-2h-2v2zm8 4h2v-2h-2v2zm0-4h2v-2h-2v2zm0 8h2v-2h-2v2zm0-12h2V7h-2v2zm-8 0h2V7h-2v2zm8-6v2h2V3h-2zm-8 2h2V3h-2v2zm4 16h2v-2h-2v2zm0-8h2v-2h-2v2zm0-8h2V3h-2v2z"/></svg>'
+    '<svg viewBox="0 0 24 24"><path d="M7 5h2V3H7v2zm0 8h2v-2H7v2zm0 8h2v-2H7v2zm4-4h2v-2h-2v2zm0 4h2v-2h-2v2zm-8 0h2v-2H3v2zm0-4h2v-2H3v2zm0-4h2v-2H3v2zm0-4h2V7H3v2zm0-4h2V3H3v2zm8 8h2v-2h-2v2zm8 4h2v-2h-2v2zm0-4h2v-2h-2v2zm0 8h2v-2h-2v2zm0-12h2V7h-2v2zm-8 0h2V7h-2v2zm8-6v2h2V3h-2zm-8 2h2V3h-2v2zm4 16h2v-2h-2v2zm0-8h2v-2h-2v2zm0-8h2V3h-2v2z"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3h-6zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3v6zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6h6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6v-6z"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>'
   ];
 
   // Build kbd HTML
@@ -82,13 +84,16 @@
           { action: 'Select Row', keys: [[modKey], ['Alt'], [click_en, true]], desc: 'Select an entire row' },
           { action: 'Select Table', keys: [[modKey], ['"Select All"', true]], desc: 'Hold and click the button at top-right' },
           { action: 'Copy Selection', keys: [[modKey], ['C']], desc: 'Copy to clipboard, paste into Excel' },
+          { action: 'Extend Selection', keys: [[modKey], ['Shift'], ['↑↓←→', true]], desc: 'Extend selection to column/row edge' },
           { action: 'Clear Selection', keys: [['Esc']], desc: 'Clear all selections' }
         ],
         features: [
           { title: 'Multi-select Cells', desc: 'Hold ' + kbd(modKey) + ' and click different cells to select multiple cells' },
           { title: 'Multi-select Columns', desc: 'Hold ' + kbd('Alt') + ' and click different columns to select multiple columns' },
           { title: 'Multi-select Rows', desc: 'Hold ' + kbd(modKey) + kbd('Alt') + ' and click different rows' },
-          { title: 'Range Selection', desc: 'Click start cell, then hold ' + kbd('Shift') + ' and click end cell to select a rectangle' }
+          { title: 'Range Selection', desc: 'Click start cell, then hold ' + kbd('Shift') + ' and click end cell to select a rectangle' },
+          { title: 'Extend Selection', desc: 'Use ' + kbd(modKey) + kbd('Shift') + kbd('↑↓←→') + ' to extend selection to column/row edge' },
+          { title: 'Copy with Placeholders', desc: 'Enable "Keep Empty Placeholders" in settings to preserve gaps when copying non-contiguous cells' }
         ],
         stats: [
           { label: 'Numeric', value: '10' },
@@ -146,6 +151,17 @@
               'Multiple rows are highlighted, stats show aggregate data',
               'Quickly compare different products or time periods'
             ]
+          },
+          {
+            emoji: '⚡',
+            title: 'Quick Extend Selection',
+            desc: 'When you need to quickly select from current cell to row/column edge:',
+            steps: [
+              'First select a starting cell',
+              'Press <strong>' + modKey + ' + Shift + ↓</strong> to extend to column bottom',
+              'Or press <strong>' + modKey + ' + Shift + →</strong> to extend to row end',
+              'Great for selecting entire columns or rows from any starting point'
+            ]
           }
         ]
       },
@@ -174,13 +190,16 @@
           { action: '选择行', keys: [[modKey], ['Alt'], [click_zh, true]], desc: '选中整行数据' },
           { action: '选择整表', keys: [[modKey], ['「全选」按钮', true]], desc: '按住后点击表格右上角按钮' },
           { action: '复制选中', keys: [[modKey], ['C']], desc: '复制到剪贴板，可粘贴到 Excel' },
+          { action: '扩展选择', keys: [[modKey], ['Shift'], ['↑↓←→', true]], desc: '扩展选择到列/行边缘' },
           { action: '取消选择', keys: [['Esc']], desc: '清除所有选中状态' }
         ],
         features: [
           { title: '多选单元格', desc: '按住 ' + kbd(modKey) + ' 连续点击不同单元格，可同时选中多个单元格' },
           { title: '多选列', desc: '按住 ' + kbd('Alt') + ' 连续点击不同列，可同时选中多列数据' },
           { title: '多选行', desc: '按住 ' + kbd(modKey) + kbd('Alt') + ' 连续点击不同行' },
-          { title: '范围选择', desc: '先点击起始单元格，再按住 ' + kbd('Shift') + ' 点击结束单元格，选中矩形区域' }
+          { title: '范围选择', desc: '先点击起始单元格，再按住 ' + kbd('Shift') + ' 点击结束单元格，选中矩形区域' },
+          { title: '扩展选择', desc: '使用 ' + kbd(modKey) + kbd('Shift') + kbd('↑↓←→') + ' 快速扩展选择到列/行边缘' },
+          { title: '保留空占位符', desc: '在设置中启用「保留空占位符」，复制非连续单元格时保持间隔位置' }
         ],
         stats: [
           { label: '数值', value: '10' },
@@ -238,6 +257,17 @@
               '多行同时高亮，统计面板显示这些行的汇总数据',
               '快速对比不同产品、不同时期的数据'
             ]
+          },
+          {
+            emoji: '⚡',
+            title: '快速扩展选择',
+            desc: '需要从当前单元格快速选择到行/列边缘时：',
+            steps: [
+              '先选中一个起始单元格',
+              '按 <strong>' + modKey + ' + Shift + ↓</strong> 扩展选择到列底部',
+              '或按 <strong>' + modKey + ' + Shift + →</strong> 扩展选择到行末尾',
+              '从任意起点快速选中整列或整行数据'
+            ]
           }
         ]
       },
@@ -266,13 +296,16 @@
           { action: '行選択', keys: [[modKey], ['Alt'], [click_ja, true]], desc: '行全体を選択' },
           { action: 'テーブル全選択', keys: [[modKey], ['「全選択」', true]], desc: '押しながら右上のボタンをクリック' },
           { action: 'コピー', keys: [[modKey], ['C']], desc: 'クリップボードにコピー、Excelに貼り付け可能' },
+          { action: '選択拡張', keys: [[modKey], ['Shift'], ['↑↓←→', true]], desc: '列/行の端まで選択を拡張' },
           { action: '選択解除', keys: [['Esc']], desc: 'すべての選択を解除' }
         ],
         features: [
           { title: '複数セル選択', desc: kbd(modKey) + ' を押しながら異なるセルをクリックして、複数のセルを選択' },
           { title: '複数列選択', desc: kbd('Alt') + ' を押しながら異なる列をクリックして、複数の列を選択' },
           { title: '複数行選択', desc: kbd(modKey) + kbd('Alt') + ' を押しながら異なる行をクリック' },
-          { title: '範囲選択', desc: '開始セルをクリックし、' + kbd('Shift') + ' を押しながら終了セルをクリックで矩形範囲を選択' }
+          { title: '範囲選択', desc: '開始セルをクリックし、' + kbd('Shift') + ' を押しながら終了セルをクリックで矩形範囲を選択' },
+          { title: '選択拡張', desc: kbd(modKey) + kbd('Shift') + kbd('↑↓←→') + ' で列/行の端まで選択を素早く拡張' },
+          { title: '空プレースホルダー保持', desc: '設定で「空プレースホルダーを保持」を有効にすると、非連続セルをコピーする際にギャップを維持' }
         ],
         stats: [
           { label: '数値', value: '10' },
@@ -329,6 +362,17 @@
               '<strong>' + modKey + ' + Alt</strong> を押し続けて他の行をクリック',
               '複数行が同時にハイライト、統計パネルに集計データを表示',
               '異なる製品や期間のデータをすばやく比較'
+            ]
+          },
+          {
+            emoji: '⚡',
+            title: 'クイック選択拡張',
+            desc: '現在のセルから行/列の端まで素早く選択する場合：',
+            steps: [
+              'まず開始セルを選択',
+              '<strong>' + modKey + ' + Shift + ↓</strong> で列の下端まで拡張',
+              'または <strong>' + modKey + ' + Shift + →</strong> で行の右端まで拡張',
+              '任意の開始点から列全体または行全体を素早く選択'
             ]
           }
         ]
