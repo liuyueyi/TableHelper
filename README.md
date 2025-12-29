@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/wxkingstar/SuperTables"><img src="https://img.shields.io/badge/Chrome-Extension-green" alt="Chrome Web Store"></a>
-  <a href="https://github.com/wxkingstar/SuperTables"><img src="https://img.shields.io/badge/version-1.0.0-blue" alt="Version"></a>
+  <a href="https://github.com/wxkingstar/SuperTables"><img src="https://img.shields.io/badge/version-1.1.0-blue" alt="Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License"></a>
 </p>
 
@@ -25,6 +25,7 @@ Select table cells like Excel - select, copy, and analyze table data on any webp
 - **Row Selection**: `Cmd/Ctrl + Alt + Click` - Select entire row
 - **Column Selection**: `Alt + Click` - Select entire column
 - **Range Selection**: `Shift + Click` - Select range from anchor cell
+- **Extend Selection**: `Cmd/Ctrl + Shift + Arrow` - Extend selection to column/row edge
 - **Select All**: Click the "Select All" button that appears when hovering over a table
 
 ### Statistics Panel
@@ -36,6 +37,11 @@ Real-time statistics displayed at the bottom of the page:
 ### Export & Copy
 - `Cmd/Ctrl + C` - Copy selected cells to clipboard
 - Download as Excel file when entire table is selected
+- Multi-language toast notifications (English, Chinese, Japanese)
+
+### Smart Features
+- **Keep Empty Placeholders**: Preserve gaps when copying non-contiguous cells
+- **Auto-cleanup**: Automatically clears invalid selections when table structure changes
 
 ### Customizable Settings
 - Keyboard shortcuts
@@ -68,6 +74,7 @@ Real-time statistics displayed at the bottom of the page:
 | Select Row | `Cmd/Ctrl` + `Alt` + Click |
 | Select Column | `Alt` + Click |
 | Range Select | `Shift` + Click |
+| Extend Selection | `Cmd/Ctrl` + `Shift` + `↑↓←→` |
 | Copy Selection | `Cmd/Ctrl` + `C` |
 | Clear Selection | `Esc` |
 

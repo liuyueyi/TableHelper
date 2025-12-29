@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/wxkingstar/SuperTables"><img src="https://img.shields.io/badge/Chrome-拡張機能-green" alt="Chrome Web Store"></a>
-  <a href="https://github.com/wxkingstar/SuperTables"><img src="https://img.shields.io/badge/バージョン-1.0.0-blue" alt="Version"></a>
+  <a href="https://github.com/wxkingstar/SuperTables"><img src="https://img.shields.io/badge/バージョン-1.1.0-blue" alt="Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/ライセンス-MIT-green" alt="License"></a>
 </p>
 
@@ -25,6 +25,7 @@ Excel のようにテーブルセルを選択 - 任意のウェブページで�
 - **行選択**: `Cmd/Ctrl + Alt + クリック` - 行全体を選択
 - **列選択**: `Alt + クリック` - 列全体を選択
 - **範囲選択**: `Shift + クリック` - アンカーセルから範囲を選択
+- **選択拡張**: `Cmd/Ctrl + Shift + 矢印キー` - 列/行の端まで選択を拡張
 - **全選択**: テーブルにホバーすると表示される「全選択」ボタンをクリック
 
 ### 統計パネル
@@ -36,6 +37,11 @@ Excel のようにテーブルセルを選択 - 任意のウェブページで�
 ### エクスポートとコピー
 - `Cmd/Ctrl + C` - 選択したセルをクリップボードにコピー
 - テーブル全体を選択すると Excel ファイルとしてダウンロード可能
+- 多言語トースト通知（英語、中国語、日本語）
+
+### スマート機能
+- **空プレースホルダー保持**: 非連続セルをコピーする際にギャップを維持
+- **自動クリーンアップ**: テーブル構造が変更されると無効な選択を自動的にクリア
 
 ### カスタマイズ設定
 - キーボードショートカット
@@ -68,6 +74,7 @@ Excel のようにテーブルセルを選択 - 任意のウェブページで�
 | 行選択 | `Cmd/Ctrl` + `Alt` + クリック |
 | 列選択 | `Alt` + クリック |
 | 範囲選択 | `Shift` + クリック |
+| 選択拡張 | `Cmd/Ctrl` + `Shift` + `↑↓←→` |
 | 選択内容をコピー | `Cmd/Ctrl` + `C` |
 | 選択解除 | `Esc` |
 

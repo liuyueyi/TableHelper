@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/wxkingstar/SuperTables"><img src="https://img.shields.io/badge/Chrome-扩展程序-green" alt="Chrome Web Store"></a>
-  <a href="https://github.com/wxkingstar/SuperTables"><img src="https://img.shields.io/badge/版本-1.0.0-blue" alt="Version"></a>
+  <a href="https://github.com/wxkingstar/SuperTables"><img src="https://img.shields.io/badge/版本-1.1.0-blue" alt="Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/许可证-MIT-green" alt="License"></a>
 </p>
 
@@ -25,6 +25,7 @@
 - **选择整行**: `Cmd/Ctrl + Alt + 点击` - 选择整行
 - **选择整列**: `Alt + 点击` - 选择整列
 - **范围选择**: `Shift + 点击` - 从锚点单元格选择范围
+- **扩展选择**: `Cmd/Ctrl + Shift + 方向键` - 扩展选择到列/行边缘
 - **全选表格**: 悬停在表格上时点击出现的"全选"按钮
 
 ### 统计面板
@@ -36,6 +37,11 @@
 ### 导出与复制
 - `Cmd/Ctrl + C` - 复制选中单元格到剪贴板
 - 选中整个表格时可下载为 Excel 文件
+- 多语言提示通知（英文、中文、日文）
+
+### 智能功能
+- **保留空占位符**: 复制非连续单元格时保持间隔位置
+- **自动清理**: 表格结构变化时自动清理无效选择
 
 ### 自定义设置
 - 键盘快捷键
@@ -68,6 +74,7 @@
 | 选择整行 | `Cmd/Ctrl` + `Alt` + 点击 |
 | 选择整列 | `Alt` + 点击 |
 | 范围选择 | `Shift` + 点击 |
+| 扩展选择 | `Cmd/Ctrl` + `Shift` + `↑↓←→` |
 | 复制选中内容 | `Cmd/Ctrl` + `C` |
 | 清除选择 | `Esc` |
 
