@@ -523,6 +523,42 @@
       // If there's native text selection, let the browser handle Cmd+C normally
     }
 
+    // Handle Cmd+Shift+Down - Extend selection to bottom of column
+    if (isCmdPressed(e) && e.shiftKey && e.key === 'ArrowDown') {
+      const startCell = anchorCell || selectionManager.lastSelectedCell;
+      if (startCell) {
+        e.preventDefault();
+        extendSelectionToColumnEnd(startCell);
+      }
+    }
+
+    // Handle Cmd+Shift+Up - Extend selection to top of column
+    if (isCmdPressed(e) && e.shiftKey && e.key === 'ArrowUp') {
+      const startCell = anchorCell || selectionManager.lastSelectedCell;
+      if (startCell) {
+        e.preventDefault();
+        extendSelectionToColumnStart(startCell);
+      }
+    }
+
+    // Handle Cmd+Shift+Right - Extend selection to end of row
+    if (isCmdPressed(e) && e.shiftKey && e.key === 'ArrowRight') {
+      const startCell = anchorCell || selectionManager.lastSelectedCell;
+      if (startCell) {
+        e.preventDefault();
+        extendSelectionToRowEnd(startCell);
+      }
+    }
+
+    // Handle Cmd+Shift+Left - Extend selection to start of row
+    if (isCmdPressed(e) && e.shiftKey && e.key === 'ArrowLeft') {
+      const startCell = anchorCell || selectionManager.lastSelectedCell;
+      if (startCell) {
+        e.preventDefault();
+        extendSelectionToRowStart(startCell);
+      }
+    }
+
     // Handle Escape to clear selection
     if (e.key === 'Escape') {
       selectionManager.clearSelection();
@@ -530,6 +566,318 @@
       hideSelectAllButton();
       anchorCell = null;
     }
+  }
+
+  /**
+   * Get the current selection bounds
+   * @returns {Object|null} {table, minRow, maxRow, minCol, maxCol, structure}
+   */
+  function getSelectionBounds() {
+    const cells = selectionManager.getSelectedCells();
+    if (cells.length === 0) return null;
+
+    const table = tableDetector.getTableFromCell(cells[0]);
+    if (!table) return null;
+
+    const structure = tableDetector.getTableStructure(table);
+    let minRow = Infinity, maxRow = -Infinity;
+    let minCol = Infinity, maxCol = -Infinity;
+
+    cells.forEach(cell => {
+      const pos = tableDetector.getCellPosition(cell);
+      if (pos) {
+        minRow = Math.min(minRow, pos.row);
+        maxRow = Math.max(maxRow, pos.row);
+        minCol = Math.min(minCol, pos.col);
+        maxCol = Math.max(maxCol, pos.col);
+      }
+    });
+
+    return { table, structure, minRow, maxRow, minCol, maxCol };
+  }
+
+  /**
+   * Select a rectangular range and scroll to target cell
+   */
+  function selectRangeAndScroll(structure, minRow, maxRow, minCol, maxCol, scrollToCell) {
+    selectionManager.clearSelection(false);
+
+    for (let r = minRow; r <= maxRow; r++) {
+      for (let c = minCol; c <= maxCol; c++) {
+        const gridCell = structure.grid[r]?.[c];
+        if (gridCell && gridCell.cell) {
+          selectionManager._addCell(gridCell.cell);
+        }
+      }
+    }
+
+    selectionManager._notifyChange();
+
+    if (scrollToCell) {
+      scrollToCell.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+    }
+  }
+
+  /**
+   * Extend selection to the bottom of the column
+   */
+  function extendSelectionToColumnEnd(startCell) {
+    const bounds = getSelectionBounds();
+    if (!bounds) {
+      // No selection, use startCell
+      const table = tableDetector.getTableFromCell(startCell);
+      if (!table) return;
+      const pos = tableDetector.getCellPosition(startCell);
+      if (!pos) return;
+      const structure = tableDetector.getTableStructure(table);
+
+      // Find the last row
+      let lastRow = pos.row;
+      for (let r = structure.grid.length - 1; r >= pos.row; r--) {
+        if (structure.grid[r]?.[pos.col]?.cell) {
+          lastRow = r;
+          break;
+        }
+      }
+
+      const endCell = structure.grid[lastRow]?.[pos.col]?.cell;
+      selectionManager.selectRange(startCell, endCell, false);
+      anchorCell = startCell;
+      if (endCell) endCell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    const { structure, minRow, minCol, maxCol } = bounds;
+
+    // Find the last row for current column range
+    let newMaxRow = bounds.maxRow;
+    for (let r = structure.grid.length - 1; r >= bounds.maxRow; r--) {
+      let hasCell = false;
+      for (let c = minCol; c <= maxCol; c++) {
+        if (structure.grid[r]?.[c]?.cell) {
+          hasCell = true;
+          break;
+        }
+      }
+      if (hasCell) {
+        newMaxRow = r;
+        break;
+      }
+    }
+
+    const scrollCell = structure.grid[newMaxRow]?.[maxCol]?.cell;
+    selectRangeAndScroll(structure, minRow, newMaxRow, minCol, maxCol, scrollCell);
+  }
+
+  /**
+   * Check if a row is a header row (contains th or is in thead)
+   */
+  function isHeaderRow(structure, rowIndex) {
+    const row = structure.grid[rowIndex];
+    if (!row) return false;
+
+    for (let c = 0; c < row.length; c++) {
+      const gridCell = row[c];
+      if (gridCell && gridCell.cell) {
+        const cell = gridCell.cell;
+        if (cell.tagName.toUpperCase() === 'TH' || cell.closest('thead')) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Check if a cell is a header cell (th or in thead)
+   */
+  function isHeaderCell(cell) {
+    if (!cell) return false;
+    return cell.tagName.toUpperCase() === 'TH' || cell.closest('thead');
+  }
+
+  /**
+   * Extend selection to the top of the column
+   */
+  function extendSelectionToColumnStart(startCell) {
+    const includeHeader = settingsManager.get('columnIncludeHeader');
+    const bounds = getSelectionBounds();
+
+    if (!bounds) {
+      const table = tableDetector.getTableFromCell(startCell);
+      if (!table) return;
+      const pos = tableDetector.getCellPosition(startCell);
+      if (!pos) return;
+      const structure = tableDetector.getTableStructure(table);
+
+      let firstRow = pos.row;
+      for (let r = 0; r <= pos.row; r++) {
+        const gridCell = structure.grid[r]?.[pos.col];
+        if (gridCell?.cell) {
+          // Skip header rows if setting is disabled
+          if (!includeHeader && isHeaderRow(structure, r)) {
+            continue;
+          }
+          firstRow = r;
+          break;
+        }
+      }
+
+      const endCell = structure.grid[firstRow]?.[pos.col]?.cell;
+      selectionManager.selectRange(startCell, endCell, false);
+      anchorCell = startCell;
+      if (endCell) endCell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    const { structure, maxRow, minCol, maxCol } = bounds;
+
+    // Find the first row for current column range
+    let newMinRow = bounds.minRow;
+    for (let r = 0; r <= bounds.minRow; r++) {
+      // Skip header rows if setting is disabled
+      if (!includeHeader && isHeaderRow(structure, r)) {
+        continue;
+      }
+
+      let hasCell = false;
+      for (let c = minCol; c <= maxCol; c++) {
+        if (structure.grid[r]?.[c]?.cell) {
+          hasCell = true;
+          break;
+        }
+      }
+      if (hasCell) {
+        newMinRow = r;
+        break;
+      }
+    }
+
+    const scrollCell = structure.grid[newMinRow]?.[minCol]?.cell;
+    selectRangeAndScroll(structure, newMinRow, maxRow, minCol, maxCol, scrollCell);
+  }
+
+  /**
+   * Extend selection to the end of the row
+   */
+  function extendSelectionToRowEnd(startCell) {
+    const bounds = getSelectionBounds();
+    if (!bounds) {
+      const table = tableDetector.getTableFromCell(startCell);
+      if (!table) return;
+      const pos = tableDetector.getCellPosition(startCell);
+      if (!pos) return;
+      const structure = tableDetector.getTableStructure(table);
+      const row = structure.grid[pos.row];
+      if (!row) return;
+
+      let lastCol = pos.col;
+      for (let c = row.length - 1; c >= pos.col; c--) {
+        if (row[c]?.cell) {
+          lastCol = c;
+          break;
+        }
+      }
+
+      const endCell = row[lastCol]?.cell;
+      selectionManager.selectRange(startCell, endCell, false);
+      anchorCell = startCell;
+      if (endCell) endCell.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+      return;
+    }
+
+    const { structure, minRow, maxRow, minCol } = bounds;
+
+    // Find the last column for current row range
+    let newMaxCol = bounds.maxCol;
+    const colCount = structure.grid[0]?.length || 0;
+    for (let c = colCount - 1; c >= bounds.maxCol; c--) {
+      let hasCell = false;
+      for (let r = minRow; r <= maxRow; r++) {
+        if (structure.grid[r]?.[c]?.cell) {
+          hasCell = true;
+          break;
+        }
+      }
+      if (hasCell) {
+        newMaxCol = c;
+        break;
+      }
+    }
+
+    const scrollCell = structure.grid[maxRow]?.[newMaxCol]?.cell;
+    selectRangeAndScroll(structure, minRow, maxRow, minCol, newMaxCol, scrollCell);
+  }
+
+  /**
+   * Extend selection to the start of the row
+   */
+  function extendSelectionToRowStart(startCell) {
+    const includeHeader = settingsManager.get('columnIncludeHeader');
+    const bounds = getSelectionBounds();
+
+    if (!bounds) {
+      const table = tableDetector.getTableFromCell(startCell);
+      if (!table) return;
+      const pos = tableDetector.getCellPosition(startCell);
+      if (!pos) return;
+      const structure = tableDetector.getTableStructure(table);
+      const row = structure.grid[pos.row];
+      if (!row) return;
+
+      let firstCol = pos.col;
+      for (let c = 0; c <= pos.col; c++) {
+        const gridCell = row[c];
+        if (gridCell?.cell) {
+          // Skip header cells if setting is disabled
+          if (!includeHeader && isHeaderCell(gridCell.cell)) {
+            continue;
+          }
+          firstCol = c;
+          break;
+        }
+      }
+
+      const endCell = row[firstCol]?.cell;
+      selectionManager.selectRange(startCell, endCell, false);
+      anchorCell = startCell;
+      if (endCell) endCell.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+      return;
+    }
+
+    const { structure, minRow, maxRow, maxCol } = bounds;
+
+    // Find the first column for current row range
+    let newMinCol = bounds.minCol;
+    for (let c = 0; c <= bounds.minCol; c++) {
+      // Check if this column contains only header cells in the selected rows
+      let hasNonHeaderCell = false;
+      let hasCell = false;
+
+      for (let r = minRow; r <= maxRow; r++) {
+        const gridCell = structure.grid[r]?.[c];
+        if (gridCell?.cell) {
+          hasCell = true;
+          if (!isHeaderCell(gridCell.cell)) {
+            hasNonHeaderCell = true;
+            break;
+          }
+        }
+      }
+
+      // Skip if all cells in this column are headers and setting is disabled
+      if (!includeHeader && hasCell && !hasNonHeaderCell) {
+        continue;
+      }
+
+      if (hasCell) {
+        newMinCol = c;
+        break;
+      }
+    }
+
+    const scrollCell = structure.grid[minRow]?.[newMinCol]?.cell;
+    selectRangeAndScroll(structure, minRow, maxRow, newMinCol, maxCol, scrollCell);
   }
 
   /**
