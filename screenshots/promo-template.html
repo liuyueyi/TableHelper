@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280, height=800">
+  <title>SuperTables - Promo Screenshots</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      width: 1280px;
+      height: 800px;
+      overflow: hidden;
+    }
+
+    .screenshot {
+      width: 1280px;
+      height: 800px;
+      display: none;
+      position: relative;
+    }
+
+    .screenshot.active {
+      display: block;
+    }
+
+    /* Screenshot 1: Multi-select cells */
+    .screenshot-1 {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      padding: 40px;
+    }
+
+    .promo-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .promo-header h1 {
+      font-size: 48px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .promo-header h1 img {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+    }
+
+    .promo-header p {
+      font-size: 24px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .browser-mockup {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .browser-toolbar {
+      background: #f1f3f4;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .browser-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .browser-dots span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .browser-dots span:nth-child(1) { background: #ff5f57; }
+    .browser-dots span:nth-child(2) { background: #ffbd2e; }
+    .browser-dots span:nth-child(3) { background: #28ca41; }
+
+    .browser-url {
+      flex: 1;
+      background: #fff;
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 14px;
+      color: #5f6368;
+    }
+
+    .browser-content {
+      padding: 30px;
+      background: #f8f9fa;
+    }
+
+    .demo-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .demo-table th,
+    .demo-table td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid #e8eaed;
+      font-size: 14px;
+    }
+
+    .demo-table th {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: #202124;
+    }
+
+    .demo-table td {
+      color: #3c4043;
+    }
+
+    .demo-table .selected {
+      background: rgba(33, 115, 70, 0.15) !important;
+      outline: 2px solid #217346;
+      outline-offset: -2px;
+    }
+
+    .demo-table .selected-row td {
+      background: rgba(33, 115, 70, 0.15) !important;
+    }
+
+    .demo-table .selected-col {
+      background: rgba(33, 115, 70, 0.15) !important;
+    }
+
+    .feature-badge {
+      position: absolute;
+      background: linear-gradient(135deg, #217346 0%, #2e9959 100%);
+      color: #fff;
+      padding: 16px 28px;
+      border-radius: 12px;
+      font-size: 20px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(33, 115, 70, 0.4);
+    }
+
+    .kbd-hint {
+      position: absolute;
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .kbd {
+      background: linear-gradient(180deg, #217346 0%, #1a5c38 100%);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', 'Monaco', monospace;
+    }
+
+    /* Stats Panel */
+    .stats-panel {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+      border-radius: 12px;
+      padding: 16px 24px;
+      display: flex;
+      gap: 32px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    /* Screenshot 2: Stats Panel */
+    .screenshot-2 {
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      padding: 40px;
+    }
+
+    /* Screenshot 3: Extend Selection */
+    .screenshot-3 {
+      background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+      padding: 40px;
+    }
+
+    .extend-arrow {
+      position: absolute;
+      color: #217346;
+      font-size: 48px;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.1); }
+    }
+
+    /* Screenshot 4: Export Excel */
+    .screenshot-4 {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      padding: 40px;
+    }
+
+    .excel-btn {
+      background: linear-gradient(135deg, #217346 0%, #2e9959 100%);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(33, 115, 70, 0.4);
+    }
+
+    .excel-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .select-all-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: linear-gradient(135deg, #217346 0%, #2e9959 100%);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .table-wrapper {
+      position: relative;
+    }
+
+    /* Highlight effects */
+    .highlight-box {
+      position: absolute;
+      border: 3px dashed #ff6b6b;
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .cursor-icon {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Screenshot 1: Multi-select cells -->
+  <div class="screenshot screenshot-1 active" id="screenshot-1">
+    <div class="promo-header">
+      <h1>
+        <img src="../icons/icon128.png" alt="SuperTables">
+        SuperTables
+      </h1>
+      <p>Select Table Cells Like Excel</p>
+    </div>
+
+    <div class="browser-mockup">
+      <div class="browser-toolbar">
+        <div class="browser-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="browser-url">https://example.com/sales-report</div>
+      </div>
+      <div class="browser-content">
+        <div class="table-wrapper">
+          <table class="demo-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Q1 Sales</th>
+                <th>Q2 Sales</th>
+                <th>Q3 Sales</th>
+                <th>Q4 Sales</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>iPhone 15 Pro</td>
+                <td class="selected">$12,450</td>
+                <td>$15,230</td>
+                <td class="selected">$18,900</td>
+                <td>$22,100</td>
+                <td>$68,680</td>
+              </tr>
+              <tr>
+                <td>MacBook Air</td>
+                <td>$8,900</td>
+                <td class="selected">$9,450</td>
+                <td>$11,200</td>
+                <td class="selected">$13,800</td>
+                <td>$43,350</td>
+              </tr>
+              <tr>
+                <td>iPad Pro</td>
+                <td class="selected">$6,780</td>
+                <td>$7,200</td>
+                <td>$8,100</td>
+                <td>$9,500</td>
+                <td>$31,580</td>
+              </tr>
+              <tr>
+                <td>AirPods Pro</td>
+                <td>$3,200</td>
+                <td>$3,800</td>
+                <td class="selected">$4,200</td>
+                <td>$5,100</td>
+                <td>$16,300</td>
+              </tr>
+              <tr>
+                <td>Apple Watch</td>
+                <td>$4,500</td>
+                <td class="selected">$5,200</td>
+                <td>$5,800</td>
+                <td>$6,900</td>
+                <td>$22,400</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="kbd-hint" style="bottom: 100px; left: 90px;">
+      <span class="kbd">&#8984;</span> + Click to multi-select cells
+    </div>
+
+    <div class="feature-badge" style="bottom: 90px; right: 90px;">
+      Multi-Select Any Cells
+    </div>
+  </div>
+
+  <!-- Screenshot 2: Stats Panel -->
+  <div class="screenshot screenshot-2" id="screenshot-2">
+    <div class="promo-header">
+      <h1>
+        <img src="../icons/icon128.png" alt="SuperTables">
+        SuperTables
+      </h1>
+      <p>Real-time Statistics Panel</p>
+    </div>
+
+    <div class="browser-mockup">
+      <div class="browser-toolbar">
+        <div class="browser-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="browser-url">https://example.com/inventory</div>
+      </div>
+      <div class="browser-content">
+        <div class="table-wrapper">
+          <table class="demo-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Revenue</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Widget A</td>
+                <td class="selected-col">1,250</td>
+                <td>$29.99</td>
+                <td>$37,487</td>
+                <td>In Stock</td>
+              </tr>
+              <tr>
+                <td>Widget B</td>
+                <td class="selected-col">890</td>
+                <td>$49.99</td>
+                <td>$44,491</td>
+                <td>In Stock</td>
+              </tr>
+              <tr>
+                <td>Widget C</td>
+                <td class="selected-col">2,100</td>
+                <td>$19.99</td>
+                <td>$41,979</td>
+                <td>In Stock</td>
+              </tr>
+              <tr>
+                <td>Widget D</td>
+                <td class="selected-col">450</td>
+                <td>$79.99</td>
+                <td>$35,996</td>
+                <td>Low Stock</td>
+              </tr>
+              <tr>
+                <td>Widget E</td>
+                <td class="selected-col">1,800</td>
+                <td>$39.99</td>
+                <td>$71,982</td>
+                <td>In Stock</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-panel">
+      <div class="stat-item">
+        <div class="stat-label">Count</div>
+        <div class="stat-value">5</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Sum</div>
+        <div class="stat-value">6,490</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Average</div>
+        <div class="stat-value">1,298</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Min</div>
+        <div class="stat-value">450</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Max</div>
+        <div class="stat-value">2,100</div>
+      </div>
+    </div>
+
+    <div class="kbd-hint" style="bottom: 100px; left: 90px;">
+      <span class="kbd">Alt</span> + Click to select column
+    </div>
+
+    <div class="feature-badge" style="bottom: 90px; right: 90px;">
+      Instant Statistics
+    </div>
+  </div>
+
+  <!-- Screenshot 3: Extend Selection -->
+  <div class="screenshot screenshot-3" id="screenshot-3">
+    <div class="promo-header">
+      <h1>
+        <img src="../icons/icon128.png" alt="SuperTables">
+        SuperTables
+      </h1>
+      <p>Smart Keyboard Shortcuts</p>
+    </div>
+
+    <div class="browser-mockup">
+      <div class="browser-toolbar">
+        <div class="browser-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="browser-url">https://example.com/data-analysis</div>
+      </div>
+      <div class="browser-content">
+        <div class="table-wrapper">
+          <table class="demo-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Users</th>
+                <th>Sessions</th>
+                <th>Bounce Rate</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2024-01-01</td>
+                <td class="selected">12,450</td>
+                <td>18,230</td>
+                <td>42.5%</td>
+                <td>3:24</td>
+              </tr>
+              <tr>
+                <td>2024-01-02</td>
+                <td class="selected">13,890</td>
+                <td>20,450</td>
+                <td>38.2%</td>
+                <td>3:45</td>
+              </tr>
+              <tr>
+                <td>2024-01-03</td>
+                <td class="selected">15,200</td>
+                <td>22,100</td>
+                <td>35.8%</td>
+                <td>4:02</td>
+              </tr>
+              <tr>
+                <td>2024-01-04</td>
+                <td class="selected">14,780</td>
+                <td>21,500</td>
+                <td>36.5%</td>
+                <td>3:58</td>
+              </tr>
+              <tr>
+                <td>2024-01-05</td>
+                <td class="selected">16,100</td>
+                <td>24,200</td>
+                <td>33.2%</td>
+                <td>4:15</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="kbd-hint" style="bottom: 100px; left: 90px;">
+      <span class="kbd">&#8984;</span> + <span class="kbd">Shift</span> + <span class="kbd">↓</span> Extend to column edge
+    </div>
+
+    <div class="feature-badge" style="bottom: 90px; right: 90px;">
+      Quick Extend Selection
+    </div>
+
+    <svg style="position: absolute; bottom: 260px; left: 435px; width: 40px; height: 120px; transform: rotate(0deg);" viewBox="0 0 40 120">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#217346"/>
+        </marker>
+      </defs>
+      <line x1="20" y1="0" x2="20" y2="100" stroke="#217346" stroke-width="4" marker-end="url(#arrowhead)"/>
+    </svg>
+  </div>
+
+  <!-- Screenshot 4: Export Excel -->
+  <div class="screenshot screenshot-4" id="screenshot-4">
+    <div class="promo-header">
+      <h1>
+        <img src="../icons/icon128.png" alt="SuperTables">
+        SuperTables
+      </h1>
+      <p>One-Click Export to Excel</p>
+    </div>
+
+    <div class="browser-mockup">
+      <div class="browser-toolbar">
+        <div class="browser-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="browser-url">https://example.com/quarterly-report</div>
+      </div>
+      <div class="browser-content">
+        <div class="table-wrapper">
+          <button class="select-all-btn">Select All</button>
+          <table class="demo-table" style="outline: 3px solid #217346; outline-offset: -1px;">
+            <thead>
+              <tr>
+                <th style="background: rgba(33, 115, 70, 0.15);">Region</th>
+                <th style="background: rgba(33, 115, 70, 0.15);">Q1</th>
+                <th style="background: rgba(33, 115, 70, 0.15);">Q2</th>
+                <th style="background: rgba(33, 115, 70, 0.15);">Q3</th>
+                <th style="background: rgba(33, 115, 70, 0.15);">Q4</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="background: rgba(33, 115, 70, 0.15);">North America</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$245,000</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$312,000</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$289,000</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$378,000</td>
+              </tr>
+              <tr>
+                <td style="background: rgba(33, 115, 70, 0.15);">Europe</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$189,000</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$225,000</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$198,000</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$267,000</td>
+              </tr>
+              <tr>
+                <td style="background: rgba(33, 115, 70, 0.15);">Asia Pacific</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$156,000</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$198,000</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$234,000</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$289,000</td>
+              </tr>
+              <tr>
+                <td style="background: rgba(33, 115, 70, 0.15);">Latin America</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$78,000</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$92,000</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$105,000</td>
+                <td style="background: rgba(33, 115, 70, 0.15);">$128,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-panel" style="gap: 24px;">
+      <div class="stat-item">
+        <div class="stat-label">Cells</div>
+        <div class="stat-value">20</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Sum</div>
+        <div class="stat-value">$3,383,000</div>
+      </div>
+      <button class="excel-btn">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h5v7h7v9H6z"/></svg>
+        Download Excel
+      </button>
+    </div>
+
+    <div class="feature-badge" style="bottom: 90px; right: 90px;">
+      Export to .xlsx
+    </div>
+  </div>
+
+  <script>
+    // Switch screenshots with keyboard
+    let current = 1;
+    document.addEventListener('keydown', (e) => {
+      if (e.key >= '1' && e.key <= '4') {
+        document.querySelectorAll('.screenshot').forEach(s => s.classList.remove('active'));
+        document.getElementById('screenshot-' + e.key).classList.add('active');
+        current = parseInt(e.key);
+      }
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        current = current >= 4 ? 1 : current + 1;
+        document.querySelectorAll('.screenshot').forEach(s => s.classList.remove('active'));
+        document.getElementById('screenshot-' + current).classList.add('active');
+      }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        current = current <= 1 ? 4 : current - 1;
+        document.querySelectorAll('.screenshot').forEach(s => s.classList.remove('active'));
+        document.getElementById('screenshot-' + current).classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>
