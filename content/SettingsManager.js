@@ -225,17 +225,32 @@ class SettingsManager {
   /**
    * Determine selection mode from event
    * @param {MouseEvent} event
-   * @returns {string|null} 'cell', 'row', 'column', 'table', or null
+   * @returns {string|null} 'cell', 'row', 'column', or null
    */
   getSelectionMode(event) {
     const shortcuts = this.get('shortcuts');
     const state = this.getModifiersState(event);
 
     // Check each mode in order of specificity (most modifiers first)
-    const modes = ['selectTable', 'selectRow', 'selectColumn', 'selectCell'];
+    // Map shortcut keys to their return values
+    const modeMap = [
+      { key: 'selectRow', result: 'row' },
+      { key: 'selectColumn', result: 'column' },
+      { key: 'selectCell', result: 'cell' }
+    ];
 
-    for (const mode of modes) {
-      const shortcut = shortcuts[mode.replace('select', '').toLowerCase()] || shortcuts[mode];
+    // Sort by number of modifiers (most specific first)
+    const sortedModes = modeMap.map(m => {
+      const shortcut = shortcuts[m.key];
+      return {
+        ...m,
+        shortcut,
+        modifierCount: shortcut ? shortcut.modifiers.length : 0
+      };
+    }).sort((a, b) => b.modifierCount - a.modifierCount);
+
+    for (const mode of sortedModes) {
+      const shortcut = mode.shortcut;
       if (!shortcut) continue;
 
       const modifiers = shortcut.modifiers || [];
@@ -244,7 +259,7 @@ class SettingsManager {
       const needsShift = modifiers.includes('shift');
 
       if (needsCmd === state.cmd && needsAlt === state.alt && needsShift === state.shift) {
-        return mode.replace('select', '').toLowerCase();
+        return mode.result;
       }
     }
 

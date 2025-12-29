@@ -187,11 +187,11 @@
    * Start editing a shortcut
    */
   function startEditingShortcut(item, action) {
-    // Cancel any existing edit
+    // Cancel any existing edit properly
     if (editingShortcut) {
       const prevItem = document.querySelector('.shortcut-item.editing');
       if (prevItem) {
-        prevItem.classList.remove('editing');
+        cancelEditingShortcut(prevItem);
       }
     }
 
@@ -202,7 +202,11 @@
     const input = item.querySelector('.shortcut-input');
     input.value = i18n.t('pressModifier');
     input.classList.add('recording');
-    input.focus();
+
+    // Use requestAnimationFrame to ensure the element is visible before focusing
+    requestAnimationFrame(() => {
+      input.focus();
+    });
 
     // Listen for keydown
     const keyHandler = (e) => {

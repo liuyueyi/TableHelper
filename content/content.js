@@ -55,21 +55,11 @@
   }
 
   /**
-   * Determine selection mode based on modifier keys
+   * Determine selection mode based on user's shortcut settings
    * Returns: 'cell', 'row', 'column', or null
    */
   function getSelectionMode(e) {
-    const cmd = isCmdPressed(e);
-    const alt = e.altKey;
-
-    // Cmd+Alt = row selection
-    if (cmd && alt) return 'row';
-    // Alt only = column selection
-    if (alt && !cmd) return 'column';
-    // Cmd only = cell selection
-    if (cmd && !alt) return 'cell';
-
-    return null;
+    return settingsManager.getSelectionMode(e);
   }
 
   /**
@@ -180,8 +170,8 @@
     const wasInSelectionMode = isSelectionMode;
     isSelectionMode = mode !== null;
 
-    // Show/hide select-all button based on Cmd key
-    if (newCmd && !newAlt && hoveredCell) {
+    // Show/hide select-all button based on cell selection mode
+    if (mode === 'cell' && hoveredCell) {
       const table = tableDetector.getTableFromCell(hoveredCell);
       if (table) {
         showSelectAllButton(table);
@@ -325,11 +315,19 @@
       if (cell !== hoveredCell) {
         hoveredCell = cell;
 
-        // Update select-all button position if Cmd is pressed
-        if (modifierState.cmd && !modifierState.alt && cell) {
-          const table = tableDetector.getTableFromCell(cell);
-          if (table && table !== currentHoveredTable) {
-            showSelectAllButton(table);
+        // Update select-all button position if in cell selection mode
+        if (isSelectionMode && cell) {
+          const currentMode = getSelectionMode({
+            metaKey: isMac ? modifierState.cmd : false,
+            ctrlKey: isMac ? false : modifierState.cmd,
+            altKey: modifierState.alt,
+            shiftKey: modifierState.shift
+          });
+          if (currentMode === 'cell') {
+            const table = tableDetector.getTableFromCell(cell);
+            if (table && table !== currentHoveredTable) {
+              showSelectAllButton(table);
+            }
           }
         }
 
@@ -543,10 +541,6 @@
     if (!isSelectionMode) {
       clearHoverPreview();
       hoveredCell = null;
-    }
-
-    // Hide select-all button when Cmd is released
-    if (!modifierState.cmd) {
       hideSelectAllButton();
     }
   }
