@@ -286,7 +286,7 @@ class SelectionManager {
           } else {
             // Check if origin is in this row's selection
             const originInSameRow = gridCell.originRow === r;
-            if (!originInSameRow) {
+            if (!originInSameRow && keepEmptyPlaceholders) {
               rowData.push(''); // Empty for spanned cells
             }
           }

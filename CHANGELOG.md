@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3] - 2025-12-31
+
+### Bug Fixes
+- Fixed "Keep Empty Placeholders" setting not being respected when copying cells from tables with merged cells (colspan/rowspan)
+
+---
+
 ## [1.1.0] - 2025-12-29
 
 ### New Features
