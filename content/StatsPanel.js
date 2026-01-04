@@ -14,6 +14,7 @@ class StatsPanel {
     this.position = 'left'; // default position
     this.isTextMode = false; // whether showing text stats instead of numeric stats
     this.userForcedMode = null; // 'numeric' | 'text' | null (auto)
+    this.modalAllTexts = null; // cached data for modal display and copy
     this._init();
   }
 
@@ -39,6 +40,13 @@ class StatsPanel {
     this.panel.className = 'stats-bar';
     this.panel.innerHTML = this._getTemplate();
     this.shadowRoot.appendChild(this.panel);
+
+    // Create modal element separately (outside stats-bar to avoid transform issues)
+    this.modal = document.createElement('div');
+    this.modal.className = 'modal-overlay';
+    this.modal.id = 'modal-overlay';
+    this.modal.innerHTML = this._getModalTemplate();
+    this.shadowRoot.appendChild(this.modal);
 
     // Append to body
     document.body.appendChild(this.container);
@@ -348,6 +356,286 @@ class StatsPanel {
         background: rgba(255, 255, 255, 0.15);
         margin-left: 8px;
       }
+
+      /* Show all stats button */
+      .show-all-btn {
+        display: none;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        margin-left: 6px;
+        background: rgba(33, 115, 70, 0.3);
+        border: 1px solid rgba(33, 115, 70, 0.5);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        color: #4ade80;
+        font-size: 11px;
+        white-space: nowrap;
+        user-select: none;
+      }
+
+      .show-all-btn.visible {
+        display: flex;
+      }
+
+      .show-all-btn:hover {
+        background: rgba(33, 115, 70, 0.5);
+        border-color: rgba(33, 115, 70, 0.7);
+      }
+
+      .show-all-btn:active {
+        background: rgba(33, 115, 70, 0.6);
+        transform: scale(0.98);
+      }
+
+      /* Modal overlay */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 2147483646;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+      }
+
+      .modal-overlay.visible {
+        display: flex;
+      }
+
+      .modal-content {
+        background: rgba(32, 32, 32, 0.98);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        max-width: 500px;
+        width: 90%;
+        max-height: 70vh;
+        display: flex;
+        flex-direction: column;
+        animation: modal-appear 0.2s ease;
+        pointer-events: auto;
+      }
+
+      @keyframes modal-appear {
+        from {
+          opacity: 0;
+          transform: scale(0.95) translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .modal-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .modal-title-count {
+        background: #217346;
+        color: #fff;
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 500;
+      }
+
+      .modal-copy {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 5px 12px;
+        margin-left: 10px;
+        background: rgba(33, 115, 70, 0.2);
+        border: 1px solid rgba(33, 115, 70, 0.4);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        color: #4ade80;
+        font-size: 11px;
+        font-weight: 500;
+      }
+
+      .modal-copy:hover {
+        background: rgba(33, 115, 70, 0.4);
+        border-color: rgba(33, 115, 70, 0.6);
+        color: #6ee7a0;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(33, 115, 70, 0.3);
+      }
+
+      .modal-copy:active {
+        background: rgba(33, 115, 70, 0.5);
+        transform: translateY(0) scale(0.98);
+        box-shadow: none;
+      }
+
+      .modal-copy.copied {
+        background: rgba(33, 115, 70, 0.5);
+        border-color: rgba(33, 115, 70, 0.7);
+        color: #fff;
+      }
+
+      .modal-copy svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .modal-close {
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.6);
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        transition: all 0.15s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-close:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+      }
+
+      .modal-close svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .modal-body {
+        padding: 12px 20px 20px;
+        overflow-y: auto;
+        flex: 1;
+        user-select: text;
+        -webkit-user-select: text;
+      }
+
+      .modal-body::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .modal-body::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+      }
+
+      .modal-body::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+      }
+
+      .modal-body::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .all-stats-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .all-stats-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        user-select: text;
+        -webkit-user-select: text;
+      }
+
+      .all-stats-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .all-stats-item:active {
+        background: rgba(255, 255, 255, 0.15);
+        transform: scale(0.99);
+      }
+
+      .all-stats-item.copied {
+        background: rgba(33, 115, 70, 0.3);
+      }
+
+      .all-stats-item .copy-tip {
+        position: absolute;
+        right: 12px;
+        background: #217346;
+        color: #fff;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 500;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.15s ease;
+        white-space: nowrap;
+      }
+
+      .all-stats-item.copied .copy-tip {
+        opacity: 1;
+      }
+
+      .all-stats-item-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        min-width: 0;
+      }
+
+      .all-stats-item-rank {
+        font-size: 11px;
+        color: #217346;
+        font-weight: 600;
+        min-width: 24px;
+      }
+
+      .all-stats-item-text {
+        font-size: 13px;
+        color: #fff;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+        user-select: text;
+        -webkit-user-select: text;
+      }
+
+      .all-stats-item-count {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 500;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 2px 8px;
+        border-radius: 10px;
+      }
     `;
   }
 
@@ -394,6 +682,9 @@ class StatsPanel {
       <div class="text-stats-container" id="text-stats">
         <span class="top-label">Top 5:</span>
         <div id="top-items"></div>
+        <button class="show-all-btn" id="show-all-btn" title="显示所有统计项">
+          统计全部
+        </button>
       </div>
       <!-- Mode toggle button -->
       <div class="divider-right"></div>
@@ -403,6 +694,38 @@ class StatsPanel {
         </svg>
         <span id="toggle-label">Top 5</span>
       </button>
+    `;
+  }
+
+  /**
+   * Get modal HTML template
+   * @private
+   */
+  _getModalTemplate() {
+    return `
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span>统计项</span>
+            <span class="modal-title-count" id="modal-count">0</span>
+            <button class="modal-copy" id="modal-copy" title="复制全部统计结果">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>复制</span>
+            </button>
+          </div>
+          <button class="modal-close" id="modal-close" title="关闭 (ESC)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="all-stats-list" id="all-stats-list"></div>
+        </div>
+      </div>
     `;
   }
 
@@ -441,6 +764,48 @@ class StatsPanel {
       e.stopPropagation();
       this._toggleMode();
     });
+
+    // Show all stats button
+    const showAllBtn = this.shadowRoot.getElementById('show-all-btn');
+    showAllBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this._showAllStatsModal();
+    });
+
+    // Modal close button
+    const modalClose = this.modal.querySelector('#modal-close');
+    modalClose.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this._hideAllStatsModal();
+    });
+
+    // Modal copy button
+    const modalCopy = this.modal.querySelector('#modal-copy');
+    modalCopy.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this._copyAllStats();
+    });
+
+    // Prevent mouse events from bubbling out of modal overlay to the page
+    // This prevents clicks inside modal from triggering page selection changes
+    // We use the overlay element so events can still bubble within modal-content
+    this.modal.addEventListener('mousedown', (e) => {
+      e.stopPropagation();
+    }, false);
+
+    this.modal.addEventListener('click', (e) => {
+      e.stopPropagation();
+    }, false);
+
+    // ESC key to close modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.modal.classList.contains('visible')) {
+        this._hideAllStatsModal();
+      }
+    });
   }
 
   /**
@@ -465,10 +830,175 @@ class StatsPanel {
   }
 
   /**
-   * Copy text to clipboard and show toast
+   * Show all stats modal
    * @private
    */
-  async _copyToClipboard(text, itemElement) {
+  _showAllStatsModal() {
+    if (!this.stats || !this.stats.allTexts) return;
+
+    // Save a copy of allTexts for the modal (in case stats gets updated while modal is open)
+    this.modalAllTexts = [...this.stats.allTexts];
+
+    const modalCount = this.modal.querySelector('#modal-count');
+    const allStatsList = this.modal.querySelector('#all-stats-list');
+
+    // Update count
+    modalCount.textContent = this.modalAllTexts.length;
+
+    // Get localized "copied" text
+    const copiedText = this._getCopiedText();
+
+    // Render all items
+    allStatsList.innerHTML = this.modalAllTexts.map((item, index) => {
+      return `
+        <div class="all-stats-item" data-value="${this._escapeHtml(item.text)}" title="点击复制: ${this._escapeHtml(item.text)}">
+          <div class="all-stats-item-left">
+            <span class="all-stats-item-rank">#${index + 1}</span>
+            <span class="all-stats-item-text">${this._escapeHtml(item.text)}</span>
+          </div>
+          <span class="all-stats-item-count">×${item.count}</span>
+          <span class="copy-tip">${copiedText}</span>
+        </div>
+      `;
+    }).join('');
+
+    // Add click listeners for copying (don't show toast in modal)
+    allStatsList.querySelectorAll('.all-stats-item').forEach(item => {
+      item.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const value = item.dataset.value;
+        if (value) {
+          await this._copyToClipboard(value, item, false);
+        }
+      });
+    });
+
+    // Show modal
+    this.modal.classList.add('visible');
+  }
+
+  /**
+   * Hide all stats modal
+   * @private
+   */
+  _hideAllStatsModal() {
+    this.modal.classList.remove('visible');
+  }
+
+  /**
+   * Get localized "copied" text
+   * @private
+   * @returns {string}
+   */
+  _getCopiedText() {
+    const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+
+    if (lang.startsWith('zh')) {
+      return '已复制';
+    } else if (lang.startsWith('ja')) {
+      return 'コピー済み';
+    } else {
+      return 'Copied';
+    }
+  }
+
+  /**
+   * Copy all stats to clipboard (tab-separated)
+   * @private
+   */
+  async _copyAllStats() {
+    // Use the saved modalAllTexts (copy of data when modal was opened)
+    if (!this.modalAllTexts || this.modalAllTexts.length === 0) {
+      console.warn('SuperTables: No data to copy');
+      return;
+    }
+
+    // Format: text\tcount (tab-separated)
+    const text = this.modalAllTexts
+      .map(item => `${item.text}\t${item.count}`)
+      .join('\n');
+
+    const copyBtn = this.modal.querySelector('#modal-copy');
+
+    let success = false;
+
+    // Method 1: Try Clipboard API first
+    try {
+      await navigator.clipboard.writeText(text);
+      success = true;
+    } catch (e) {
+      console.warn('SuperTables: Clipboard API failed, trying fallback', e);
+    }
+
+    // Method 2: Fallback using execCommand (must be outside Shadow DOM)
+    if (!success) {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0;pointer-events:none;';
+        textarea.setAttribute('readonly', '');
+        document.body.appendChild(textarea);
+
+        // Select text
+        textarea.focus();
+        textarea.select();
+        textarea.setSelectionRange(0, text.length);
+
+        success = document.execCommand('copy');
+        document.body.removeChild(textarea);
+      } catch (e2) {
+        console.error('SuperTables: execCommand copy failed', e2);
+      }
+    }
+
+    // Method 3: Use chrome extension messaging to background script
+    if (!success && typeof chrome !== 'undefined' && chrome.runtime) {
+      try {
+        chrome.runtime.sendMessage({ action: 'copyToClipboard', text: text }, (response) => {
+          if (response && response.success) {
+            this._showCopySuccessFeedback(copyBtn);
+          }
+        });
+        return; // Background script will handle it
+      } catch (e3) {
+        console.error('SuperTables: Chrome messaging failed', e3);
+      }
+    }
+
+    if (success) {
+      this._showCopySuccessFeedback(copyBtn);
+    }
+  }
+
+  /**
+   * Show copy success feedback on the copy button
+   * @private
+   */
+  _showCopySuccessFeedback(copyBtn) {
+    if (!copyBtn) return;
+
+    copyBtn.classList.add('copied');
+    const spanEl = copyBtn.querySelector('span');
+    const originalText = spanEl ? spanEl.textContent : '复制';
+    if (spanEl) spanEl.textContent = '已复制';
+
+    setTimeout(() => {
+      copyBtn.classList.remove('copied');
+      if (spanEl) spanEl.textContent = originalText;
+    }, 1500);
+
+    // Note: Don't show stats bar toast here, button feedback is enough for modal
+  }
+
+  /**
+   * Copy text to clipboard and show feedback
+   * @private
+   * @param {string} text - Text to copy
+   * @param {HTMLElement} itemElement - Element to show feedback on
+   * @param {boolean} [showToast=true] - Whether to show toast notification
+   */
+  async _copyToClipboard(text, itemElement, showToast = true) {
     let success = false;
 
     // Method 1: Use Clipboard API (preferred)
@@ -508,7 +1038,7 @@ class StatsPanel {
       try {
         chrome.runtime.sendMessage({ action: 'copyToClipboard', text: text }, (response) => {
           if (response && response.success) {
-            this._showCopyFeedback(itemElement);
+            this._showCopyFeedback(itemElement, showToast);
           }
         });
         return; // Background script will handle it
@@ -518,22 +1048,26 @@ class StatsPanel {
     }
 
     if (success) {
-      this._showCopyFeedback(itemElement);
+      this._showCopyFeedback(itemElement, showToast);
     }
   }
 
   /**
    * Show copy feedback
    * @private
+   * @param {HTMLElement} itemElement - Element to show feedback on
+   * @param {boolean} [showToast=true] - Whether to show toast notification
    */
-  _showCopyFeedback(itemElement) {
+  _showCopyFeedback(itemElement, showToast = true) {
     if (itemElement) {
       itemElement.classList.add('copied');
       setTimeout(() => {
         itemElement.classList.remove('copied');
       }, 300);
     }
-    this._showToast();
+    if (showToast) {
+      this._showToast();
+    }
   }
 
   /**
@@ -640,11 +1174,13 @@ class StatsPanel {
 
     const numericCount = values.length;
 
-    // Calculate Top 5 text items
-    const topTexts = Array.from(textCounts.entries())
+    // Calculate all text items sorted by frequency
+    const allTexts = Array.from(textCounts.entries())
       .sort((a, b) => b[1] - a[1]) // Sort by count descending
-      .slice(0, 5)
       .map(([text, freq]) => ({ text, count: freq }));
+
+    // Top 5 is the first 5 items
+    const topTexts = allTexts.slice(0, 5);
 
     if (numericCount === 0) {
       return {
@@ -655,6 +1191,7 @@ class StatsPanel {
         min: null,
         max: null,
         topTexts,
+        allTexts,
         isTextMode: true
       };
     }
@@ -672,6 +1209,7 @@ class StatsPanel {
       min,
       max,
       topTexts,
+      allTexts,
       isTextMode: false
     };
   }
@@ -725,6 +1263,9 @@ class StatsPanel {
     const modeToggle = this.shadowRoot.getElementById('mode-toggle');
     const toggleLabel = this.shadowRoot.getElementById('toggle-label');
 
+    // Get show all button
+    const showAllBtn = this.shadowRoot.getElementById('show-all-btn');
+
     if (showTextMode) {
       // Show text stats (Top 5), hide numeric stats
       numericContainer.classList.add('hidden');
@@ -732,6 +1273,10 @@ class StatsPanel {
 
       // Render Top 5 items
       this._renderTopTexts(topTexts);
+
+      // Show "统计全部" button only if there are more than 5 items
+      const allTexts = this.stats.allTexts || [];
+      showAllBtn.classList.toggle('visible', allTexts.length > 5);
 
       // Update toggle button - show option to switch to numeric
       toggleLabel.textContent = '123';
@@ -741,6 +1286,9 @@ class StatsPanel {
       // Show numeric stats, hide text stats
       numericContainer.classList.remove('hidden');
       textContainer.classList.remove('visible');
+
+      // Hide "统计全部" button in numeric mode
+      showAllBtn.classList.remove('visible');
 
       this._setValue('numeric-count', numericCount || '-', numericCount);
       this._setValue('sum', this._formatNumber(sum), sum);
@@ -875,6 +1423,7 @@ class StatsPanel {
     if (this.isVisible) {
       this.panel.classList.remove('visible');
       this.isVisible = false;
+      // Note: Do NOT auto-close modal here, let user close it manually
     }
   }
 
