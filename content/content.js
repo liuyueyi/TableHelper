@@ -948,12 +948,10 @@
    * Excel download callback
    */
   statsPanel.onDownloadClick = () => {
-    if (selectionManager.isFullTableSelected && selectionManager.selectedTable) {
-      // Only export visible cells (filtered rows are excluded)
-      excelExporter.exportFromCells(
-        selectionManager.getVisibleSelectedCells(),
-        tableDetector
-      );
+    const visibleCells = selectionManager.getVisibleSelectedCells();
+    if (visibleCells && visibleCells.length > 0) {
+      // Export visible selected cells (filtered rows are excluded)
+      excelExporter.exportFromCells(visibleCells, tableDetector);
     }
   };
 

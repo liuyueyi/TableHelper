@@ -1229,7 +1229,7 @@ class StatsPanel {
     this.userForcedMode = null;
 
     this.stats = this.calculateStats(cells);
-    this.showDownloadButton = isFullTable;
+    this.showDownloadButton = true; // Always show download button when stats bar is visible
     this._render();
     this.show();
   }

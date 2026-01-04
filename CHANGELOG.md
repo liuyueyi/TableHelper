@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.5] - 2026-01-04
+
+### Bug Fixes
+- Fixed copying cells including hidden element text content (e.g., hidden badges with counters)
+- Changed from `textContent` to `innerText` to only capture visible text when copying
+
+---
+
 ## [1.1.4] - 2025-12-31
 
 ### Bug Fixes

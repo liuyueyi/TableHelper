@@ -267,7 +267,7 @@ class SelectionManager {
 
     // Find the table and organize cells by their grid position
     const table = this.tableDetector.getTableFromCell(cells[0]);
-    if (!table) return cells.map(c => [c.textContent.trim()]);
+    if (!table) return cells.map(c => [c.innerText.trim()]);
 
     const structure = this.tableDetector.getTableStructure(table);
     const keepEmptyPlaceholders = this.settingsManager?.get('copyKeepEmptyPlaceholders') ?? false;
@@ -307,7 +307,7 @@ class SelectionManager {
         if (gridCell && gridCell.cell && visibleSelectedSet.has(gridCell.cell)) {
           // Only add content for origin cells to avoid duplicates
           if (gridCell.isOrigin) {
-            rowData.push(gridCell.cell.textContent.trim());
+            rowData.push(gridCell.cell.innerText.trim());
           } else {
             // Check if origin is in this row's selection
             const originInSameRow = gridCell.originRow === r;

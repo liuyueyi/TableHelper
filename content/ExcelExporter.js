@@ -157,21 +157,37 @@ ${rows}
     if (!table) return;
 
     const structure = tableDetector.getTableStructure(table);
-    const data = [];
 
-    // Build 2D array from all table cells
+    // Create a Set of selected cells for quick lookup
+    const selectedCellSet = new Set(cells);
+
+    // Find the row and column range of selected cells
+    let minRow = Infinity, maxRow = -1, minCol = Infinity, maxCol = -1;
+    const cellPositions = new Map(); // Map cell element to its grid position
+
     for (let r = 0; r < structure.rows; r++) {
-      const rowData = [];
       for (let c = 0; c < structure.cols; c++) {
         const gridCell = structure.grid[r]?.[c];
-        if (gridCell && gridCell.isOrigin) {
+        if (gridCell && gridCell.isOrigin && selectedCellSet.has(gridCell.cell)) {
+          minRow = Math.min(minRow, r);
+          maxRow = Math.max(maxRow, r);
+          minCol = Math.min(minCol, c);
+          maxCol = Math.max(maxCol, c);
+          cellPositions.set(gridCell.cell, { row: r, col: c });
+        }
+      }
+    }
+
+    if (maxRow < 0) return; // No selected cells found
+
+    // Build 2D array from selected cells only
+    const data = [];
+    for (let r = minRow; r <= maxRow; r++) {
+      const rowData = [];
+      for (let c = minCol; c <= maxCol; c++) {
+        const gridCell = structure.grid[r]?.[c];
+        if (gridCell && gridCell.isOrigin && selectedCellSet.has(gridCell.cell)) {
           rowData.push(gridCell.cell.textContent.trim());
-        } else if (gridCell && !gridCell.isOrigin) {
-          // Skip merged cells that aren't the origin
-          if (gridCell.originCol === c - 1 || gridCell.originRow !== r) {
-            continue;
-          }
-          rowData.push('');
         } else {
           rowData.push('');
         }
