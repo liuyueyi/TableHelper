@@ -1,0 +1,36 @@
+/* SuperTables - Table Selection Styles */
+
+/* Selected cell highlight */
+.st-selected {
+  outline: 1px solid #6BCB77 !important;
+  outline-offset: -1px;
+  background-color: rgba(107, 203, 119, 0.12) !important;
+  position: relative;
+}
+
+/* Hover preview when modifier key is pressed */
+.st-hover-preview {
+  outline: 1px dashed #70C1CF !important;
+  outline-offset: -1px;
+  background-color: rgba(112, 193, 207, 0.06) !important;
+}
+
+/* Row/Column hover preview */
+.st-row-preview,
+.st-col-preview {
+  background-color: rgba(112, 193, 207, 0.04) !important;
+}
+
+/* Selection mode - only change cursor on table cells, do NOT disable user-select globally
+   This ensures that existing text selections are preserved when pressing Cmd/Ctrl */
+.st-selecting table,
+.st-selecting td,
+.st-selecting th {
+  cursor: cell !important;
+}
+
+/* Table highlight when hovering for full table selection */
+.st-table-highlight {
+  outline: 2px solid #6BCB77 !important;
+  outline-offset: 2px;
+}

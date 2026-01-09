@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SuperTables Settings</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      width: 340px;
+      padding: 16px;
+      background: #fff;
+      color: #333;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      font-size: 11px;
+      color: #888;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 14px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 8px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .tab:hover {
+      color: #333;
+    }
+
+    .tab.active {
+      color: #6BCB77;
+      border-bottom-color: #6BCB77;
+    }
+
+    .tab-content {
+      display: none;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .section {
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+
+    .setting-label {
+      font-size: 13px;
+      color: #333;
+    }
+
+    .setting-desc {
+      font-size: 11px;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    /* Toggle Switch */
+    .toggle {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.3s;
+      border-radius: 22px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+
+    .toggle input:checked+.toggle-slider {
+      background-color: #6BCB77;
+    }
+
+    .toggle input:checked+.toggle-slider:before {
+      transform: translateX(18px);
+    }
+
+    /* Select dropdown */
+    .select-wrapper {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .select-wrapper select {
+      appearance: none;
+      -webkit-appearance: none;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 6px 28px 6px 10px;
+      font-size: 12px;
+      color: #333;
+      cursor: pointer;
+      outline: none;
+      min-width: 100px;
+    }
+
+    .select-wrapper select:focus {
+      border-color: #6BCB77;
+    }
+
+    .select-wrapper::after {
+      content: '';
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 4px solid transparent;
+      border-top-color: #666;
+      pointer-events: none;
+    }
+
+    .shortcut-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .shortcut-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .shortcut-item:hover {
+      background: #f0f0f0;
+    }
+
+    .shortcut-item.editing {
+      background: #e8f5e9;
+    }
+
+    .shortcut-label {
+      font-size: 12px;
+      color: #333;
+      flex-shrink: 0;
+    }
+
+    .shortcut-keys {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .key {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', 'Monaco', monospace;
+      color: #555;
+    }
+
+    .key.mod {
+      background: #6BCB77;
+      border-color: #54a05d;
+      color: #fff;
+    }
+
+    .shortcut-edit {
+      display: none;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .shortcut-item.editing .shortcut-keys {
+      display: none;
+    }
+
+    .shortcut-item.editing .shortcut-edit {
+      display: flex;
+    }
+
+    .shortcut-input {
+      padding: 5px 10px;
+      border: 2px solid #6BCB77;
+      border-radius: 4px;
+      font-size: 11px;
+      width: 120px;
+      outline: none;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .shortcut-input.recording {
+      animation: pulse 1s infinite;
+    }
+
+    .shortcut-input.error {
+      border-color: #d93025;
+      color: #d93025;
+      animation: none;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        border-color: #6BCB77;
+      }
+
+      50% {
+        border-color: #54a05d;
+      }
+    }
+
+    .edit-btn {
+      padding: 5px 12px;
+      font-size: 11px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      font-weight: 500;
+    }
+
+    .edit-btn.primary {
+      background: #6BCB77;
+      color: #fff;
+    }
+
+    .edit-btn.primary:hover {
+      background: #54a05d;
+    }
+
+    .edit-btn.secondary {
+      background: #eee;
+      color: #666;
+    }
+
+    .edit-btn.secondary:hover {
+      background: #ddd;
+    }
+
+    .footer {
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #eee;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .version-info {
+      font-size: 11px;
+      color: #888;
+    }
+
+    .version-info .author {
+      color: #6BCB77;
+    }
+
+    .doc-link {
+      font-size: 11px;
+      color: #6BCB77;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .doc-link:hover {
+      text-decoration: underline;
+    }
+
+    .doc-link svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .reset-btn {
+      font-size: 11px;
+      color: #e53e3e;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .reset-btn:hover {
+      text-decoration: underline;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #6BCB77;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      opacity: 0;
+      transition: all 0.2s ease;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .hint {
+      font-size: 10px;
+      color: #999;
+      margin-top: 8px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <div class="logo">
+      <img src="../icons/icon48.png" alt="SuperTables">
+    </div>
+    <div>
+      <div class="title" data-i18n="title">SuperTables</div>
+      <div class="subtitle" data-i18n="subtitle">Table Selection Tool</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="shortcuts" data-i18n="tabShortcuts">Shortcuts</div>
+    <div class="tab" data-tab="settings" data-i18n="tabSettings">Settings</div>
+  </div>
+
+  <div id="shortcuts-tab" class="tab-content active">
+    <div class="section">
+      <div class="section-title" data-i18n="sectionShortcuts">Keyboard Shortcuts</div>
+      <div class="shortcut-list" id="shortcut-list">
+        <!-- Shortcuts will be generated by JS -->
+      </div>
+      <div class="hint" data-i18n-hint>Click to edit shortcut</div>
+    </div>
+  </div>
+
+  <div id="settings-tab" class="tab-content">
+    <div class="section">
+      <div class="section-title" data-i18n="sectionColumnSelection">Column Selection</div>
+      <div class="setting-item">
+        <div>
+          <div class="setting-label" data-i18n="includeHeader">Include Header Row</div>
+          <div class="setting-desc" data-i18n="includeHeaderDesc">When selecting a column, include the header cells
+          </div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="columnIncludeHeader">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title" data-i18n="sectionCopy">Copy Settings</div>
+      <div class="setting-item">
+        <div>
+          <div class="setting-label" data-i18n="keepEmptyPlaceholders">Keep Empty Placeholders</div>
+          <div class="setting-desc" data-i18n="keepEmptyPlaceholdersDesc">When copying non-contiguous cells, keep empty
+            placeholders for unselected cells</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="copyKeepEmptyPlaceholders">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title" data-i18n="sectionStatsBar">Statistics Bar</div>
+      <div class="setting-item">
+        <div>
+          <div class="setting-label" data-i18n="statsPosition">Position</div>
+          <div class="setting-desc" data-i18n="statsPositionDesc">Choose where to display the statistics bar</div>
+        </div>
+        <div class="select-wrapper">
+          <select id="statsPosition">
+            <option value="center" data-i18n="positionCenter">Bottom Center</option>
+            <option value="left" data-i18n="positionLeft">Bottom Left</option>
+            <option value="right" data-i18n="positionRight">Bottom Right</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-top">
+      <span class="version-info">v1.1.0 by <span class="author">wangxin</span></span>
+      <button class="doc-link" id="doc-link">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h5v7h7v9H6z" />
+          <path d="M8 12h8v2H8zm0 4h8v2H8z" />
+        </svg>
+        <span data-i18n="usageDoc">Usage Guide</span>
+      </button>
+    </div>
+    <div class="footer-bottom">
+      <span></span>
+      <button class="reset-btn" id="reset-btn" data-i18n="resetDefaults">Reset to Defaults</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Settings saved</div>
+
+  <script src="i18n.js"></script>
+  <script src="popup.js"></script>
+</body>
+
+</html>

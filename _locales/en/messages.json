@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "TableHelper",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Select table cells like Excel - select, copy, and analyze table data on any webpage",
+    "description": "Extension description"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "TableHelper",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Excelのようにテーブルセルを選択 - 選択、コピー、データ分析",
+    "description": "Extension description"
+  }
+}

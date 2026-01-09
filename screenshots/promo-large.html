@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SuperTables Promo - Large (1400x560)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 1400px;
+      height: 560px;
+      background: linear-gradient(135deg, #217346 0%, #1a5c38 50%, #0d3320 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 60px 80px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Background pattern */
+    .bg-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .left-content {
+      position: relative;
+      z-index: 1;
+      max-width: 500px;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: #fff;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .logo img {
+      width: 60px;
+      height: 60px;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 48px;
+      font-weight: 700;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+
+    .tagline {
+      color: rgba(255,255,255,0.95);
+      font-size: 24px;
+      margin-bottom: 32px;
+      line-height: 1.4;
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.12);
+      padding: 12px 20px;
+      border-radius: 30px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .feature svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    /* Right side - Demo table */
+    .demo-container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .demo-table {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      overflow: hidden;
+      transform: perspective(1000px) rotateY(-8deg) rotateX(2deg);
+    }
+
+    .demo-header {
+      background: #fafbfc;
+      padding: 12px 20px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+
+    .demo-header span {
+      margin-left: 10px;
+      color: #666;
+      font-size: 13px;
+    }
+
+    .demo-content {
+      padding: 0;
+    }
+
+    table {
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      text-align: left;
+    }
+
+    th {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: #555;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .selected {
+      background: rgba(33, 115, 70, 0.15) !important;
+      outline: 2px solid #217346;
+      outline-offset: -2px;
+    }
+
+    .number {
+      font-family: 'SF Mono', Monaco, monospace;
+      text-align: right;
+    }
+
+    .positive { color: #217346; }
+    .negative { color: #e53e3e; }
+
+    /* Stats panel mock */
+    .stats-mock {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+      padding: 12px 24px;
+      border-radius: 10px;
+      display: flex;
+      gap: 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .stat-value {
+      font-size: 16px;
+      color: #fff;
+      font-weight: 600;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-pattern"></div>
+
+  <div class="left-content">
+    <div class="logo-row">
+      <div class="logo">
+        <img src="../icons/icon128.png" alt="SuperTables">
+      </div>
+      <h1>SuperTables</h1>
+    </div>
+    <p class="tagline">Select table cells like Excel<br>on any webpage</p>
+    <div class="features">
+      <div class="feature">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L11 13.17l6.59-6.59L19 8l-9 9z"/></svg>
+        Click to Select
+      </div>
+      <div class="feature">
+        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        Copy to Excel
+      </div>
+      <div class="feature">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+        Instant Stats
+      </div>
+      <div class="feature">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        Export .xlsx
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-container">
+    <div class="demo-table">
+      <div class="demo-header">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+        <span>Sales Report</span>
+      </div>
+      <div class="demo-content">
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th class="number">Revenue</th>
+              <th class="number">Growth</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>MacBook Pro</td>
+              <td class="number selected">$2,468,000</td>
+              <td class="number positive selected">+15.3%</td>
+            </tr>
+            <tr>
+              <td>iPhone 15</td>
+              <td class="number selected">$3,923,700</td>
+              <td class="number positive selected">+22.1%</td>
+            </tr>
+            <tr>
+              <td>AirPods Pro</td>
+              <td class="number selected">$1,473,000</td>
+              <td class="number positive selected">+8.7%</td>
+            </tr>
+            <tr>
+              <td>iPad Air</td>
+              <td class="number selected">$1,286,800</td>
+              <td class="number negative selected">-3.2%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="stats-mock">
+      <div class="stat">
+        <div class="stat-label">Sum</div>
+        <div class="stat-value">$9.15M</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Avg</div>
+        <div class="stat-value">$2.29M</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Max</div>
+        <div class="stat-value">+22.1%</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

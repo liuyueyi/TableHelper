@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SuperTables Demo - Sales Report</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f7fa;
+      padding: 40px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      color: #1a1a2e;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-header h2 {
+      font-size: 18px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .badge {
+      background: #e8f5e9;
+      color: #217346;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    th {
+      background: #fafbfc;
+      font-weight: 600;
+      color: #555;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      font-size: 14px;
+      color: #333;
+    }
+
+    tr:hover td {
+      background: #fafbfc;
+    }
+
+    .product-name {
+      font-weight: 500;
+    }
+
+    .number {
+      font-family: 'SF Mono', Monaco, monospace;
+      text-align: right;
+    }
+
+    .positive {
+      color: #217346;
+    }
+
+    .negative {
+      color: #e53e3e;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status.completed {
+      background: #e8f5e9;
+      color: #217346;
+    }
+
+    .status.pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status.processing {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    /* Simulated SuperTables selection styles */
+    .st-selected {
+      outline: 2px solid #217346 !important;
+      outline-offset: -2px;
+      background-color: rgba(33, 115, 70, 0.12) !important;
+    }
+
+    .st-col-selected {
+      background-color: rgba(33, 115, 70, 0.08) !important;
+    }
+
+    /* Simulated Stats Panel */
+    .stats-panel {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+      border-radius: 12px;
+      padding: 16px 24px;
+      display: flex;
+      gap: 28px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      z-index: 10000;
+    }
+
+    .stat-item {
+      text-align: center;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .stat-item:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    .mode-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      margin-left: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      color: #aaa;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .mode-toggle svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    /* Keyboard hint */
+    .keyboard-hint {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .kbd {
+      background: linear-gradient(180deg, #217346 0%, #1a5c38 100%);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: -apple-system, monospace;
+    }
+
+    .plus {
+      color: #888;
+    }
+
+    /* Extension icon indicator */
+    .ext-indicator {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      padding: 10px 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+
+    .ext-indicator img {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+    }
+
+    .ext-indicator span {
+      font-weight: 600;
+      color: #217346;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Q4 Sales Report</h1>
+      <p>October - December 2024</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Product Sales Summary</h2>
+        <span class="badge">Live Data</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th class="number">Units Sold</th>
+            <th class="number">Revenue</th>
+            <th class="number">Growth</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="product-name">MacBook Pro 14"</td>
+            <td>Electronics</td>
+            <td class="number st-selected">1,234</td>
+            <td class="number st-selected">$2,468,000</td>
+            <td class="number positive st-selected">+15.3%</td>
+            <td><span class="status completed">Completed</span></td>
+          </tr>
+          <tr>
+            <td class="product-name">iPhone 15 Pro</td>
+            <td>Electronics</td>
+            <td class="number st-selected">3,567</td>
+            <td class="number st-selected">$3,923,700</td>
+            <td class="number positive st-selected">+22.1%</td>
+            <td><span class="status completed">Completed</span></td>
+          </tr>
+          <tr>
+            <td class="product-name">AirPods Pro</td>
+            <td>Accessories</td>
+            <td class="number st-selected">5,892</td>
+            <td class="number st-selected">$1,473,000</td>
+            <td class="number positive st-selected">+8.7%</td>
+            <td><span class="status completed">Completed</span></td>
+          </tr>
+          <tr>
+            <td class="product-name">iPad Air</td>
+            <td>Electronics</td>
+            <td class="number st-selected">2,145</td>
+            <td class="number st-selected">$1,286,800</td>
+            <td class="number negative st-selected">-3.2%</td>
+            <td><span class="status pending">Pending</span></td>
+          </tr>
+          <tr>
+            <td class="product-name">Apple Watch</td>
+            <td>Wearables</td>
+            <td class="number st-selected">4,321</td>
+            <td class="number st-selected">$1,728,400</td>
+            <td class="number positive st-selected">+12.5%</td>
+            <td><span class="status processing">Processing</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Extension indicator -->
+  <div class="ext-indicator">
+    <img src="../icons/icon48.png" alt="SuperTables">
+    <span>SuperTables</span>
+  </div>
+
+  <!-- Keyboard hint -->
+  <div class="keyboard-hint">
+    <span class="kbd">⌘</span>
+    <span class="plus">+</span>
+    <span>Click to select cells</span>
+  </div>
+
+  <!-- Stats Panel -->
+  <div class="stats-panel">
+    <div class="stat-item">
+      <div class="stat-label">Count</div>
+      <div class="stat-value">15</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Numeric</div>
+      <div class="stat-value">15</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Sum</div>
+      <div class="stat-value">10,879,900</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Average</div>
+      <div class="stat-value">2,175,980</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Min</div>
+      <div class="stat-value">1,234</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Max</div>
+      <div class="stat-value">5,892</div>
+    </div>
+    <div class="mode-toggle">
+      <svg viewBox="0 0 24 24"><path d="M3 18h12v-2H3v2zM3 6v2h18V6H3zm0 7h18v-2H3v2z"/></svg>
+      <span>Text</span>
+    </div>
+  </div>
+</body>
+</html>
