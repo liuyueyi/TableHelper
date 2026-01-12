@@ -59,7 +59,8 @@ const i18n = {
 
       // Documentation
       usageDoc: 'Usage Guide',
-      docTitle: 'Usage Guide'
+      docTitle: 'Usage Guide',
+      tableTool: 'Table Tool'
     },
 
     zh: {
@@ -116,7 +117,8 @@ const i18n = {
 
       // Documentation
       usageDoc: '使用文档',
-      docTitle: '使用文档'
+      docTitle: '使用文档',
+      tableTool: '表格工具'
     },
 
     ja: {
@@ -173,7 +175,8 @@ const i18n = {
 
       // Documentation
       usageDoc: '使用ガイド',
-      docTitle: '使用ガイド'
+      docTitle: '使用ガイド',
+      tableTool: 'テーブルツール'
     }
   },
 

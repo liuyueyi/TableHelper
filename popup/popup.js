@@ -2,7 +2,7 @@
  * SuperTables - Popup Settings Script
  * Supports i18n, shortcut editing, and position settings
  */
-(function() {
+(function () {
   'use strict';
 
   // Detect platform
@@ -43,6 +43,7 @@
   const tabs = document.querySelectorAll('.tab');
   const shortcutList = document.getElementById('shortcut-list');
   const docLink = document.getElementById('doc-link');
+  const tableToolLink = document.getElementById('table-tool-link');
 
   /**
    * Initialize i18n
@@ -71,8 +72,8 @@
     const hint = document.querySelector('[data-i18n-hint]');
     if (hint) {
       hint.textContent = i18n.currentLocale === 'zh' ? '点击编辑快捷键' :
-                         i18n.currentLocale === 'ja' ? 'クリックして編集' :
-                         'Click to edit shortcut';
+        i18n.currentLocale === 'ja' ? 'クリックして編集' :
+          'Click to edit shortcut';
     }
   }
 
@@ -420,6 +421,11 @@
     // Documentation link - open in new tab
     docLink.addEventListener('click', () => {
       chrome.tabs.create({ url: chrome.runtime.getURL('popup/docs.html') });
+    });
+
+    // Table tool link - open in new tab
+    tableToolLink.addEventListener('click', () => {
+      chrome.tabs.create({ url: chrome.runtime.getURL('popup/table-tool.html') });
     });
   }
 

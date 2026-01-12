@@ -146,11 +146,6 @@ class DrawerManager {
             <div class="collapsible-content">
               <div class="operation-controls">
                 <label class="radio-label">
-                  <input type="radio" name="set-operation" id="set-no" value="no">
-                  <span class="radiomark"></span>
-                  无
-                </label>
-                <label class="radio-label">
                   <input type="radio" name="set-operation" id="set-intersection" value="intersection">
                   <span class="radiomark"></span>
                   交集
@@ -1068,7 +1063,7 @@ class DrawerManager {
                 });
 
                 const insertValues = filteredDataRows.map(row => {
-                    return '(' + row.map(cell => "'" + cell.textContent.trim().replace(/'/g, "''") + "'").join(',') + ')';
+                    return '(' + row.map(cell => this.formatSqlValue(cell.textContent)).join(',') + ')';
                 }).join(',\n  ');
 
                 return `INSERT INTO ${tableName} (${filteredColumns.join(',')}) VALUES\n  ${insertValues};`;
@@ -1108,9 +1103,8 @@ class DrawerManager {
                     const tupleValues = [];
                     for (const colIndex of selectedColumnIndices) {
                         const cellValue = row[colIndex]?.textContent.trim();
-                        // 转义单引号并用单引号包围值
-                        const escapedValue = cellValue ? cellValue.replace(/'/g, "''") : '';
-                        tupleValues.push(`'${escapedValue}'`);
+                        // 使用通用方法处理单元格值
+                        tupleValues.push(this.formatSqlValue(cellValue));
                     }
                     return `(${tupleValues.join(',')})`;
                 }).filter(tuple => tuple !== '()'); // 过滤空元组
@@ -1157,17 +1151,16 @@ class DrawerManager {
                     const setCols = setColsInput.split(',').map(col => col.trim()).filter(col => col);
                     setColumns = columns.filter((col, idx) => setCols.includes(headers[idx].toLowerCase()));
                 } else {
-                    setColumns = ''
+                    setColumns = []
                 }
 
                 // 如果设置了查询列，则只使用指定的列作为WHERE条件
                 if (whereColsInput && whereColsInput.trim()) {
                     const whereCols = whereColsInput.split(',').map(col => col.trim()).filter(col => col);
                     whereColumns = columns.filter((col, idx) => whereCols.includes(headers[idx].toLowerCase()));
-                } else if (setColumns == '') {
+                } else if (setColumns.length == 0) {
                     // 更新列和查询列都没有设置时，使用所有的列作为查询列
-                    const whereCols = columns;
-                    whereColumns = columns.filter((col, idx) => whereCols.includes(headers[idx].toLowerCase()));
+                    whereColumns = columns
                 }
 
                 // 为每一行数据生成一个UPDATE语句
@@ -1176,14 +1169,14 @@ class DrawerManager {
                     const setPairs = setColumns.map((col, colIdx) => {
                         // 找到对应的表头索引
                         const headerIdx = headers.findIndex(header => `\`${header}\`` === col);
-                        return `${col} = '${row[headerIdx]?.textContent.trim().replace(/'/g, "''") || ""}'`;
+                        return `${col} = ${this.formatSqlValue(row[headerIdx]?.textContent || "")}`;
                     }).join(', ');
 
                     // 构建WHERE子句
                     const wherePairs = whereColumns.map((col, colIdx) => {
                         // 找到对应的表头索引
                         const headerIdx = headers.findIndex(header => `\`${header}\`` === col);
-                        return `${col} = '${row[headerIdx]?.textContent.trim().replace(/'/g, "''") || ""}'`;
+                        return `${col} = ${this.formatSqlValue(row[headerIdx]?.textContent || "")}`;
                     }).join(' AND ');
 
                     return `UPDATE ${tableName} SET ${setPairs} WHERE ${wherePairs};`;
@@ -1195,6 +1188,32 @@ class DrawerManager {
                 return '未知SQL操作';
         }
     }
+
+    /**
+     * Format cell value for SQL operations
+     * Handles special values like null, (null), NULL and escapes single quotes
+     * @param {string} cellText - The raw cell text content
+     * @returns {string} - Formatted SQL value (with quotes) or NULL
+     */
+    formatSqlValue(cellText) {
+        if (cellText === null || cellText === undefined) {
+            return 'NULL';
+        }
+
+        const trimmedText = cellText.toString().trim();
+
+        // Check for null-like values
+        if (trimmedText.toLowerCase() === 'null' || trimmedText === '(null)') {
+            return 'NULL';
+        }
+
+        // Escape single quotes in the text
+        const escapedText = trimmedText.replace(/'/g, "''");
+
+        // Return the value wrapped in quotes
+        return `'${escapedText}'`;
+    }
+
     /**
      * Get selected cells from the table as 2D array
      * @private
