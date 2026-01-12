@@ -198,6 +198,53 @@ class DrawerManager {
                   UPDATE
                 </label>
               </div>
+              
+              <!-- 表名输入框 -->
+              <div class="sql-operation-row">
+                <div class="operation-controls">
+                  <label style="margin-left: 8px;">表名:</label>
+                  <div class="input-group">
+                    <input type="text" id="sql-table-name" placeholder="请输入表名" style="width: 100%;">
+                  </div>
+                </div>
+              </div>
+              <!-- INSERT 操作的输入框 -->
+              <div class="sql-operation-row" id="insert-columns-row" style="display: none;">
+                <div class="operation-controls">
+                  <div class="input-group">
+                    <label>选中列 (逗号分隔):</label>
+                    <input type="text" id="sql-insert-include-columns" placeholder="例如: id,name,age" style="width: 100%;">
+                  </div>
+                  <div class="input-group">
+                    <label>排除列 (逗号分隔):</label>
+                    <input type="text" id="sql-insert-exclude-columns" placeholder="例如: password,temp" style="width: 100%;">
+                  </div>
+                </div>
+              </div>
+              
+              <!-- SELECT 操作的输入框 -->
+              <div class="sql-operation-row" id="select-condition-row" style="display: none;">
+                <div class="operation-controls">
+                  <div class="input-group">
+                    <label>查询条件 (逗号分隔):</label>
+                    <input type="text" id="sql-select-condition" placeholder="用于构建查询条件的列，如name,age" style="width: 100%;">
+                  </div>
+                </div>
+              </div>
+              
+              <!-- UPDATE 操作的输入框 -->
+              <div class="sql-operation-row" id="update-columns-row" style="display: none;">
+                <div class="operation-controls">
+                  <div class="input-group">
+                    <label>更新列 (逗号分隔):</label>
+                    <input type="text" id="sql-update-set-columns" placeholder="例如: name,age" style="width: 100%;">
+                  </div>
+                  <div class="input-group">
+                    <label>查询列 (逗号分隔):</label>
+                    <input type="text" id="sql-update-where-columns" placeholder="例如: id,status" style="width: 100%;">
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
               
@@ -419,9 +466,70 @@ class DrawerManager {
         const sqlOperationRadios = document.querySelectorAll('input[name="sql-operation"]');
         sqlOperationRadios.forEach(radio => {
             radio.addEventListener('change', () => {
+                // 显示对应操作的输入框
+                const insertRow = document.getElementById('insert-columns-row');
+                const selectRow = document.getElementById('select-condition-row');
+                const updateRow = document.getElementById('update-columns-row');
+
+                if (radio.value === 'insert') {
+                    if (insertRow) insertRow.style.display = 'block';
+                    if (selectRow) selectRow.style.display = 'none';
+                    if (updateRow) updateRow.style.display = 'none';
+                } else if (radio.value === 'select') {
+                    if (insertRow) insertRow.style.display = 'none';
+                    if (selectRow) selectRow.style.display = 'block';
+                    if (updateRow) updateRow.style.display = 'none';
+                } else if (radio.value === 'update') {
+                    if (insertRow) insertRow.style.display = 'none';
+                    if (selectRow) selectRow.style.display = 'none';
+                    if (updateRow) updateRow.style.display = 'block';
+                } else {
+                    if (insertRow) insertRow.style.display = 'none';
+                    if (selectRow) selectRow.style.display = 'none';
+                    if (updateRow) updateRow.style.display = 'none';
+                }
+
                 this._autoExecuteOperation('sql-operations');
             });
         });
+
+
+        const sqlTableName = document.getElementById('sql-table-name');
+        if (sqlTableName) {
+            sqlTableName.addEventListener('input', () => {
+                this._autoExecuteOperation('sql-operations');
+            });
+        }
+        const sqlInsertColumns = document.getElementById('sql-insert-include-columns');
+        if (sqlInsertColumns) {
+            sqlInsertColumns.addEventListener('input', () => {
+                this._autoExecuteOperation('sql-operations');
+            });
+        }
+        const sqlExcludeColumns = document.getElementById('sql-insert-exclude-columns');
+        if (sqlExcludeColumns) {
+            sqlExcludeColumns.addEventListener('input', () => {
+                this._autoExecuteOperation('sql-operations');
+            });
+        }
+        const sqlUpdateSetColumns = document.getElementById('sql-update-set-columns');
+        if (sqlUpdateSetColumns) {
+            sqlUpdateSetColumns.addEventListener('input', () => {
+                this._autoExecuteOperation('sql-operations');
+            });
+        }
+        const sqlUpdateWhereColumns = document.getElementById('sql-update-where-columns');
+        if (sqlUpdateWhereColumns) {
+            sqlUpdateWhereColumns.addEventListener('input', () => {
+                this._autoExecuteOperation('sql-operations');
+            });
+        }
+        const sqlSelectColumns = document.getElementById('sql-select-condition')
+        if (sqlSelectColumns) {
+            sqlSelectColumns.addEventListener('input', () => {
+                this._autoExecuteOperation('sql-operations');
+            });
+        }
 
         // Copy result button
         const copyResultBtn = document.getElementById('copy-result');
@@ -818,11 +926,13 @@ class DrawerManager {
         if (result2D[0].length != 2) {
             return '集合操作请选择两列数据';
         }
-        const col0 = []
-        const col1 = []
+
+        // 提取两列数据
+        const col0 = [];
+        const col1 = [];
         for (const row of result2D) {
-            col0.push(row[0])
-            col1.push(row[1])
+            col0.push(row[0]);
+            col1.push(row[1]);
         }
 
         // 记录原始集合的元素个数
@@ -857,7 +967,7 @@ class DrawerManager {
                 operationName = '未知操作';
         }
 
-        this.showStatusMessage(`集合操作完成: A集合 ${originalSetASize} 个元素, B集合 ${originalSetBSize} 个元素, ${operationName}结果 ${resultCount} 个元素`, 'info');
+        this.showStatusMessage(`集合操作完成: A集合 \${originalSetASize} 个元素, B集合 \${originalSetBSize} 个元素, \${operationName}结果 \${resultCount} 个元素`, 'info');
         return result;
     }
 
@@ -876,22 +986,215 @@ class DrawerManager {
 
         const operation = selectedOp.value;
 
-        // Extract data from 2D array of selected cells
-        const allCells = cells2D.flat();
-        const values = allCells.map(cell => `'${cell.textContent.trim().replace(/'/g, "''")}'`).filter(text => text !== "''");
+        // 检查是否至少有一行数据作为表头
+        if (cells2D.length === 0) {
+            return '请先选择表格数据';
+        }
 
+        // 检查第一行是否为表头（检查第一个单元格是否为 th 标签）
+        const firstRow = cells2D[0];
+        if (!firstRow || firstRow.length === 0) {
+            this.showStatusMessage('错误: 请选中包含表头的表格数据，第一行将作为字段名', 'error');
+            return '错误: 请选中包含表头的表格数据，第一行将作为字段名';
+        }
+
+        // 检查第一个单元格是否为 th 标签，如果是则表示有表头
+        const hasHeader = firstRow.some(cell => cell.tagName.toLowerCase() === 'th');
+        if (!hasHeader) {
+            this.showStatusMessage('错误: 请选中包含表头的表格数据（第一行应包含 th 标签作为表头）', 'error');
+            return '错误: 请选中包含表头的表格数据（第一行应包含 th 标签作为表头）';
+        }
+
+        // 提取表头作为字段名
+        const headers = firstRow.map(cell => cell.textContent.trim());
+
+        // 检查表头是否为空
+        const hasEmptyHeader = headers.some(header => !header);
+        if (hasEmptyHeader) {
+            this.showStatusMessage('错误: 表头包含空字段，请确保第一行每个单元格都有内容作为字段名', 'error');
+            return '错误: 表头包含空字段，请确保第一行每个单元格都有内容作为字段名';
+        }
+
+        // 提取数据行（跳过表头）
+        const dataRows = cells2D.slice(1);
+
+        // 获取表名
+        let tableName = document.getElementById('sql-table-name')?.value || 'table_name';
+        // 如果表名中形如 xxx.xxx 格式，表示同时指定了库 + 表名，需要我们分别为库和表，添加 `
+        const tableNameParts = tableName.split('.');
+        if (tableNameParts.length === 2) {
+            tableName = `\`${tableNameParts[0]}\`` + '.' + `\`${tableNameParts[1]}\``;
+        } else {
+            tableName = `\`${tableName}\``;
+        }
+
+        // 生成字段列表
+        const columns = headers.map(header => `\`${header.replace(/\`/g, '``')}\``); // 使用反引号包围字段名，防止SQL关键字冲突
+
+        // 根据操作类型生成SQL
         switch (operation) {
             case 'insert':
-                return `INSERT INTO table_name (column_name) VALUES\n  (${values.join(',\n  ')});`;
+                if (dataRows.length === 0) {
+                    return '没有数据行用于INSERT操作，请确保选择的表格包含表头和至少一行数据';
+                }
+
+                // 获取选中列和排除列
+                const includeColsInput = document.getElementById('sql-insert-include-columns')?.value;
+                const excludeColsInput = document.getElementById('sql-insert-exclude-columns')?.value;
+
+                let filteredColumns = columns;
+
+                // 如果设置了选中列，则只使用选中的列
+                if (includeColsInput && includeColsInput.trim()) {
+                    const includeCols = includeColsInput.split(',').map(col => col.trim()).filter(col => col);
+                    filteredColumns = columns.filter((col, idx) => includeCols.includes(headers[idx].toLowerCase()));
+                }
+                // 如果设置了排除列，则移除排除的列
+                else if (excludeColsInput && excludeColsInput.trim()) {
+                    const excludeCols = excludeColsInput.split(',').map(col => col.trim()).filter(col => col);
+                    filteredColumns = columns.filter((col, idx) => !excludeCols.includes(headers[idx].toLowerCase()));
+                }
+
+                // 过滤数据行以匹配列
+                const filteredDataRows = dataRows.map(row => {
+                    if (includeColsInput && includeColsInput.trim()) {
+                        const includeCols = includeColsInput.split(',').map(col => col.trim()).filter(col => col);
+                        return row.filter((_, idx) => includeCols.includes(headers[idx].toLowerCase()));
+                    } else if (excludeColsInput && excludeColsInput.trim()) {
+                        const excludeCols = excludeColsInput.split(',').map(col => col.trim()).filter(col => col);
+                        return row.filter((_, idx) => !excludeCols.includes(headers[idx].toLowerCase()));
+                    }
+                    return row;
+                });
+
+                const insertValues = filteredDataRows.map(row => {
+                    return '(' + row.map(cell => "'" + cell.textContent.trim().replace(/'/g, "''") + "'").join(',') + ')';
+                }).join(',\n  ');
+
+                return `INSERT INTO ${tableName} (${filteredColumns.join(',')}) VALUES\n  ${insertValues};`;
+
             case 'select':
-                return `SELECT * FROM table_name WHERE column_name IN (${values.join(',')});`;
+                // 获取查询条件字段
+                const selectConditionInput = document.getElementById('sql-select-condition')?.value;
+
+                // 确定要使用的列（如果输入框为空，则使用所有列）
+                let selectedColumns = [];
+                if (selectConditionInput && selectConditionInput.trim()) {
+                    // 如果输入框有值，使用输入的字段名
+                    selectedColumns = selectConditionInput.split(',').map(col => col.trim()).filter(col => col);
+                } else {
+                    // 如果输入框为空，使用所有表头字段
+                    selectedColumns = headers;
+                }
+
+                // 构建用于WHERE子句的列
+                const selectedColumnNames = [];
+                const selectedColumnIndices = [];
+
+                for (let i = 0; i < headers.length; i++) {
+                    if (selectedColumns.includes(headers[i])) {
+                        selectedColumnNames.push(columns[i]);
+                        selectedColumnIndices.push(i);
+                    }
+                }
+
+                // 如果没有匹配的列，返回基本查询
+                if (selectedColumnNames.length === 0) {
+                    return `SELECT * FROM ${tableName};`;
+                }
+
+                // 构建IN子句中的值列表
+                const valueTuples = dataRows.map(row => {
+                    const tupleValues = [];
+                    for (const colIndex of selectedColumnIndices) {
+                        const cellValue = row[colIndex]?.textContent.trim();
+                        // 转义单引号并用单引号包围值
+                        const escapedValue = cellValue ? cellValue.replace(/'/g, "''") : '';
+                        tupleValues.push(`'${escapedValue}'`);
+                    }
+                    return `(${tupleValues.join(',')})`;
+                }).filter(tuple => tuple !== '()'); // 过滤空元组
+
+                // 如果没有有效的值元组，返回基本查询
+                if (valueTuples.length === 0) {
+                    return `SELECT * FROM ${tableName};`;
+                }
+
+                // 生成最终的SQL查询
+                // 如果只有一列，使用列名 IN (值1,值2,...) 的格式
+                // 如果多列，使用 (列1,列2,...) IN ((值1,值2,...),(值3,值4,...),...) 的格式
+                if (selectedColumnNames.length === 1) {
+                    // 单列情况：列名 IN (值1,值2,...)
+                    const singleColumn = selectedColumnNames[0];
+                    // 从元组中提取单个值
+                    const singleValues = valueTuples.map(tuple => {
+                        // 去掉括号并提取值
+                        const inner = tuple.substring(1, tuple.length - 1); // 去掉首尾的括号
+                        return inner;
+                    }).join(',');
+                    return `SELECT * FROM ${tableName} WHERE ${singleColumn} IN (${singleValues});`;
+                } else {
+                    // 多列情况：(列1,列2) IN ((值1,值2),(值3,值4),...)
+                    const columnsPart = `(${selectedColumnNames.join(',')})`;
+                    const valuesPart = valueTuples.join(',');
+                    return `SELECT * FROM ${tableName} WHERE ${columnsPart} IN (${valuesPart});`;
+                }
+
             case 'update':
-                return `UPDATE table_name SET column_name = new_value WHERE column_name IN (${values.join(',')});`;
+                if (dataRows.length === 0) {
+                    return '没有数据行用于UPDATE操作，请确保选择的表格包含表头和至少一行数据';
+                }
+
+                // 获取更新列和查询列
+                const setColsInput = document.getElementById('sql-update-set-columns')?.value;
+                const whereColsInput = document.getElementById('sql-update-where-columns')?.value;
+
+                let setColumns = columns;
+                let whereColumns = columns;
+
+                // 如果设置了更新列，则只使用指定的列
+                if (setColsInput && setColsInput.trim()) {
+                    const setCols = setColsInput.split(',').map(col => col.trim()).filter(col => col);
+                    setColumns = columns.filter((col, idx) => setCols.includes(headers[idx].toLowerCase()));
+                } else {
+                    setColumns = ''
+                }
+
+                // 如果设置了查询列，则只使用指定的列作为WHERE条件
+                if (whereColsInput && whereColsInput.trim()) {
+                    const whereCols = whereColsInput.split(',').map(col => col.trim()).filter(col => col);
+                    whereColumns = columns.filter((col, idx) => whereCols.includes(headers[idx].toLowerCase()));
+                } else if (setColumns == '') {
+                    // 更新列和查询列都没有设置时，使用所有的列作为查询列
+                    const whereCols = columns;
+                    whereColumns = columns.filter((col, idx) => whereCols.includes(headers[idx].toLowerCase()));
+                }
+
+                // 为每一行数据生成一个UPDATE语句
+                const updateStatements = dataRows.map(row => {
+                    // 构建SET子句
+                    const setPairs = setColumns.map((col, colIdx) => {
+                        // 找到对应的表头索引
+                        const headerIdx = headers.findIndex(header => `\`${header}\`` === col);
+                        return `${col} = '${row[headerIdx]?.textContent.trim().replace(/'/g, "''") || ""}'`;
+                    }).join(', ');
+
+                    // 构建WHERE子句
+                    const wherePairs = whereColumns.map((col, colIdx) => {
+                        // 找到对应的表头索引
+                        const headerIdx = headers.findIndex(header => `\`${header}\`` === col);
+                        return `${col} = '${row[headerIdx]?.textContent.trim().replace(/'/g, "''") || ""}'`;
+                    }).join(' AND ');
+
+                    return `UPDATE ${tableName} SET ${setPairs} WHERE ${wherePairs};`;
+                }).join('\n');
+
+                return updateStatements;
+
             default:
                 return '未知SQL操作';
         }
     }
-
     /**
      * Get selected cells from the table as 2D array
      * @private

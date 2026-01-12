@@ -709,7 +709,7 @@ class StatsPanel {
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
           <path fill="currentColor" d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
         </svg>
-        <span>高级</span>
+        <span id="advanced-btn-text">高级</span>
       </button>
     `;
   }
@@ -834,9 +834,91 @@ class StatsPanel {
       advancedBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        this.drawerManager.toggle();
+
+        // 检查抽屉是否已打开
+        const isDrawerOpen = this.drawerManager.drawerPanel.classList.contains('open');
+
+        if (isDrawerOpen) {
+          // 如果抽屉已打开，则刷新选中的单元格内容并重新触发计算
+          const globalSelectionManager = this._getGlobalSelectionManager();
+          if (globalSelectionManager && typeof globalSelectionManager.getSelectedCells === 'function') {
+            const currentCells = globalSelectionManager.getSelectedCells();
+            if (currentCells && currentCells.length > 0) {
+              // 更新抽屉管理器中的选中内容
+              this.drawerManager.updateSelection(currentCells);
+              // 更新当前存储的选中单元格
+              this.currentSelectedCells = currentCells;
+              // 重新触发抽屉内的操作计算
+              this.drawerManager.updateOperationButtons();
+            }
+          }
+        } else {
+          // 如果抽屉未打开，则正常切换抽屉
+          this.drawerManager.toggle();
+        }
       });
     }
+
+    // 监听抽屉状态变化，更新按钮文本
+    this._setupDrawerStateListener();
+  }
+
+  /**
+   * Setup listener for drawer state changes to update button text
+   * @private
+   */
+  _setupDrawerStateListener() {
+    // 监听抽屉打开/关闭状态变化
+    if (this.drawerManager && this.drawerManager.drawerPanel) {
+      // 使用 MutationObserver 监听抽屉的 open 类变化
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            const isOpen = this.drawerManager.drawerPanel.classList.contains('open');
+            this._updateAdvancedButtonText(isOpen);
+          }
+        });
+      });
+
+      observer.observe(this.drawerManager.drawerPanel, {
+        attributes: true,
+        attributeFilter: ['class']
+      });
+
+      // 初始化按钮文本
+      const isOpen = this.drawerManager.drawerPanel.classList.contains('open');
+      this._updateAdvancedButtonText(isOpen);
+    }
+  }
+
+  /**
+   * Update the advanced button text based on drawer state
+   * @private
+   * @param {boolean} isOpen - Whether the drawer is open
+   */
+  _updateAdvancedButtonText(isOpen) {
+    const buttonText = this.shadowRoot.getElementById('advanced-btn-text');
+    if (buttonText) {
+      buttonText.textContent = isOpen ? '刷新' : '高级';
+    }
+  }
+
+  /**
+   * Get the global selection manager instance
+   * @private
+   */
+  _getGlobalSelectionManager() {
+    // Try to access the global selection manager from the content script
+    if (window.SuperTables && window.SuperTables.contentScript && window.SuperTables.contentScript.selectionManager) {
+      return window.SuperTables.contentScript.selectionManager;
+    }
+
+    // Alternative: try to access via modules
+    if (window.SuperTables && window.SuperTables.modules && window.SuperTables.modules.selectionManager) {
+      return window.SuperTables.modules.selectionManager;
+    }
+
+    return null;
   }
 
   /**
