@@ -51,6 +51,12 @@ class StatsPanel {
     // Append to body
     document.body.appendChild(this.container);
 
+    // Initialize drawer manager
+    this.drawerManager = new window.SuperTables.DrawerManager(this);
+
+    // Store reference to selected cells for drawer operations
+    this.currentSelectedCells = [];
+
     // Setup event listeners
     this._setupEventListeners();
   }
@@ -357,6 +363,8 @@ class StatsPanel {
         margin-left: 8px;
       }
 
+
+
       /* Show all stats button */
       .show-all-btn {
         display: none;
@@ -636,6 +644,7 @@ class StatsPanel {
         padding: 2px 8px;
         border-radius: 10px;
       }
+
     `;
   }
 
@@ -694,6 +703,14 @@ class StatsPanel {
         </svg>
         <span id="toggle-label">Top 5</span>
       </button>
+      
+      <!-- Advanced button -->
+      <button class="advanced-btn" id="advanced-btn" title="Advanced table operations">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
+          <path fill="currentColor" d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+        </svg>
+        <span>高级</span>
+      </button>
     `;
   }
 
@@ -729,6 +746,10 @@ class StatsPanel {
     `;
   }
 
+  /**
+   * Get drawer panel HTML template
+   * @private
+   */
   /**
    * Setup event listeners
    * @private
@@ -806,6 +827,16 @@ class StatsPanel {
         this._hideAllStatsModal();
       }
     });
+
+    // Advanced button
+    const advancedBtn = this.shadowRoot.getElementById('advanced-btn');
+    if (advancedBtn) {
+      advancedBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.drawerManager.toggle();
+      });
+    }
   }
 
   /**
@@ -1232,6 +1263,11 @@ class StatsPanel {
     this.showDownloadButton = true; // Always show download button when stats bar is visible
     this._render();
     this.show();
+
+    // Update drawer manager with current selection
+    if (this.drawerManager && typeof this.drawerManager.updateSelection === 'function') {
+      this.drawerManager.updateSelection(cells);
+    }
   }
 
   /**

@@ -26,6 +26,11 @@
   const clipboardHandler = new ClipboardHandler(selectionManager);
   const excelExporter = new ExcelExporter();
 
+  // Expose the selection manager globally so other modules can access it
+  window.SuperTables = window.SuperTables || {};
+  window.SuperTables.contentScript = window.SuperTables.contentScript || {};
+  window.SuperTables.contentScript.selectionManager = selectionManager;
+
   // Track modifier key state
   let modifierState = {
     cmd: false,
@@ -999,6 +1004,10 @@
       // Skip if clicking on select-all button
       if (selectAllButton && selectAllButton.contains(e.target)) return;
 
+      // Skip if clicking inside the drawer panel
+      const drawerPanel = document.getElementById('drawer-panel');
+      if (drawerPanel && drawerPanel.contains(e.target)) return;
+
       if (selectionManager.getSelectionCount() > 0) {
         const cell = tableDetector.findCell(e.target);
         if (!cell) {
@@ -1017,4 +1026,16 @@
   } else {
     init();
   }
+
+  // Also expose the modules globally for external access
+  window.SuperTables = window.SuperTables || {};
+  window.SuperTables.modules = {
+    settingsManager,
+    tableDetector,
+    selectionManager,
+    statsPanel,
+    clipboardHandler,
+    excelExporter
+  };
+
 })();
