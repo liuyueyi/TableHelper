@@ -4,7 +4,7 @@
     "description": "Extension name"
   },
   "extDescription": {
-    "message": "像Excel一样选择网页表格 - 选择、复制、分析任意网页上的表格数据",
+    "message": "还在为无法批量选择网页表格的行列而烦恼？还在手动拼接SQL语句？Table Helper 提供精准的选择工具与智能SQL生成器，你的网页表格瑞士军刀。",
     "description": "Extension description"
   }
 }

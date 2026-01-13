@@ -4,7 +4,7 @@
     "description": "Extension name"
   },
   "extDescription": {
-    "message": "Excelのようにテーブルセルを選択 - 選択、コピー、データ分析",
+    "message": "ウェブテーブルの行と列をまとめて選択できないことに悩んでいませんか？まだ手動でSQL文を作成していますか？Table Helperは正確な選択ツールとスマートなSQLジェネレーターを提供し、あなたのためのウェブテーブル用スイスアーミーナイフです。",
     "description": "Extension description"
   }
 }

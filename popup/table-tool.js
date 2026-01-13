@@ -26,11 +26,6 @@ class TableToolUtils {
             statusElement.textContent = message;
             statusElement.className = `thp-status-message ${type === 'info' ? 'thp-status-message-info' : ''}`;
             statusElement.style.display = 'block';
-
-            // 5秒后自动隐藏信息
-            setTimeout(() => {
-                statusElement.style.display = 'none';
-            }, 5000);
         }
     }
 

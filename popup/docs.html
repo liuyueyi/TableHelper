@@ -4,8 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SuperTables - Documentation</title>
+  <title>TableHelper - Documentation</title>
   <style>
+    /* 小清新护眼风格CSS */
     * {
       margin: 0;
       padding: 0;
@@ -13,29 +14,31 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #e0f2f1 0%, #d1e8e4 100%);
       min-height: 100vh;
-      padding: 40px 20px;
-      color: #333;
+      padding: 10px 10px;
+      color: #2c3e50;
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 90vw;
       margin: 0 auto;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       overflow: hidden;
+      backdrop-filter: blur(10px);
     }
 
     .header {
-      background: linear-gradient(135deg, #6BCB77 0%, #54a05d 100%);
+      background: linear-gradient(135deg, #88d3ce 0%, #6cbaba 100%);
       color: #fff;
-      padding: 32px 40px;
+      padding: 24px;
       display: flex;
       align-items: center;
       gap: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .header-logo {
@@ -53,9 +56,10 @@
     }
 
     .header-text h1 {
-      font-size: 28px;
-      font-weight: 700;
+      font-size: 24px;
+      font-weight: 600;
       margin-bottom: 4px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .header-text p {
@@ -64,7 +68,7 @@
     }
 
     .content {
-      padding: 40px;
+      padding: 32px;
     }
 
     .section {
@@ -81,13 +85,13 @@
       gap: 12px;
       margin-bottom: 20px;
       padding-bottom: 12px;
-      border-bottom: 2px solid #e8f5e9;
+      border-bottom: 2px solid #e0f2f1;
     }
 
     .section-icon {
       width: 40px;
       height: 40px;
-      background: linear-gradient(135deg, #6BCB77 0%, #54a05d 100%);
+      background: linear-gradient(135deg, #88d3ce 0%, #6cbaba 100%);
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -105,15 +109,16 @@
     .section-title {
       font-size: 20px;
       font-weight: 600;
-      color: #54a05d;
+      color: #6cbaba;
     }
 
     .shortcuts-table {
       width: 100%;
       border-collapse: collapse;
-      border-radius: 12px;
+      border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      background: white;
     }
 
     .shortcuts-table th,
@@ -123,9 +128,9 @@
     }
 
     .shortcuts-table th {
-      background: #f8faf9;
+      background: #e0f2f1;
       font-weight: 600;
-      color: #555;
+      color: #2c3e50;
       font-size: 13px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -134,6 +139,7 @@
     .shortcuts-table td {
       border-bottom: 1px solid #f0f0f0;
       font-size: 14px;
+      color: #2c3e50;
     }
 
     .shortcuts-table tr:last-child td {
@@ -146,7 +152,7 @@
 
     .shortcuts-table .action-name {
       font-weight: 500;
-      color: #333;
+      color: #2c3e50;
     }
 
     .key-combo {
@@ -156,14 +162,14 @@
     }
 
     .kbd {
-      background: linear-gradient(180deg, #6BCB77 0%, #54a05d 100%);
+      background: linear-gradient(180deg, #88d3ce 0%, #6bcb77 100%);
       color: #fff;
       padding: 5px 10px;
       border-radius: 6px;
       font-size: 12px;
       font-weight: 600;
       font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', 'Monaco', monospace;
-      box-shadow: 0 2px 4px rgba(33, 115, 70, 0.3);
+      box-shadow: 0 2px 4px rgba(136, 211, 206, 0.3);
     }
 
     .kbd.secondary {
@@ -172,7 +178,7 @@
     }
 
     .plus {
-      color: #999;
+      color: #7f8c8d;
       font-weight: 500;
     }
 
@@ -183,16 +189,23 @@
     }
 
     .feature-card {
-      background: #f8faf9;
-      border-radius: 12px;
+      background: white;
+      border-radius: 10px;
       padding: 20px;
-      border-left: 4px solid #6BCB77;
+      border-left: 4px solid #88d3ce;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     }
 
     .feature-card h4 {
       font-size: 15px;
       font-weight: 600;
-      color: #6BCB77;
+      color: #88d3ce;
       margin-bottom: 8px;
       display: flex;
       align-items: center;
@@ -224,6 +237,7 @@
       gap: 24px;
       flex-wrap: wrap;
       margin-top: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
     .stat-item {
@@ -281,10 +295,11 @@
     }
 
     .stats-mode-card {
-      background: #f8faf9;
+      background: white;
       border-radius: 10px;
       padding: 16px 20px;
-      border-left: 4px solid #6BCB77;
+      border-left: 4px solid #88d3ce;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
     .stats-mode-card.text-mode {
@@ -294,7 +309,7 @@
     .stats-mode-card h4 {
       font-size: 14px;
       font-weight: 600;
-      color: #6BCB77;
+      color: #88d3ce;
       margin-bottom: 6px;
       display: flex;
       align-items: center;
@@ -395,11 +410,18 @@
     }
 
     .practice-item {
-      background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
-      border-radius: 12px;
+      background: white;
+      border-radius: 10px;
       padding: 24px;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .practice-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     }
 
     .practice-item::before {
@@ -409,7 +431,7 @@
       top: 0;
       bottom: 0;
       width: 5px;
-      background: linear-gradient(180deg, #6BCB77 0%, #7cd587 100%);
+      background: linear-gradient(180deg, #88d3ce 0%, #6bcb77 100%);
     }
 
     .practice-number {
@@ -418,14 +440,14 @@
       top: 16px;
       font-size: 48px;
       font-weight: 700;
-      color: rgba(33, 115, 70, 0.1);
+      color: rgba(136, 211, 206, 0.1);
       line-height: 1;
     }
 
     .practice-item h4 {
       font-size: 16px;
       font-weight: 600;
-      color: #54a05d;
+      color: #88d3ce;
       margin-bottom: 10px;
       display: flex;
       align-items: center;
@@ -456,12 +478,12 @@
     }
 
     .practice-item .steps li strong {
-      color: #6BCB77;
+      color: #88d3ce;
     }
 
     .highlight-box {
-      background: #fff3cd;
-      border: 1px solid #ffc107;
+      background: #e8f4f3;
+      border: 1px solid #c8e6c9;
       border-radius: 8px;
       padding: 16px 20px;
       margin-top: 16px;
@@ -473,27 +495,28 @@
     .highlight-box svg {
       width: 20px;
       height: 20px;
-      fill: #856404;
+      fill: #2e7d32;
       flex-shrink: 0;
       margin-top: 2px;
     }
 
     .highlight-box p {
       font-size: 13px;
-      color: #856404;
+      color: #2e7d32;
       line-height: 1.6;
     }
 
     .footer {
       text-align: center;
       padding: 24px 40px;
-      border-top: 1px solid #eee;
-      color: #888;
+      border-top: 1px solid #e0f2f1;
+      color: #7f8c8d;
       font-size: 13px;
+      background-color: #f8f9fa;
     }
 
     .footer a {
-      color: #217346;
+      color: #88d3ce;
       text-decoration: none;
     }
 
@@ -518,12 +541,220 @@
       }
 
       .header {
-        padding: 24px;
+        padding: 20px;
       }
 
       .content {
-        padding: 24px;
+        padding: 20px;
       }
+    }
+
+    /* 新增样式：高级特性左右布局 */
+    .feature-detail-card {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 24px;
+      margin-bottom: 24px;
+      align-items: flex-start;
+    }
+
+    .feature-content {
+      flex: 1;
+      min-width: 300px;
+      max-width: 50%;
+    }
+
+    .feature-demo {
+      flex: 1;
+      min-width: 300px;
+      max-width: 50%;
+    }
+
+    .feature-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #88d3ce;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .feature-title svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    .feature-description {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .demo-container {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background: #f8f9fa;
+    }
+
+    .demo-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .demo-slide.active {
+      opacity: 1;
+    }
+
+    .demo-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: white;
+    }
+
+    .demo-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 8px 12px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .demo-nav {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .demo-nav-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid #88d3ce;
+      background: white;
+      color: #88d3ce;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .demo-nav-btn:hover {
+      background: #88d3ce;
+      color: white;
+    }
+
+    .demo-nav-btn.active {
+      background: #88d3ce;
+      color: white;
+    }
+
+    /* 响应式：小屏幕下垂直堆叠 */
+    @media (max-width: 900px) {
+      .feature-detail-card {
+        flex-direction: column;
+      }
+
+      .feature-content,
+      .feature-demo {
+        max-width: 100%;
+      }
+    }
+
+    /* 图片预览模态框样式 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .modal-content {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 900px;
+      margin-top: 40px;
+    }
+
+    .modal-caption {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 900px;
+      text-align: center;
+      color: #ccc;
+      padding: 10px 0;
+      font-size: 16px;
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #bbb;
+      text-decoration: none;
+    }
+
+    .zoom-controls {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      z-index: 1001;
+    }
+
+    .zoom-btn {
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-right: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .zoom-btn:hover {
+      background-color: rgba(255, 255, 255, 1);
+    }
+
+    /* 使图片可缩放 */
+    #previewedImage {
+      transition: transform 0.3s ease;
+      transform-origin: center center;
+      margin-top: 15vh;
     }
   </style>
 </head>
@@ -532,10 +763,10 @@
   <div class="container">
     <div class="header">
       <div class="header-logo">
-        <img src="../icons/icon128.png" alt="SuperTables">
+        <img src="../icons/icon128.png" alt="TableHelper">
       </div>
       <div class="header-text">
-        <h1 id="doc-title">SuperTables Documentation</h1>
+        <h1 id="doc-title">Table Helper Documentation</h1>
         <p id="doc-subtitle">Select table cells like Excel</p>
       </div>
     </div>
@@ -619,6 +850,177 @@
         <div class="section-header">
           <div class="section-icon">
             <svg viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+          </div>
+          <h2 class="section-title" id="section-advanced">Advanced Features</h2>
+        </div>
+
+        <!-- Theme Selection Feature -->
+        <div class="feature-detail-card" data-feature="theme-selection">
+          <div class="feature-content">
+            <h3 class="feature-title">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12,2A7,7 0 0,1 19,9C19,11.38 17.81,13.47 16,14.74V17A1,1 0 0,1 15,18H9A1,1 0 0,1 8,17V14.74C6.19,13.47 5,11.38 5,9A7,7 0 0,1 12,2M9,21V20H15V21A1,1 0 0,1 14,22H10A1,1 0 0,1 9,21M11,13H13V16H11V13M11,7H13V11H11V7Z" />
+              </svg>
+              <span class="feature-title-text">Theme Selection</span>
+            </h3>
+            <p class="feature-description">Choose from multiple themes to customize the appearance of the table helper.
+              Switch between light, dark, or system theme based on your preference and working environment.</p>
+          </div>
+          <div class="feature-demo">
+            <div class="demo-container">
+              <div class="demo-slide active">
+                <img src="../icons/img/1-01.webp" alt="Light Theme" />
+                <div class="demo-caption">Light Theme</div>
+              </div>
+            </div>
+            <div class="demo-nav">
+              <button class="demo-nav-btn active" data-slide="0">1</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Side Drawer Panel Feature -->
+        <div class="feature-detail-card" data-feature="side-drawer">
+          <div class="feature-content">
+            <h3 class="feature-title">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M21,4H3A1,1 0 0,0 2,5V9A1,1 0 0,0 3,10H5V14H3A1,1 0 0,0 2,15V19A1,1 0 0,0 3,20H21A1,1 0 0,0 22,19V5A1,1 0 0,0 21,4M20,18H12V15H4V8H20V18Z" />
+              </svg>
+              <span class="feature-title-text">Side Drawer Panel</span>
+            </h3>
+            <p class="feature-description">Access additional tools and information through the collapsible side drawer.
+              View detailed table statistics, export options, and advanced settings without cluttering the main
+              interface.</p>
+          </div>
+          <div class="feature-demo">
+            <div class="demo-container">
+              <div class="demo-slide active">
+                <img src="../icons/img/2-01.webp" alt="Drawer Closed" />
+                <div class="demo-caption">Drawer Open</div>
+              </div>
+              <div class="demo-slide">
+                <img src="../icons/img/2-02.webp" alt="Drawer Open" />
+                <div class="demo-caption">Drawer Open</div>
+              </div>
+              <div class="demo-slide">
+                <img src="../icons/img/2-03.webp" alt="Drawer Settings" />
+                <div class="demo-caption">Drawer Open</div>
+              </div>
+            </div>
+            <div class="demo-nav">
+              <button class="demo-nav-btn active" data-slide="0">1</button>
+              <button class="demo-nav-btn" data-slide="1">2</button>
+              <button class="demo-nav-btn" data-slide="2">3</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advanced Editing Feature -->
+        <div class="feature-detail-card" data-feature="advanced-editing">
+          <div class="feature-content">
+            <h3 class="feature-title">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M14.08,4L19,8.93V19.07C19,19.58 18.58,20 18,20H6C5.42,20 5,19.58 5,19.07V4C5,3.42 5.42,3 6,3H18C18.58,3 19,3.42 19,4V9.07L14.08,4.15C13.7,3.77 13.19,3.77 12.81,4.15L11.85,5.11L14.08,7.34L15.04,6.38L19.92,11.27C19.96,11.31 20,11.35 20,11.4V19.07C20,19.58 19.58,20 19,20H6C5.42,20 5,19.58 5,19.07V4C5,3.42 5.42,3 6,3H12.62L14.08,4.46V4H14.08Z" />
+              </svg>
+              <span class="feature-title-text">Advanced Editing</span>
+            </h3>
+            <p class="feature-description">Perform advanced editing operations on table data including batch updates,
+              conditional formatting, and formula calculations that mirror spreadsheet functionality.</p>
+          </div>
+          <div class="feature-demo">
+            <div class="demo-container">
+              <div class="demo-slide active">
+                <img src="../icons/img/3-01.webp" alt="Batch Edit" />
+                <div class="demo-caption">Batch Updates</div>
+              </div>
+              <div class="demo-slide">
+                <img src="../icons/img/3-02.webp" alt="Conditional Formatting" />
+                <div class="demo-caption">Batch Updates</div>
+              </div>
+              <div class="demo-slide">
+                <img src="../icons/img/3-03.webp" alt="Formula Calculation" />
+                <div class="demo-caption">Batch Updates</div>
+              </div>
+            </div>
+            <div class="demo-nav">
+              <button class="demo-nav-btn active" data-slide="0">1</button>
+              <button class="demo-nav-btn" data-slide="1">2</button>
+              <button class="demo-nav-btn" data-slide="2">3</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Set Operations Feature -->
+        <div class="feature-detail-card" data-feature="set-operations">
+          <div class="feature-content">
+            <h3 class="feature-title">
+              <svg viewBox="0 0 24 24">
+                <path d="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z" />
+              </svg>
+              <span class="feature-title-text">Set Operations</span>
+            </h3>
+            <p class="feature-description">Combine data from multiple tables using set operations like union,
+              intersection, and difference. Merge, join, or compare datasets with simple operations.</p>
+          </div>
+          <div class="feature-demo">
+            <div class="demo-container">
+              <div class="demo-slide active">
+                <img src="../icons/img/4-01.webp" alt="Union Operation" />
+                <div class="demo-caption">Union Operation</div>
+              </div>
+            </div>
+            <div class="demo-nav">
+              <button class="demo-nav-btn active" data-slide="0">1</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SQL Generation Feature -->
+        <div class="feature-detail-card" data-feature="sql-generation">
+          <div class="feature-content">
+            <h3 class="feature-title">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M7,3H21V5H19V7H21V9H19V11H21V13H19V15H21V17H19V19H21V21H7V3M9,5V7H11V5H9M13,5V7H15V5H13M17,5V7H17V5H17M9,9V11H11V9H9M13,9V11H15V9H13M17,9V11H17V9H17M9,13V15H11V13H9M13,13V15H15V13H13M17,13V15H17V13H17M9,17V19H11V17H9M13,17V19H15V17H13M17,17V19H17V17H17Z" />
+              </svg>
+              <span class="feature-title-text">SQL Generation</span>
+            </h3>
+            <p class="feature-description">Automatically generate SQL queries from your table selections and operations.
+              Export data with corresponding SQL statements for database integration.</p>
+          </div>
+          <div class="feature-demo">
+            <div class="demo-container">
+              <div class="demo-slide active">
+                <img src="../icons/img/5-01.webp" alt="SELECT Query" />
+                <div class="demo-caption">INSERT Query</div>
+              </div>
+              <div class="demo-slide">
+                <img src="../icons/img/5-02.webp" alt="INSERT Query" />
+                <div class="demo-caption">SELECT Query</div>
+              </div>
+              <div class="demo-slide">
+                <img src="../icons/img/5-03.webp" alt="Export with SQL" />
+                <div class="demo-caption">Update SQL</div>
+              </div>
+            </div>
+            <div class="demo-nav">
+              <button class="demo-nav-btn active" data-slide="0">1</button>
+              <button class="demo-nav-btn" data-slide="1">2</button>
+              <button class="demo-nav-btn" data-slide="2">3</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg viewBox="0 0 24 24">
               <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
             </svg>
           </div>
@@ -629,11 +1031,24 @@
     </div>
 
     <div class="footer">
-      <p>SuperTables v1.1.0 by <a href="#">wangxin</a> · <span id="footer-tip"></span> <span class="kbd">Esc</span></p>
+      <p>TableHelper v2.0.0 by <a href="https://github.com/liuyueyi/TableHelper">YiHui</a> · <span
+          id="footer-tip"></span> <span class="kbd">Esc</span></p>
     </div>
   </div>
 
   <script src="docs.js"></script>
+
+  <!-- 全屏图片预览模态框 -->
+  <div id="imagePreviewModal" class="modal">
+    <span id="closePreview" class="close">&times;</span>
+    <div class="zoom-controls">
+      <button id="zoomIn" class="zoom-btn">+</button>
+      <button id="zoomOut" class="zoom-btn">-</button>
+      <button id="zoomReset" class="zoom-btn">100%</button>
+    </div>
+    <img id="previewedImage" class="modal-content" src="" alt="">
+    <div id="previewCaption" class="modal-caption"></div>
+  </div>
 </body>
 
 </html>

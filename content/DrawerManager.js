@@ -1179,7 +1179,7 @@ class DrawerManager {
                 operationName = '未知操作';
         }
 
-        this.showStatusMessage(`集合操作完成: A集合 \${originalSetASize} 个元素, B集合 \${originalSetBSize} 个元素, \${operationName}结果 \${resultCount} 个元素`, 'info');
+        this.showStatusMessage(`集合操作完成: A集合 ${originalSetASize} 个元素, B集合 ${originalSetBSize} 个元素, ${operationName}结果 ${resultCount} 个元素`, 'info');
         return result;
     }
 

@@ -7,8 +7,8 @@ const i18n = {
   messages: {
     en: {
       // Header
-      title: 'SuperTables',
-      subtitle: 'Table Selection Tool',
+      title: 'TableHelper',
+      subtitle: 'Table Selection & Operation Tool',
 
       // Tabs
       tabShortcuts: 'Shortcuts',
@@ -150,8 +150,8 @@ const i18n = {
 
     zh: {
       // Header
-      title: 'SuperTables',
-      subtitle: '表格选择工具',
+      title: 'TableHelper',
+      subtitle: '表格选择与操作工具',
 
       // Tabs
       tabShortcuts: '快捷键',
@@ -293,8 +293,8 @@ const i18n = {
 
     ja: {
       // Header
-      title: 'SuperTables',
-      subtitle: 'テーブル選択ツール',
+      title: 'TableHelper',
+      subtitle: 'テーブル選択与操作ツール',
 
       // Tabs
       tabShortcuts: 'ショートカット',
