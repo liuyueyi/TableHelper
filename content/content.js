@@ -71,10 +71,9 @@
     const mode = settingsManager.getSelectionMode(e);
 
     // Check if this is a selectAll action
-    if (mode === 'cell' && isDoubleClick) {
+    if ((mode === 'cell' || mode === 'column' || mode === 'row') && isDoubleClick) {
       const shortcuts = settingsManager.get('shortcuts');
       const shortcut = shortcuts && shortcuts.selectAll;
-      console.log('判断是否为双击:', shortcut)
       if (shortcut && shortcut.doubleClick) {
         // Check if the modifiers match
         const isCmd = isMac ? e.metaKey : e.ctrlKey;
@@ -113,7 +112,7 @@
       <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
         <path d="M3 3h18v18H3V3zm2 2v5h5V5H5zm7 0v5h7V5h-7zm-7 7v5h5v-5H5zm7 0v5h7v-5h-7z"/>
       </svg>
-      <span>全选</span>
+      <span>Ctrl+双击单元格实现全选</span>
     `;
     selectAllButton.style.cssText = `
       position: absolute;
@@ -481,7 +480,6 @@
 
     const isDoubleClick = (firstClickCell === cell && currentTime - firstClickTime < 500);
     const mode = getSelectionMode(e, isDoubleClick);
-    console.log('判断是否为双击:', isDoubleClick, mode)
     if (!mode) return;
 
     e.preventDefault();
