@@ -1,14 +1,14 @@
-# Privacy Policy for SuperTables
+# Privacy Policy for TableHelper
 
 **Last Updated: December 27, 2024**
 
 ## Overview
 
-SuperTables is a Chrome extension that helps users select, copy, and analyze table data on web pages. We are committed to protecting your privacy and being transparent about our practices.
+TableHelper is a Chrome extension that helps users select, copy, and analyze table data on web pages. We are committed to protecting your privacy and being transparent about our practices.
 
 ## Data Collection
 
-**SuperTables does NOT collect, store, or transmit any personal data.**
+**TableHelper does NOT collect, store, or transmit any personal data.**
 
 - No user data is sent to external servers
 - No analytics or tracking is implemented
@@ -26,7 +26,7 @@ The extension stores only user preferences (such as keyboard shortcuts and displ
 
 ## Permissions Explained
 
-SuperTables requires the following permissions:
+TableHelper requires the following permissions:
 
 | Permission | Purpose |
 |------------|---------|
@@ -39,11 +39,11 @@ SuperTables requires the following permissions:
 
 ## Third-Party Services
 
-SuperTables does not use any third-party services, analytics, or tracking tools.
+TableHelper does not use any third-party services, analytics, or tracking tools.
 
 ## Children's Privacy
 
-SuperTables does not knowingly collect any information from children under 13 years of age.
+TableHelper does not knowingly collect any information from children under 13 years of age.
 
 ## Changes to This Policy
 
@@ -51,8 +51,8 @@ We may update this Privacy Policy from time to time. Any changes will be reflect
 
 ## Contact
 
-If you have any questions about this Privacy Policy, please create an issue on our [GitHub repository](https://github.com/wxkingstar/SuperTables/issues).
+If you have any questions about this Privacy Policy, please create an issue on our [GitHub repository](https://github.com/wxkingstar/TableHelper/issues).
 
 ---
 
-**Summary: SuperTables is a privacy-focused extension that processes all data locally on your device. We do not collect, store, or share any personal information.**
+**Summary: TableHelper is a privacy-focused extension that processes all data locally on your device. We do not collect, store, or share any personal information.**

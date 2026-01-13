@@ -3,75 +3,114 @@
 ## 中文 (zh-CN)
 
 ```
-🎯 SuperTables - 像Excel一样选择网页表格
+🎯 SuperTables - 专业网页表格助手 | Excel级操作体验
 
-厌倦了无法方便地复制网页表格数据？SuperTables 让你像使用 Excel 一样，轻松选择、复制、分析任意网页上的表格数据。
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✨ 核心功能
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📌 灵活选择
-• 单元格选择：⌘/Ctrl + 点击选择单个单元格
-• 列选择：Alt + 点击选择整列
-• 行选择：⌘/Ctrl + Alt + 点击选择整行
-• 多选：按住快捷键连续点击，选择多个不连续的区域
-• 范围选择：先点击起始单元格，再 Shift + 点击结束单元格
-
-📊 智能统计
-选中数据后，底部自动显示统计面板：
-• 数字模式：显示计数、求和、平均值、最大值、最小值
-• 文本模式：显示 Top 5 高频词及其出现次数
-• 一键切换：点击切换按钮在两种模式间切换
-
-📋 一键复制
-• 选中数据后按 ⌘/Ctrl + C 复制
-• 保持表格格式，可直接粘贴到 Excel
-• 点击统计面板中的任意数值即可复制
-
-📥 导出 Excel
-• 选中整个表格后，统计面板显示「下载 Excel」按钮
-• 一键导出为 .xlsx 格式文件
+🚀 重新定义网页表格操作体验！告别繁琐的手动复制粘贴，享受如同Excel般流畅的表格选择与处理功能。
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎮 快捷键一览（Mac / Windows）
+✨ 革命性功能亮点
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• 选择单元格：⌘ + 点击 / Ctrl + 点击
-• 选择列：Alt + 点击
-• 选择行：⌘ + Alt + 点击 / Ctrl + Alt + 点击
-• 范围选择：Shift + 点击
+🌟 智能表格检测
+• 自动识别网页中的所有表格元素
+• 支持复杂嵌套表格结构
+• 零配置即装即用
+
+📌 专业级选择模式
+• 单元格选择：⌘/Ctrl + 点击 - 精准选取
+• 列选择：Alt + 点击 - 整列批量处理
+• 行选择：⌘/Ctrl + Alt + 点击 - 快速行操作
+• 范围选择：Shift + 点击 - 矩形区域选择
+• 多区域选择：自由组合，灵活高效
+
+📊 实时智能统计
+• 数值模式：计数、总和、平均值、最大/最小值
+• 文本模式：高频词汇TOP5及出现频率
+• 动态切换：一键在模式间无缝转换
+
+⚡ 一键式数据操作
+• 智能复制：⌘/Ctrl + C，完美保持表格格式
+• Excel导出：一键生成.xlsx文件
+• 直接粘贴：无缝对接Excel及其他表格软件
+
+🎨 个性化定制体验
+• 4种主题可选：Excel经典、清新绿、深色模式、金属质感
+• 统计面板位置自定义：左/中/右灵活布局
+• 完全可定制快捷键，打造个人专属操作习惯
+
+📱 增强功能套组
+• 侧边抽屉面板：高级工具与详细信息
+• SQL生成：一键生成INSERT、SELECT、UPDATE语句
+• 集合操作：支持交集、并集、差集等运算
+• 单元格编辑：批量转换、列合并、行合并等操作
+• 设置面板：全面的选项配置
+• 多语言支持：中文、英文、日文界面
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎮 专业快捷键映射
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 选择操作
+• 单元格：⌘ + 点击 / Ctrl + 点击
+• 整列：Alt + 点击
+• 整行：⌘ + Alt + 点击 / Ctrl + Alt + 点击
+• 范围：Shift + 点击
 • 复制：⌘ + C / Ctrl + C
-• 取消选择：Esc
+• 清除选择：Esc
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💡 使用场景
+💼 专业应用场景
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• 数据分析师：快速提取网页数据到 Excel 进行分析
-• 研究人员：从在线报告中复制表格数据
-• 财务人员：汇总网页上的财务数据
-• 学生：收集在线课程或论文中的数据表格
-• 任何需要处理网页表格的人
+📈 数据分析师
+• 网页数据快速提取，秒级导入分析工具
+• 复杂报表一键统计，大幅提升工作效率
+
+📊 财务金融从业者
+• 股票行情、财报数据精准抓取
+• 复杂财务表格格式完美保留
+
+🔍 研究学者
+• 学术论文数据表格便捷收集
+• 在线报告数据快速整理分析
+
+🎓 学生教育
+• 课业资料表格快速整理
+• 研究数据高效收集处理
+
+🏢 企业办公
+• 工作报表数据快速汇总
+• 商业情报表格高效处理
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔒 隐私保护
+🛡️ 隐私安全承诺
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• 不收集任何用户数据
-• 不连接外部服务器
-• 所有处理在本地完成
-• 开源透明
+🔒 数据完全本地化
+• 所有处理均在浏览器内部完成
+• 零网络传输，确保数据隐私
+• 无云端存储，绝对安全可靠
+
+🌐 无需额外权限
+• 不访问互联网
+• 不收集用户信息
+• 不追踪使用行为
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⚙️ 自定义设置
+🔧 深度自定义设置
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• 可自定义所有快捷键
-• 可调整统计面板位置（左/中/右）
-• 支持中文、英文、日文界面
+🎨 视觉定制
+• 4种精美主题任选
+• 统计面板位置自由调整
+• 统一视觉风格，赏心悦目
 
-立即安装，让网页表格操作变得简单高效！
+⌨️ 操作定制
+• 完全可修改快捷键
+• 个性化操作流程
+• 符合使用习惯
+
+立即安装SuperTables，开启专业级网页表格处理新时代！
 ```
 
 ---
@@ -79,75 +118,114 @@
 ## English (en)
 
 ```
-🎯 SuperTables - Select Web Tables Like Excel
+🎯 SuperTables - Professional Web Table Assistant | Excel-Level Experience
 
-Tired of struggling to copy table data from websites? SuperTables brings Excel-like table selection to your browser, making it easy to select, copy, and analyze table data on any webpage.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✨ KEY FEATURES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📌 Flexible Selection
-• Cell selection: ⌘/Ctrl + Click to select individual cells
-• Column selection: Alt + Click to select entire columns
-• Row selection: ⌘/Ctrl + Alt + Click to select entire rows
-• Multi-select: Hold modifier keys and click to select multiple non-adjacent areas
-• Range selection: Click start cell, then Shift + Click end cell
-
-📊 Smart Statistics
-When you select data, a statistics panel automatically appears:
-• Numeric mode: Shows Count, Sum, Average, Min, Max
-• Text mode: Shows Top 5 most frequent values with counts
-• Toggle: Click the switch button to change modes
-
-📋 One-Click Copy
-• Press ⌘/Ctrl + C to copy selected data
-• Maintains table format - paste directly into Excel
-• Click any value in the stats panel to copy it
-
-📥 Excel Export
-• Select entire table to reveal "Download Excel" button
-• One-click export to .xlsx format
+🚀 Revolutionize your web table operations! Say goodbye to tedious manual copy-paste and enjoy Excel-like smooth table selection and processing.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎮 KEYBOARD SHORTCUTS (Mac / Windows)
+✨ Revolutionary Features
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• Select Cell: ⌘ + Click / Ctrl + Click
-• Select Column: Alt + Click
-• Select Row: ⌘ + Alt + Click / Ctrl + Alt + Click
-• Range Select: Shift + Click
+🌟 Intelligent Table Detection
+• Automatically identifies all table elements on webpages
+• Supports complex nested table structures
+• Zero configuration, ready to use immediately
+
+📌 Professional Selection Modes
+• Cell selection: ⌘/Ctrl + Click - Precision picking
+• Column selection: Alt + Click - Bulk column processing
+• Row selection: ⌘/Ctrl + Alt + Click - Quick row operations
+• Range selection: Shift + Click - Rectangular area selection
+• Multi-area selection: Flexible combinations for maximum efficiency
+
+📊 Real-Time Smart Statistics
+• Numeric mode: Count, Sum, Average, Min/Max values
+• Text mode: Top 5 most frequent words with occurrence frequency
+• Dynamic switching: Seamless toggle between modes with one click
+
+⚡ One-Touch Data Operations
+• Smart Copy: ⌘/Ctrl + C, perfectly preserves table format
+• Excel Export: One-click generation of .xlsx files
+• Direct Paste: Seamless integration with Excel and other spreadsheet software
+
+🎨 Personalized Customization Experience
+• 4 Themes Available: Classic Excel, Fresh Green, Dark Mode, Metallic
+• Statistics panel position: Left/Center/Right flexible layout
+• Fully customizable shortcuts, create your personal workflow
+
+📱 Enhanced Feature Suite
+• Side drawer panel: Advanced tools and detailed information
+• SQL Generation: One-click generation of INSERT, SELECT, UPDATE statements
+• Set Operations: Support for intersection, union, difference operations
+• Cell Editing: Batch transform, column merge, row merge operations
+• Settings panel: Comprehensive option configuration
+• Multi-language support: English, Chinese, and Japanese interface
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎮 Professional Shortcut Mapping
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 Selection Operations
+• Cell: ⌘ + Click / Ctrl + Click
+• Column: Alt + Click
+• Row: ⌘ + Alt + Click / Ctrl + Alt + Click
+• Range: Shift + Click
 • Copy: ⌘ + C / Ctrl + C
 • Clear Selection: Esc
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💡 USE CASES
+💼 Professional Use Cases
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• Data Analysts: Quickly extract web data to Excel for analysis
-• Researchers: Copy table data from online reports and papers
-• Finance Professionals: Aggregate financial data from web pages
-• Students: Collect data tables from online courses and research
-• Anyone who works with web tables
+📈 Data Analysts
+• Rapid web data extraction, instant import to analysis tools
+• Complex reports statistics with one click, dramatically boost efficiency
+
+📊 Financial Professionals
+• Stock market, financial data precise capture
+• Complex financial table formats perfectly preserved
+
+🔍 Researchers
+• Academic paper data tables convenient collection
+• Online report data rapid organization and analysis
+
+🎓 Education
+• Course material tables rapid organization
+• Research data efficient collection and processing
+
+🏢 Business Office
+• Work report data rapid aggregation
+• Business intelligence tables efficient processing
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔒 PRIVACY FIRST
+🛡️ Privacy Security Commitment
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• No user data collection
-• No external server connections
-• All processing happens locally
-• Open source and transparent
+🔒 Fully Local Data Processing
+• All processing completed internally within browser
+• Zero network transmission, ensuring data privacy
+• No cloud storage, absolutely secure and reliable
+
+🌐 No Additional Permissions Required
+• No internet access required
+• No user information collected
+• No usage behavior tracking
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⚙️ CUSTOMIZATION
+🔧 Deep Customization Settings
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• Fully customizable keyboard shortcuts
-• Adjustable stats panel position (left/center/right)
-• Supports English, Chinese, and Japanese
+🎨 Visual Customization
+• 4 Beautiful themes to choose from
+• Statistics panel position freely adjustable
+• Unified visual style, pleasing to the eye
 
-Install now and make working with web tables simple and efficient!
+⌨️ Operation Customization
+• Fully modifiable shortcuts
+• Personalized operation workflow
+• Conforms to usage habits
+
+Install SuperTables now and start your professional web table processing new era!
 ```
 
 ---
@@ -155,73 +233,112 @@ Install now and make working with web tables simple and efficient!
 ## 日本語 (ja)
 
 ```
-🎯 SuperTables - Excelのようにウェブテーブルを選択
+🎯 SuperTables - 専門的なウェブテーブルアシスタント | Excelレベルの操作体験
 
-ウェブページからテーブルデータをコピーするのに苦労していませんか？SuperTablesは、Excelのようなテーブル選択機能をブラウザにもたらし、任意のウェブページでテーブルデータを簡単に選択、コピー、分析できます。
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✨ 主な機能
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📌 柔軟な選択
-• セル選択：⌘/Ctrl + クリックで個別セルを選択
-• 列選択：Alt + クリックで列全体を選択
-• 行選択：⌘/Ctrl + Alt + クリックで行全体を選択
-• 複数選択：修飾キーを押しながらクリックで複数エリアを選択
-• 範囲選択：開始セルをクリック後、Shift + クリックで終了セルを選択
-
-📊 スマート統計
-データを選択すると、統計パネルが自動的に表示されます：
-• 数値モード：カウント、合計、平均、最大、最小を表示
-• テキストモード：出現頻度Top 5とその回数を表示
-• モード切替：切替ボタンでモードを変更
-
-📋 ワンクリックコピー
-• ⌘/Ctrl + Cで選択データをコピー
-• テーブル形式を維持 - Excelに直接貼り付け可能
-• 統計パネルの数値をクリックしてコピー
-
-📥 Excelエクスポート
-• テーブル全体を選択すると「Excelダウンロード」ボタンが表示
-• ワンクリックで.xlsx形式でエクスポート
+🚀 ウェブテーブル操作を完全に再定義！ 手動での面倒なコピー＆ペーストにサヨナラし、Excelのようにスムーズなテーブル選択と処理をお楽しみください。
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎮 キーボードショートカット（Mac / Windows）
+✨ 革命的な機能
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• セル選択：⌘ + クリック / Ctrl + クリック
-• 列選択：Alt + クリック
-• 行選択：⌘ + Alt + クリック / Ctrl + Alt + クリック
-• 範囲選択：Shift + クリック
+🌟 智能テーブル検出
+• ウェブページ上のすべてのテーブル要素を自動認識
+• 複雑な入れ子構造のテーブルもサポート
+• 設定ゼロ、すぐに使用可能
+
+📌 専門的な選択モード
+• セル選択：⌘/Ctrl + クリック - 精密な選択
+• 列選択：Alt + クリック - 一括列処理
+• 行選択：⌘/Ctrl + Alt + クリック - 素早い行操作
+• 範囲選択：Shift + クリック - 矩形範囲選択
+• 複数領域選択：自由な組み合わせで柔軟かつ効率的
+
+📊 リアルタイムスマート統計
+• 数値モード：カウント、合計、平均、最大・最小値
+• テキストモード：上位5つの高頻度語と出現回数
+• 動的切り替え：ワンクリックでモードをシームレス切替
+
+⚡ ワンタッチデータ操作
+• スマートコピー：⌘/Ctrl + C、テーブル形式を完全保持
+• Excelエクスポート：ワンクリックで.xlsxファイル生成
+• 直接ペースト：Excelおよび他のスプレッドシートソフトとのシームレス連携
+
+🎨 個人用カスタマイズ体験
+• 4つのテーマ選択可能：Excelクラシック、フレッシュグリーン、ダークテーマ、メタリック
+• 統計パネル位置のカスタマイズ：左/中央/右の柔軟なレイアウト
+• 完全カスタマイズ可能なショートカット、個人用ワークフロー作成
+
+📱 拡張機能スイート
+• サイドドロワーパネル：高度なツールと詳細情報
+• SQL生成：ワンクリックでINSERT、SELECT、UPDATE文を生成
+• 集合操作：積集合、和集合、差集合などの演算をサポート
+• セル編集：一括変換、列マージ、行マージなどの操作
+• 設定パネル：包括的なオプション設定
+• 多言語対応：日本語、英語、中国語インターフェース
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎮 専門的なショートカットマッピング
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 選択操作
+• セル：⌘ + クリック / Ctrl + クリック
+• 列：Alt + クリック
+• 行：⌘ + Alt + クリック / Ctrl + Alt + クリック
+• 範囲：Shift + クリック
 • コピー：⌘ + C / Ctrl + C
 • 選択解除：Esc
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💡 活用シーン
+💼 専門的な利用ケース
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• データアナリスト：ウェブデータを素早くExcelに抽出して分析
-• 研究者：オンラインレポートや論文からテーブルデータをコピー
-• 財務担当者：ウェブページから財務データを集計
-• 学生：オンライン講座や研究からデータテーブルを収集
-• ウェブテーブルを扱うすべての方
+📈 データアナリスト
+• ウェブデータの迅速な抽出、分析ツールへの即時インポート
+• 複雑なレポート統計をワンクリックで、作業効率を大幅向上
+
+📊 金融専門家
+• 株価情報、財務データの精密キャプチャ
+• 複雑な財務テーブル形式を完全に保持
+
+🔍 研究者
+• 学術論文データテーブルの便利な収集
+• オンラインレポートデータの迅速な整理と分析
+
+🎓 教育関係
+• 授業資料テーブルの迅速な整理
+• 研究データの効率的な収集と処理
+
+🏢 企業オフィス
+• 報告書データの迅速な集約
+• ビジネスインテリジェンステーブルの効率的な処理
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔒 プライバシー保護
+🛡️ プライバシー保護の約束
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• ユーザーデータの収集なし
-• 外部サーバーへの接続なし
-• すべての処理はローカルで完結
-• オープンソースで透明性を確保
+🔒 完全ローカルデータ処理
+• すべての処理はブラウザ内部で完了
+• ネットワーク転送ゼロ、データプライバシーを確実
+• クラウドストレージなし、絶対的なセキュリティと信頼性
+
+🌐 追加パーミッション不要
+• インターネットアクセス不要
+• ユーザー情報収集なし
+• 使用行動追跡なし
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⚙️ カスタマイズ
+🔧 深層カスタマイズ設定
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• キーボードショートカットを完全カスタマイズ可能
-• 統計パネルの位置を調整可能（左/中央/右）
-• 英語、中国語、日本語に対応
+🎨 視覚カスタマイズ
+• 4つの美しいテーマから選択可能
+• 統計パネル位置の自由調整
+• 統一されたビジュアルスタイル、見やすさ抜群
 
-今すぐインストールして、ウェブテーブルの操作をシンプルで効率的に！
+⌨️ 操作カスタマイズ
+• 完全に修正可能なショートカット
+• 個人用操作ワークフロー
+• 使用習慣に合わせた設計
+
+いますぐSuperTablesをインストールして、専門的なウェブテーブル処理の新時代を始めましょう！
 ```

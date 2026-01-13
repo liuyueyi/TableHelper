@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>SuperTables Promo - Large (1400x560)</title>
+  <title>Table Ranger Promo - Large (1200x600)</title>
   <style>
     * {
       margin: 0;
@@ -11,19 +12,24 @@
     }
 
     body {
-      width: 1400px;
-      height: 560px;
-      background: linear-gradient(135deg, #217346 0%, #1a5c38 50%, #0d3320 100%);
+      width: 1200px;
+      height: 600px;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 60px 80px;
+      justify-content: center;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       overflow: hidden;
       position: relative;
     }
 
-    /* Background pattern */
+    .container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
     .bg-pattern {
       position: absolute;
       top: 0;
@@ -31,274 +37,423 @@
       right: 0;
       bottom: 0;
       background-image:
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 60px 60px;
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 80px 80px;
     }
 
-    .left-content {
-      position: relative;
-      z-index: 1;
-      max-width: 500px;
-    }
-
-    .logo-row {
+    .center-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 20px;
-      margin-bottom: 24px;
+      justify-content: center;
+      text-align: center;
+      z-index: 3;
     }
 
     .logo {
-      width: 80px;
-      height: 80px;
+      width: 120px;
+      height: 120px;
       background: #fff;
-      border-radius: 18px;
+      border-radius: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
     }
 
     .logo img {
-      width: 60px;
-      height: 60px;
+      width: 90px;
+      height: 90px;
     }
 
     h1 {
       color: #fff;
       font-size: 48px;
-      font-weight: 700;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      font-weight: 800;
+      text-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      margin-bottom: 10px;
     }
 
     .tagline {
-      color: rgba(255,255,255,0.95);
-      font-size: 24px;
-      margin-bottom: 32px;
-      line-height: 1.4;
-    }
-
-    .features {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .feature {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(255,255,255,0.12);
-      padding: 12px 20px;
-      border-radius: 30px;
       color: #fff;
-      font-size: 15px;
+      font-size: 24px;
       font-weight: 500;
+      margin-bottom: 40px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
-    .feature svg {
-      width: 20px;
-      height: 20px;
-      fill: currentColor;
-    }
-
-    /* Right side - Demo table */
-    .demo-container {
-      position: relative;
-      z-index: 1;
-    }
-
-    .demo-table {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-      overflow: hidden;
-      transform: perspective(1000px) rotateY(-8deg) rotateX(2deg);
-    }
-
-    .demo-header {
-      background: #fafbfc;
-      padding: 12px 20px;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-
-    .dot.red { background: #ff5f56; }
-    .dot.yellow { background: #ffbd2e; }
-    .dot.green { background: #27c93f; }
-
-    .demo-header span {
-      margin-left: 10px;
-      color: #666;
-      font-size: 13px;
-    }
-
-    .demo-content {
-      padding: 0;
-    }
-
-    table {
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
-    th, td {
-      padding: 12px 16px;
-      border-bottom: 1px solid #f0f0f0;
-      text-align: left;
-    }
-
-    th {
-      background: #f8f9fa;
+    .chrome-btn {
+      background: #FF6D00;
+      color: white;
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-size: 18px;
       font-weight: 600;
-      color: #555;
-      font-size: 11px;
-      text-transform: uppercase;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(255, 109, 0, 0.4);
+      transition: all 0.3s ease;
     }
 
-    .selected {
-      background: rgba(33, 115, 70, 0.15) !important;
-      outline: 2px solid #217346;
-      outline-offset: -2px;
+    .chrome-btn:hover {
+      background: #FF8500;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(255, 109, 0, 0.5);
     }
 
-    .number {
-      font-family: 'SF Mono', Monaco, monospace;
-      text-align: right;
-    }
-
-    .positive { color: #217346; }
-    .negative { color: #e53e3e; }
-
-    /* Stats panel mock */
-    .stats-mock {
-      position: absolute;
-      bottom: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
-      padding: 12px 24px;
-      border-radius: 10px;
+    .left-side {
+      width: 50%;
+      height: 100%;
+      padding: 40px;
       display: flex;
-      gap: 24px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.15);
+      position: relative;
+      z-index: 2;
     }
 
-    .stat {
+    .right-side {
+      width: 50%;
+      height: 100%;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .side-title {
+      color: #FFD700;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
       text-align: center;
     }
 
-    .stat-label {
-      font-size: 10px;
-      color: #888;
-      text-transform: uppercase;
-      margin-bottom: 2px;
+    .before-scenario {
+      background: #1a1a2e;
+      border-radius: 16px;
+      padding: 20px;
+      height: 300px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .stat-value {
-      font-size: 16px;
+    .after-scenario {
+      background: #0f3460;
+      border-radius: 16px;
+      padding: 20px;
+      height: 300px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .webpage-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+      border-radius: 12px;
+    }
+
+    .table-data {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 11px;
+      color: #666;
+      width: 80%;
+    }
+
+    .table-data div {
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chaos-table {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      width: 70%;
+      font-size: 10px;
+      border-collapse: collapse;
+    }
+
+    .chaos-table td {
+      border: 1px solid #ccc;
+      padding: 3px 5px;
+      background: #fff;
+    }
+
+    .chaos-table .highlight {
+      background: #ffeb3b;
+      opacity: 0.7;
+    }
+
+    .person-before {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: #ff6b6b;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+    }
+
+    .person-after {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: #4ecdc4;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+    }
+
+    .toolbar {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .toolbar-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      background: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .toolbar-btn:hover {
+      background: #d0d0d0;
+    }
+
+    .sql-bubble {
+      position: absolute;
+      top: 20%;
+      right: 15%;
+      background: #2d3748;
       color: #fff;
-      font-weight: 600;
-      font-family: 'SF Mono', Monaco, monospace;
+      padding: 12px;
+      border-radius: 10px;
+      min-width: 180px;
+      font-size: 12px;
+      font-family: 'Courier New', monospace;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .sql-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 10px 10px 0;
+      border-style: solid;
+      border-color: #2d3748 transparent transparent;
+    }
+
+    .highlighted-area {
+      position: absolute;
+      top: 80px;
+      left: 15%;
+      width: 60%;
+      height: 120px;
+      border: 3px solid #4ecdc4;
+      border-radius: 8px;
+      box-shadow: 0 0 0 4px rgba(78, 205, 196, 0.3);
+      background: rgba(78, 205, 196, 0.1);
+      z-index: 5;
+    }
+
+    .selected-table {
+      position: absolute;
+      top: 80px;
+      left: 15%;
+      width: 60%;
+      border-collapse: collapse;
+      font-size: 12px;
+      z-index: 6;
+    }
+
+    .selected-table th,
+    .selected-table td {
+      border: 1px solid #ccc;
+      padding: 6px 10px;
+      text-align: left;
+    }
+
+    .selected-table th {
+      background: #f0f0f0;
+      font-weight: bold;
+    }
+
+    .selected-table .selected-cell {
+      background: rgba(78, 205, 196, 0.3);
     }
   </style>
 </head>
+
 <body>
   <div class="bg-pattern"></div>
 
-  <div class="left-content">
-    <div class="logo-row">
-      <div class="logo">
-        <img src="../icons/icon128.png" alt="SuperTables">
+  <div class="container">
+    <div class="left-side">
+      <div class="side-title">BEFORE SCENARIO</div>
+      <div class="before-scenario">
+        <div class="webpage-background"></div>
+        <div class="chaos-table">
+          <tr>
+            <td>Product</td>
+            <td>Revenue</td>
+            <td>Q1</td>
+            <td>Q2</td>
+            <td>Q3</td>
+            <td>Q4</td>
+          </tr>
+          <tr>
+            <td>MacBook Pro</td>
+            <td class="highlight">$2,468,000</td>
+            <td class="highlight">$600,000</td>
+            <td class="highlight">$620,000</td>
+            <td class="highlight">$610,000</td>
+            <td class="highlight">$638,000</td>
+          </tr>
+          <tr>
+            <td>iPhone 15</td>
+            <td>$3,923,700</td>
+            <td>$950,000</td>
+            <td>$980,000</td>
+            <td>$960,000</td>
+            <td>$1,033,700</td>
+          </tr>
+          <tr>
+            <td>AirPods Pro</td>
+            <td>$1,473,000</td>
+            <td>$350,000</td>
+            <td>$360,000</td>
+            <td>$370,000</td>
+            <td>$393,000</td>
+          </tr>
+          <tr>
+            <td>iPad Air</td>
+            <td>$1,286,800</td>
+            <td>$320,000</td>
+            <td>$310,000</td>
+            <td>$315,000</td>
+            <td>$341,800</td>
+          </tr>
+          <tr>
+            <td>Apple Watch</td>
+            <td>$890,500</td>
+            <td>$210,000</td>
+            <td>$220,000</td>
+            <td>$225,000</td>
+            <td>$235,500</td>
+          </tr>
+          <tr>
+            <td>AirTag</td>
+            <td>$450,200</td>
+            <td>$110,000</td>
+            <td>$115,000</td>
+            <td>$112,000</td>
+            <td>$113,200</td>
+          </tr>
+        </div>
+        <div class="person-before">😠</div>
+        <div
+          style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.8); padding: 5px 10px; border-radius: 5px; font-size: 12px; color: #333;">
+          难以选择的表格区域
+        </div>
       </div>
-      <h1>SuperTables</h1>
     </div>
-    <p class="tagline">Select table cells like Excel<br>on any webpage</p>
-    <div class="features">
-      <div class="feature">
-        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L11 13.17l6.59-6.59L19 8l-9 9z"/></svg>
-        Click to Select
-      </div>
-      <div class="feature">
-        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-        Copy to Excel
-      </div>
-      <div class="feature">
-        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-        Instant Stats
-      </div>
-      <div class="feature">
-        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-        Export .xlsx
-      </div>
-    </div>
-  </div>
 
-  <div class="demo-container">
-    <div class="demo-table">
-      <div class="demo-header">
-        <div class="dot red"></div>
-        <div class="dot yellow"></div>
-        <div class="dot green"></div>
-        <span>Sales Report</span>
-      </div>
-      <div class="demo-content">
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th class="number">Revenue</th>
-              <th class="number">Growth</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>MacBook Pro</td>
-              <td class="number selected">$2,468,000</td>
-              <td class="number positive selected">+15.3%</td>
-            </tr>
-            <tr>
-              <td>iPhone 15</td>
-              <td class="number selected">$3,923,700</td>
-              <td class="number positive selected">+22.1%</td>
-            </tr>
-            <tr>
-              <td>AirPods Pro</td>
-              <td class="number selected">$1,473,000</td>
-              <td class="number positive selected">+8.7%</td>
-            </tr>
-            <tr>
-              <td>iPad Air</td>
-              <td class="number selected">$1,286,800</td>
-              <td class="number negative selected">-3.2%</td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="right-side">
+      <div class="side-title">AFTER SCENARIO</div>
+      <div class="after-scenario">
+        <div class="webpage-background"></div>
+        <div class="selected-table">
+          <tr>
+            <th>Product</th>
+            <th>Revenue</th>
+            <th>Growth</th>
+          </tr>
+          <tr>
+            <td class="selected-cell">MacBook Pro</td>
+            <td class="selected-cell">$2,468,000</td>
+            <td class="selected-cell">+15.3%</td>
+          </tr>
+          <tr>
+            <td class="selected-cell">iPhone 15</td>
+            <td class="selected-cell">$3,923,700</td>
+            <td class="selected-cell">+22.1%</td>
+          </tr>
+          <tr>
+            <td class="selected-cell">AirPods Pro</td>
+            <td class="selected-cell">$1,473,000</td>
+            <td class="selected-cell">+8.7%</td>
+          </tr>
+        </div>
+        <div class="highlighted-area"></div>
+        <div class="toolbar">
+          <div class="toolbar-btn">📋</div>
+          <div class="toolbar-btn">✏️</div>
+          <div class="toolbar-btn">📊</div>
+          <div class="toolbar-btn">📋</div>
+        </div>
+        <div class="sql-bubble" style="margin-top: 12em;">
+          SELECT Product, Revenue, Growth<br>
+          FROM Sales WHERE Revenue = 1000000;
+        </div>
+        <div class="person-after">😊</div>
       </div>
     </div>
-    <div class="stats-mock">
-      <div class="stat">
-        <div class="stat-label">Sum</div>
-        <div class="stat-value">$9.15M</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Avg</div>
-        <div class="stat-value">$2.29M</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">Max</div>
-        <div class="stat-value">+22.1%</div>
+
+    <div class="center-content">
+
+      <h1 style="margin-top: -9em;">Table Helper</h1>
+      <p class="tagline">Table Helper provides precise selection tools and intelligent SQL generator.</p>
+    </div>
+
+    <div class="center-content">
+      <div class="logo" style="margin-top: 0em;">
+        <img src="../../icons/icon128.png" alt="Table Helper">
       </div>
     </div>
   </div>
 </body>
+
 </html>

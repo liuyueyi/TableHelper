@@ -4,7 +4,7 @@
     "description": "Extension name"
   },
   "extDescription": {
-    "message": "Tired of not being able to batch select rows and columns in web tables? Still manually constructing SQL statements? Table Helper provides precise selection tools and intelligent SQL generator, your Swiss Army knife for web tables.",
+    "message": "Table Helper provides precise selection tools and intelligent SQL generator, your Swiss Army knife for web tables.",
     "description": "Extension description"
   }
 }
