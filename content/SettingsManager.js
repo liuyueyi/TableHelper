@@ -15,11 +15,15 @@ class SettingsManager {
       // Stats bar position: 'left', 'center', 'right'
       statsPosition: 'left',
 
+      // Theme: 'excel', 'freshGreen', 'dark', 'metal'
+      theme: 'excel',
+
       // Keyboard shortcuts (key combinations)
       shortcuts: {
         selectCell: { key: 'click', modifiers: ['cmd'] },
         selectColumn: { key: 'click', modifiers: ['alt'] },
         selectRow: { key: 'click', modifiers: ['cmd', 'alt'] },
+        selectAll: { key: 'click', modifiers: ['cmd'], doubleClick: true },
         copy: { key: 'c', modifiers: ['cmd'] }
       }
     };
@@ -59,6 +63,7 @@ class SettingsManager {
       columnIncludeHeader: stored.columnIncludeHeader ?? this.defaults.columnIncludeHeader,
       copyKeepEmptyPlaceholders: stored.copyKeepEmptyPlaceholders ?? this.defaults.copyKeepEmptyPlaceholders,
       statsPosition: stored.statsPosition ?? this.defaults.statsPosition,
+      theme: stored.theme ?? this.defaults.theme,
       shortcuts: {
         ...this.defaults.shortcuts,
         ...(stored.shortcuts || {})
@@ -135,6 +140,34 @@ class SettingsManager {
         console.error('SuperTables: Settings listener error', e);
       }
     });
+  }
+
+  /**
+   * Get available themes
+   * @returns {Array} Array of available theme objects
+   */
+  getAvailableThemes() {
+    return [
+      { id: 'excel', name: 'Excel Theme', description: 'Classic Excel green theme' },
+      { id: 'freshGreen', name: 'Fresh Green', description: 'Fresh green theme' },
+      { id: 'dark', name: 'Dark Theme', description: 'Dark theme for comfortable viewing' },
+      { id: 'metal', name: 'Metallic', description: 'Metallic silver theme' }
+    ];
+  }
+
+  /**
+   * Apply theme to document
+   * @param {string} themeId The theme to apply
+   */
+  applyTheme(themeId) {
+    // Remove existing theme classes
+    document.body.classList.remove('st-theme-excel', 'st-theme-freshGreen', 'st-theme-dark', 'st-theme-metal');
+
+    // Add new theme class
+    document.body.classList.add(`st-theme-${themeId}`);
+
+    // Store current theme in settings
+    this.set('theme', themeId);
   }
 
   /**
@@ -240,7 +273,8 @@ class SettingsManager {
     const modeMap = [
       { key: 'selectRow', result: 'row' },
       { key: 'selectColumn', result: 'column' },
-      { key: 'selectCell', result: 'cell' }
+      { key: 'selectCell', result: 'cell' },
+      { key: 'selectAll', result: 'cell' }  // Return 'cell' since it's based on cell click
     ];
 
     // Sort by number of modifiers (most specific first)
@@ -257,16 +291,29 @@ class SettingsManager {
       const shortcut = mode.shortcut;
       if (!shortcut) continue;
 
-      const modifiers = shortcut.modifiers || [];
-      const needsCmd = modifiers.includes('cmd');
-      const needsAlt = modifiers.includes('alt');
-      // Note: Shift is ignored here because it's used for range selection,
-      // not for determining the selection mode
-      const needsShift = modifiers.includes('shift');
+      // For selectAll, we only check modifiers, not the key itself
+      if (mode.key === 'selectAll') {
+        const modifiers = shortcut.modifiers || [];
+        const needsCmd = modifiers.includes('cmd');
+        const needsAlt = modifiers.includes('alt');
+        const needsShift = modifiers.includes('shift');
 
-      // Match cmd and alt, but ignore shift state (shift is for range selection)
-      if (needsCmd === state.cmd && needsAlt === state.alt && (!needsShift || needsShift === state.shift)) {
-        return mode.result;
+        // Match cmd, alt, and shift states
+        if (needsCmd === state.cmd && needsAlt === state.alt && (!needsShift || needsShift === state.shift)) {
+          return mode.result;
+        }
+      } else {
+        const modifiers = shortcut.modifiers || [];
+        const needsCmd = modifiers.includes('cmd');
+        const needsAlt = modifiers.includes('alt');
+        // Note: Shift is ignored here because it's used for range selection,
+        // not for determining the selection mode
+        const needsShift = modifiers.includes('shift');
+
+        // Match cmd and alt, but ignore shift state (shift is for range selection)
+        if (needsCmd === state.cmd && needsAlt === state.alt && (!needsShift || needsShift === state.shift)) {
+          return mode.result;
+        }
       }
     }
 

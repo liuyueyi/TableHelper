@@ -35,6 +35,7 @@ EXCLUDE=(
   "*.map"
   "generate-icons.html"
   "logo.png"
+  "docs"
 )
 
 # Create temporary build directory

@@ -25,6 +25,7 @@
         "content/SettingsManager.js",
         "content/TableDetector.js",
         "content/SelectionManager.js",
+        "content/DrawerManager.js",
         "content/StatsPanel.js",
         "content/ClipboardHandler.js",
         "content/ExcelExporter.js",

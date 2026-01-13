@@ -26,6 +26,11 @@
   const clipboardHandler = new ClipboardHandler(selectionManager);
   const excelExporter = new ExcelExporter();
 
+  // Expose the selection manager globally so other modules can access it
+  window.SuperTables = window.SuperTables || {};
+  window.SuperTables.contentScript = window.SuperTables.contentScript || {};
+  window.SuperTables.contentScript.selectionManager = selectionManager;
+
   // Track modifier key state
   let modifierState = {
     cmd: false,
@@ -39,6 +44,13 @@
 
   // Track anchor cell for Shift range selection
   let anchorCell = null;
+
+  // Track double-click for selectAll
+  let firstClickTime = null;
+  let firstClickCell = null;
+
+  // Track currently applied theme to prevent loops
+  let currentAppliedTheme = null;
 
   // Select-all button element
   let selectAllButton = null;
@@ -56,10 +68,39 @@
 
   /**
    * Determine selection mode based on user's shortcut settings
-   * Returns: 'cell', 'row', 'column', or null
+   * Returns: 'cell', 'row', 'column', 'selectAll', or null
    */
-  function getSelectionMode(e) {
-    return settingsManager.getSelectionMode(e);
+  function getSelectionMode(e, isDoubleClick = false) {
+    const mode = settingsManager.getSelectionMode(e);
+
+    // Check if this is a selectAll action
+    if ((mode === 'cell' || mode === 'column' || mode === 'row') && isDoubleClick) {
+      const shortcuts = settingsManager.get('shortcuts');
+      const shortcut = shortcuts && shortcuts.selectAll;
+      if (shortcut && shortcut.doubleClick) {
+        // Check if the modifiers match
+        const isCmd = isMac ? e.metaKey : e.ctrlKey;
+        const isAlt = e.altKey;
+        const isShift = e.shiftKey;
+
+        const hasCmd = shortcut.modifiers.includes('cmd') && isCmd;
+        const hasAlt = shortcut.modifiers.includes('alt') && isAlt;
+        const hasShift = shortcut.modifiers.includes('shift') && isShift;
+
+        // Check if all required modifiers are pressed and no extra ones
+        const requiredMods = shortcut.modifiers.length;
+        const actualMods = (isCmd ? 1 : 0) + (isAlt ? 1 : 0) + (isShift ? 1 : 0);
+
+        if (hasCmd === (shortcut.modifiers.includes('cmd')) &&
+          hasAlt === (shortcut.modifiers.includes('alt')) &&
+          hasShift === (shortcut.modifiers.includes('shift')) &&
+          requiredMods === actualMods) {
+          return 'selectAll';
+        }
+      }
+    }
+
+    return mode;
   }
 
   /**
@@ -74,7 +115,7 @@
       <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
         <path d="M3 3h18v18H3V3zm2 2v5h5V5H5zm7 0v5h7V5h-7zm-7 7v5h5v-5H5zm7 0v5h7v-5h-7z"/>
       </svg>
-      <span>全选</span>
+      <span>Ctrl+Double Click to select all</span>
     `;
     selectAllButton.style.cssText = `
       position: absolute;
@@ -436,11 +477,13 @@
    * Handle click for selection
    */
   function handleClick(e) {
-    const mode = getSelectionMode(e);
-    if (!mode) return;
-
+    const currentTime = Date.now();
     const cell = tableDetector.findCell(e.target);
     if (!cell) return;
+
+    const isDoubleClick = (firstClickCell === cell && currentTime - firstClickTime < 500);
+    const mode = getSelectionMode(e, isDoubleClick);
+    if (!mode) return;
 
     e.preventDefault();
     e.stopPropagation();
@@ -449,6 +492,19 @@
     const selection = window.getSelection();
     if (selection) {
       selection.removeAllRanges();
+    }
+
+    // Handle double click for selectAll
+    if (mode === 'selectAll') {
+      const table = tableDetector.getTableFromCell(cell);
+      if (table) {
+        selectionManager.selectTable(table, false);
+        anchorCell = null;
+        // Reset double click tracker
+        firstClickTime = null;
+        firstClickCell = null;
+      }
+      return;
     }
 
     const isShift = e.shiftKey;
@@ -474,8 +530,20 @@
       }
     }
 
-    // Normal selection (set new anchor)
+    // Handle single click
     anchorCell = cell;
+
+    // Update double click tracker
+    firstClickTime = currentTime;
+    firstClickCell = cell;
+
+    // Clear the double click tracker after delay
+    setTimeout(() => {
+      if (firstClickTime && currentTime === firstClickTime) {
+        firstClickTime = null;
+        firstClickCell = null;
+      }
+    }, 500);
 
     switch (mode) {
       case 'cell':
@@ -905,6 +973,18 @@
   }
 
   /**
+   * Apply theme to the document
+   * @param {string} themeId The theme to apply
+   */
+  function applyTheme(themeId) {
+    // Remove existing theme classes
+    document.body.classList.remove('st-theme-excel', 'st-theme-freshGreen', 'st-theme-dark', 'st-theme-metal');
+
+    // Add new theme class
+    document.body.classList.add(`st-theme-${themeId}`);
+  }
+
+  /**
    * Selection change callback
    */
   selectionManager.onSelectionChange = (cells) => {
@@ -974,7 +1054,28 @@
       if (newSettings.statsPosition) {
         statsPanel.setPosition(newSettings.statsPosition);
       }
+
+      // Apply theme if it changed
+      if (newSettings.theme && newSettings.theme !== currentAppliedTheme) {
+        currentAppliedTheme = newSettings.theme;
+        applyTheme(newSettings.theme);
+      }
     });
+
+    // Listen for messages from popup
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      if (message.action === 'applyTheme') {
+        currentAppliedTheme = message.theme;
+        applyTheme(message.theme);
+        sendResponse({ status: 'success' });
+      }
+      return true; // Required for async responses
+    });
+
+    // Apply initial theme
+    const initialTheme = settingsManager.get('theme') || 'excel';
+    currentAppliedTheme = initialTheme;
+    applyTheme(currentAppliedTheme);
 
     // Use capture phase for better performance
     document.addEventListener('keydown', handleKeyDown, true);
@@ -999,6 +1100,10 @@
       // Skip if clicking on select-all button
       if (selectAllButton && selectAllButton.contains(e.target)) return;
 
+      // Skip if clicking inside the drawer panel
+      const drawerPanel = document.getElementById('drawer-panel');
+      if (drawerPanel && drawerPanel.contains(e.target)) return;
+
       if (selectionManager.getSelectionCount() > 0) {
         const cell = tableDetector.findCell(e.target);
         if (!cell) {
@@ -1017,4 +1122,16 @@
   } else {
     init();
   }
+
+  // Also expose the modules globally for external access
+  window.SuperTables = window.SuperTables || {};
+  window.SuperTables.modules = {
+    settingsManager,
+    tableDetector,
+    selectionManager,
+    statsPanel,
+    clipboardHandler,
+    excelExporter
+  };
+
 })();

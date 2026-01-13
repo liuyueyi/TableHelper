@@ -2,21 +2,22 @@
   <img src="icons/logo.png" alt="SuperTables Logo" width="128" height="128">
 </p>
 
-<h1 align="center">SuperTables</h1>
+<h1 align="center">TableHelper</h1>
 
 <p align="center">
-  <a href="https://github.com/wxkingstar/SuperTables"><img src="https://img.shields.io/badge/Chrome-扩展程序-green" alt="Chrome Web Store"></a>
-  <a href="https://github.com/wxkingstar/SuperTables"><img src="https://img.shields.io/badge/版本-1.1.0-blue" alt="Version"></a>
+  <a href="https://github.com/liuyueyi/TableHelper"><img src="https://img.shields.io/badge/Chrome-扩展程序-green" alt="Chrome Web Store"></a>
+  <a href="https://github.com/liuyueyi/TableHelper"><img src="https://img.shields.io/badge/版本-2.0.0-blue" alt="Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/许可证-MIT-green" alt="License"></a>
 </p>
 
 <p align="center">
-  <b>语言 / Language / 言語</b>: <a href="README_en.md">English</a> | 简体中文 | <a href="README_ja.md">日本語</a>
+  <b>语言 / Language / 言語</b>: <a href="docs/README_en.md">English</a> | <a href="README.md">简体中文</a> | <a href="docs/README_ja.md">日本語</a>
 </p>
 
 ---
 
-像 Excel 一样选择网页表格 - 选择、复制、分析任意网页上的表格数据。
+基于项目 [SuperTables](https://github.com/wxkingstar/SuperTables) 进行二次开发，主要实现侧边抽屉，支持表格的高级操作内容（如集合运算、sql生成、基础编辑等），更适合研发人员的使用场景
+
 
 ## 功能特性
 
@@ -26,7 +27,7 @@
 - **选择整列**: `Alt + 点击` - 选择整列
 - **范围选择**: `Shift + 点击` - 从锚点单元格选择范围
 - **扩展选择**: `Cmd/Ctrl + Shift + 方向键` - 扩展选择到列/行边缘
-- **全选表格**: 悬停在表格上时点击出现的"全选"按钮
+- **全选表格**: `Ctrl + 双击` - 实现表格全选
 
 ### 统计面板
 页面底部实时显示统计信息：
@@ -52,12 +53,12 @@
 
 | 数值模式 | 文本模式 |
 |---------|---------|
-| ![数值模式](screenshots/output/screenshot-1-numeric-mode.png) | ![文本模式](screenshots/output/screenshot-2-text-mode.png) |
+| ![数值模式](docs/screenshots/output/screenshot-1-numeric-mode.png) | ![文本模式](docs/screenshots/output/screenshot-2-text-mode.png) |
 
 ## 安装
 
 ### Chrome 网上应用店
-[从 Chrome 网上应用店安装](https://chromewebstore.google.com/detail/supertables/eonhkaekeodnhfmajkjgiikmjakekjnj?hl=zh-CN)
+[从 Chrome 网上应用店安装]()
 
 ### 手动安装
 1. 下载或克隆此仓库
@@ -77,6 +78,7 @@
 | 扩展选择 | `Cmd/Ctrl` + `Shift` + `↑↓←→` |
 | 复制选中内容 | `Cmd/Ctrl` + `C` |
 | 清除选择 | `Esc` |
+| 全选 | `Ctrl` + `双击` |
 
 ### 统计面板
 选择单元格后，统计面板会自动显示：
@@ -150,6 +152,8 @@ SuperTables：
 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件。
 
 ## 作者
+
+**YiHui** - [GitHub](https://github.com/liuyueyi)
 
 **wangxin** - [GitHub](https://github.com/wxkingstar)
 

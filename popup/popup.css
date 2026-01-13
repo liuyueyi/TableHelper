@@ -1,0 +1,243 @@
+/* Popup Theme Styles */
+
+/* Excel Theme */
+body.popup-theme-excel {
+  /* Already using Excel green as the base theme in the main CSS */
+}
+
+/* Fresh Green Theme */
+body.popup-theme-freshGreen {
+  background: #f0f9f1;
+  color: #2d5a2d;
+}
+
+body.popup-theme-freshGreen .tab.active {
+  color: #4CAF50;
+  border-bottom-color: #4CAF50;
+}
+
+body.popup-theme-freshGreen .toggle input:checked + .toggle-slider {
+  background-color: #4CAF50;
+}
+
+body.popup-theme-freshGreen .edit-btn.primary {
+  background: #4CAF50;
+}
+
+body.popup-theme-freshGreen .edit-btn.primary:hover {
+  background: #3d8b40;
+}
+
+body.popup-theme-freshGreen .version-info .author {
+  color: #4CAF50;
+}
+
+body.popup-theme-freshGreen .doc-link {
+  color: #4CAF50;
+}
+
+body.popup-theme-freshGreen .toast {
+  background: #4CAF50;
+}
+
+body.popup-theme-freshGreen .key.mod {
+  background: #4CAF50;
+  border-color: #3d8b40;
+}
+
+body.popup-theme-freshGreen .shortcut-input {
+  border: 2px solid #4CAF50;
+}
+
+body.popup-theme-freshGreen .shortcut-input.recording {
+  animation: freshGreenPulse 1s infinite;
+}
+
+@keyframes freshGreenPulse {
+  0%,
+  100% {
+    border-color: #4CAF50;
+  }
+  50% {
+    border-color: #3d8b40;
+  }
+}
+
+/* Dark Theme */
+body.popup-theme-dark {
+  background: #1e1e1e;
+  color: #e0e0e0;
+}
+
+body.popup-theme-dark .header {
+  border-bottom-color: #444;
+}
+
+body.popup-theme-dark .tabs {
+  border-bottom-color: #444;
+}
+
+body.popup-theme-dark .tab {
+  color: #aaa;
+}
+
+body.popup-theme-dark .tab:hover {
+  color: #ddd;
+}
+
+body.popup-theme-dark .tab.active {
+  color: #BB86FC;
+  border-bottom-color: #BB86FC;
+}
+
+body.popup-theme-dark .section-title {
+  color: #aaa;
+}
+
+body.popup-theme-dark .setting-label {
+  color: #e0e0e0;
+}
+
+body.popup-theme-dark .setting-desc {
+  color: #aaa;
+}
+
+body.popup-theme-dark .toggle-slider {
+  background-color: #444;
+}
+
+body.popup-theme-dark .toggle-slider:before {
+  background-color: #aaa;
+}
+
+body.popup-theme-dark .toggle input:checked + .toggle-slider {
+  background-color: #BB86FC;
+}
+
+body.popup-theme-dark .select-wrapper select {
+  background: #2d2d2d;
+  border: 1px solid #444;
+  color: #e0e0e0;
+}
+
+body.popup-theme-dark .shortcut-item {
+  background: #2d2d2d;
+  color: #e0e0e0;
+}
+
+body.popup-theme-dark .shortcut-item:hover {
+  background: #3d3d3d;
+}
+
+body.popup-theme-dark .shortcut-item.editing {
+  background: #3a4d3a;
+}
+
+body.popup-theme-dark .shortcut-label {
+  color: #e0e0e0;
+}
+
+body.popup-theme-dark .key {
+  background: #2d2d2d;
+  border: 1px solid #444;
+  color: #e0e0e0;
+}
+
+body.popup-theme-dark .key.mod {
+  background: #BB86FC;
+  border-color: #9a6ddc;
+  color: #000;
+}
+
+body.popup-theme-dark .shortcut-input {
+  border: 2px solid #BB86FC;
+  background: #2d2d2d;
+  color: #e0e0e0;
+}
+
+body.popup-theme-dark .edit-btn.secondary {
+  background: #444;
+  color: #ccc;
+}
+
+body.popup-theme-dark .edit-btn.secondary:hover {
+  background: #555;
+}
+
+body.popup-theme-dark .hint {
+  color: #777;
+}
+
+body.popup-theme-dark .subtitle {
+  color: #aaa;
+}
+
+body.popup-theme-dark .version-info {
+  color: #aaa;
+}
+
+body.popup-theme-dark .version-info .author {
+  color: #BB86FC;
+}
+
+body.popup-theme-dark .doc-link {
+  color: #BB86FC;
+}
+
+body.popup-theme-dark .toast {
+  background: #BB86FC;
+}
+
+/* Metal Theme */
+body.popup-theme-metal {
+  background: linear-gradient(to bottom, #e0e0e0, #c0c0c0);
+  color: #333;
+}
+
+body.popup-theme-metal .header {
+  border-bottom-color: #a0a0a0;
+}
+
+body.popup-theme-metal .tabs {
+  border-bottom-color: #a0a0a0;
+}
+
+body.popup-theme-metal .tab.active {
+  color: #5a5a5a;
+  border-bottom-color: #5a5a5a;
+}
+
+body.popup-theme-metal .toggle input:checked + .toggle-slider {
+  background-color: #7d7d7d;
+}
+
+body.popup-theme-metal .edit-btn.primary {
+  background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
+  color: #333;
+}
+
+body.popup-theme-metal .edit-btn.primary:hover {
+  background: linear-gradient(to bottom, #b0b0b0, #909090);
+}
+
+body.popup-theme-metal .version-info .author {
+  color: #5a5a5a;
+}
+
+body.popup-theme-metal .doc-link {
+  color: #5a5a5a;
+}
+
+body.popup-theme-metal .toast {
+  background: #7d7d7d;
+}
+
+body.popup-theme-metal .key.mod {
+  background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
+  border-color: #7d7d7d;
+  color: #333;
+}
+
+body.popup-theme-metal .shortcut-input {
+  border: 2px solid #7d7d7d;
+}
