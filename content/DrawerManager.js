@@ -28,6 +28,9 @@ class DrawerManager {
 
         // Set initial state of collapsible groups
         this._initializeCollapsibleGroups();
+
+        // Apply initial theme
+        this._applyCurrentTheme();
     }
 
     /**
@@ -57,10 +60,178 @@ class DrawerManager {
      * @private
      */
     _getDrawerTemplate() {
+        // Get current locale from navigator
+        const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+        let locale = 'en';
+        if (lang.startsWith('zh')) {
+            locale = 'zh';
+        } else if (lang.startsWith('ja')) {
+            locale = 'ja';
+        }
+
+        // Get translations from i18n module if available, otherwise use fallback
+        let drawerTitle, infoGroupTitle, basicGroupTitle, setGroupTitle, sqlGroupTitle, resultGroupTitle, tableInfoPlaceholder, cellTransformLabel, colDedupLabel, colMergeLabel, rowMergeLabel, setIntersectionLabel, setUnionLabel, setDiffABLabel, setDiffBALabel, sqlInsertLabel, sqlSelectLabel, sqlUpdateLabel, sqlTableNameLabel, sqlIncludeColumnsLabel, sqlExcludeColumnsLabel, sqlSelectConditionLabel, sqlUpdateSetColumnsLabel, sqlUpdateWhereColumnsLabel, resultCopyBtn, resultExportBtn, resultAreaPlaceholder, statusMessagePlaceholder;
+
+        if (window.i18n && typeof window.i18n.t === 'function') {
+            // Use i18n module for translations
+            drawerTitle = window.i18n.t('advancedTableOperations');
+            infoGroupTitle = window.i18n.t('tableInfo');
+            basicGroupTitle = window.i18n.t('basicOperations');
+            setGroupTitle = window.i18n.t('setOperations');
+            sqlGroupTitle = window.i18n.t('sql');
+            resultGroupTitle = window.i18n.t('resultDisplay');
+            tableInfoPlaceholder = window.i18n.t('noTableDataSelected');
+            cellTransformLabel = window.i18n.t('cellTransform');
+            colDedupLabel = window.i18n.t('columnDeduplication');
+            colMergeLabel = window.i18n.t('columnMerge');
+            rowMergeLabel = window.i18n.t('rowMerge');
+            setIntersectionLabel = window.i18n.t('intersection');
+            setUnionLabel = window.i18n.t('union');
+            setDiffABLabel = window.i18n.t('differenceAB');
+            setDiffBALabel = window.i18n.t('differenceBA');
+            sqlInsertLabel = window.i18n.t('insertStatement');
+            sqlSelectLabel = window.i18n.t('selectStatement');
+            sqlUpdateLabel = window.i18n.t('updateStatement');
+            sqlTableNameLabel = window.i18n.t('tableName');
+            sqlIncludeColumnsLabel = window.i18n.t('selectedColumnsCommaSeparated');
+            sqlExcludeColumnsLabel = window.i18n.t('excludedColumnsCommaSeparated');
+            sqlSelectConditionLabel = window.i18n.t('queryConditionsCommaSeparated');
+            sqlUpdateSetColumnsLabel = window.i18n.t('updateColumnsCommaSeparated');
+            sqlUpdateWhereColumnsLabel = window.i18n.t('queryColumnsCommaSeparated');
+            resultCopyBtn = window.i18n.t('copyResult');
+            resultExportBtn = window.i18n.t('exportResult');
+            resultAreaPlaceholder = window.i18n.t('operationResult');
+            statusMessagePlaceholder = window.i18n.t('operationStatusInfo');
+        } else {
+            // Fallback translations
+            const translations = {
+                en: {
+                    drawerTitle: 'Advanced Table Operations',
+                    infoGroupTitle: 'Table Info',
+                    basicGroupTitle: 'Basic Operations',
+                    setGroupTitle: 'Set Operations',
+                    sqlGroupTitle: 'SQL',
+                    resultGroupTitle: 'Result Display',
+                    tableInfoPlaceholder: 'No table data selected',
+                    cellTransformLabel: 'Cell Transform',
+                    colDedupLabel: 'Column Deduplication',
+                    colMergeLabel: 'Column Merge',
+                    rowMergeLabel: 'Row Merge',
+                    setIntersectionLabel: 'Intersection',
+                    setUnionLabel: 'Union',
+                    setDiffABLabel: 'Difference (A - B)',
+                    setDiffBALabel: 'Difference (B - A)',
+                    sqlInsertLabel: 'INSERT',
+                    sqlSelectLabel: 'SELECT',
+                    sqlUpdateLabel: 'UPDATE',
+                    sqlTableNameLabel: 'Table Name:',
+                    sqlIncludeColumnsLabel: 'Selected Columns (comma separated):',
+                    sqlExcludeColumnsLabel: 'Excluded Columns (comma separated):',
+                    sqlSelectConditionLabel: 'Query Conditions (comma separated):',
+                    sqlUpdateSetColumnsLabel: 'Update Columns (comma separated):',
+                    sqlUpdateWhereColumnsLabel: 'Query Columns (comma separated):',
+                    resultCopyBtn: 'Copy Result',
+                    resultExportBtn: 'Export Result',
+                    resultAreaPlaceholder: 'Operation result will be displayed here...',
+                    statusMessagePlaceholder: 'Operation status will be displayed here...'
+                },
+                zh: {
+                    drawerTitle: '高级表格操作',
+                    infoGroupTitle: '表格信息',
+                    basicGroupTitle: '基础操作',
+                    setGroupTitle: '集合操作',
+                    sqlGroupTitle: 'SQL',
+                    resultGroupTitle: '结果展示',
+                    tableInfoPlaceholder: '未选择任何表格数据',
+                    cellTransformLabel: '单元格转换',
+                    colDedupLabel: '列去重',
+                    colMergeLabel: '列合并',
+                    rowMergeLabel: '行合并',
+                    setIntersectionLabel: '交集',
+                    setUnionLabel: '并集',
+                    setDiffABLabel: '差集 (A - B)',
+                    setDiffBALabel: '差集 (B - A)',
+                    sqlInsertLabel: 'INSERT',
+                    sqlSelectLabel: 'SELECT',
+                    sqlUpdateLabel: 'UPDATE',
+                    sqlTableNameLabel: '表名:',
+                    sqlIncludeColumnsLabel: '选中列 (逗号分隔):',
+                    sqlExcludeColumnsLabel: '排除列 (逗号分隔):',
+                    sqlSelectConditionLabel: '查询条件 (逗号分隔):',
+                    sqlUpdateSetColumnsLabel: '更新列 (逗号分隔):',
+                    sqlUpdateWhereColumnsLabel: '查询列 (逗号分隔):',
+                    resultCopyBtn: '复制结果',
+                    resultExportBtn: '导出结果',
+                    resultAreaPlaceholder: '操作结果将显示在这里...',
+                    statusMessagePlaceholder: '操作状态信息将显示在这里...'
+                },
+                ja: {
+                    drawerTitle: '高度な表操作',
+                    infoGroupTitle: '表情報',
+                    basicGroupTitle: '基本操作',
+                    setGroupTitle: '集合操作',
+                    sqlGroupTitle: 'SQL',
+                    resultGroupTitle: '結果表示',
+                    tableInfoPlaceholder: 'テーブルデータが選択されていません',
+                    cellTransformLabel: 'セル変換',
+                    colDedupLabel: '列の重複排除',
+                    colMergeLabel: '列のマージ',
+                    rowMergeLabel: '行のマージ',
+                    setIntersectionLabel: '積集合',
+                    setUnionLabel: '和集合',
+                    setDiffABLabel: '差集合 (A - B)',
+                    setDiffBALabel: '差集合 (B - A)',
+                    sqlInsertLabel: 'INSERT',
+                    sqlSelectLabel: 'SELECT',
+                    sqlUpdateLabel: 'UPDATE',
+                    sqlTableNameLabel: 'テーブル名:',
+                    sqlIncludeColumnsLabel: '選択された列（カンマ区切り）:',
+                    sqlExcludeColumnsLabel: '除外された列（カンマ区切り）:',
+                    sqlSelectConditionLabel: 'クエリ条件（カンマ区切り）:',
+                    sqlUpdateSetColumnsLabel: '更新列（カンマ区隔）:',
+                    sqlUpdateWhereColumnsLabel: 'クエリ列（カンマ区切り）:',
+                    resultCopyBtn: '結果をコピー',
+                    resultExportBtn: '結果をエクスポート',
+                    resultAreaPlaceholder: '操作結果はここに表示されます...',
+                    statusMessagePlaceholder: '操作ステータス情報はここに表示されます...'
+                }
+            };
+
+            const t = translations[locale] || translations.en;
+            drawerTitle = t.drawerTitle;
+            infoGroupTitle = t.infoGroupTitle;
+            basicGroupTitle = t.basicGroupTitle;
+            setGroupTitle = t.setGroupTitle;
+            sqlGroupTitle = t.sqlGroupTitle;
+            resultGroupTitle = t.resultGroupTitle;
+            tableInfoPlaceholder = t.tableInfoPlaceholder;
+            cellTransformLabel = t.cellTransformLabel;
+            colDedupLabel = t.colDedupLabel;
+            colMergeLabel = t.colMergeLabel;
+            rowMergeLabel = t.rowMergeLabel;
+            setIntersectionLabel = t.setIntersectionLabel;
+            setUnionLabel = t.setUnionLabel;
+            setDiffABLabel = t.setDiffABLabel;
+            setDiffBALabel = t.setDiffBALabel;
+            sqlInsertLabel = t.sqlInsertLabel;
+            sqlSelectLabel = t.sqlSelectLabel;
+            sqlUpdateLabel = t.sqlUpdateLabel;
+            sqlTableNameLabel = t.sqlTableNameLabel;
+            sqlIncludeColumnsLabel = t.sqlIncludeColumnsLabel;
+            sqlExcludeColumnsLabel = t.sqlExcludeColumnsLabel;
+            sqlSelectConditionLabel = t.sqlSelectConditionLabel;
+            sqlUpdateSetColumnsLabel = t.sqlUpdateSetColumnsLabel;
+            sqlUpdateWhereColumnsLabel = t.sqlUpdateWhereColumnsLabel;
+            resultCopyBtn = t.resultCopyBtn;
+            resultExportBtn = t.resultExportBtn;
+            resultAreaPlaceholder = t.resultAreaPlaceholder;
+            statusMessagePlaceholder = t.statusMessagePlaceholder;
+        }
+
         return `
       <div class="drawer-panel" id="drawer-panel">
         <div class="drawer-header">
-          <div class="drawer-title">高级表格操作</div>
+          <div class="drawer-title">${drawerTitle}</div>
           <button class="drawer-close" id="drawer-close">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
               <path d="M18 6L6 18M6 6l12 12"/>
@@ -71,18 +242,18 @@ class DrawerManager {
           <!-- 第一个面板：当前选中的表格信息 -->
           <div class="operation-group collapsible expanded">
             <div class="group-title" id="info-group-title">
-              <span>表格信息</span>
+              <span>${infoGroupTitle}</span>
               <span class="collapse-icon">▲</span>
             </div>
             <div class="collapsible-content" style="display: block;">
-              <textarea class="table-info" id="table-info" readonly>未选择任何表格数据</textarea>
+              <textarea class="table-info" id="table-info" readonly>${tableInfoPlaceholder}</textarea>
             </div>
           </div>
               
           <!-- 第二个面板：基础操作 -->
           <div class="operation-group collapsible expanded">
             <div class="group-title" id="basic-group-title">
-              <span>基础操作</span>
+              <span>${basicGroupTitle}</span>
               <span class="collapse-icon">▲</span>
             </div>
             <div class="collapsible-content" style="display: block;">
@@ -92,7 +263,7 @@ class DrawerManager {
                     <label class="checkbox-label">
                     <input type="checkbox" id="cell-transform-checkbox">
                     <span class="checkmark"></span>
-                    单元格转换
+                    ${cellTransformLabel}
                     </label>
                     <div class="input-group" id="cell-transform-input-group" style="display: none;">
                     <input type="text" id="cell-transform-rule" placeholder="例如: '$' 表示单元格使用单引号包裹" value="'$'">
@@ -106,12 +277,12 @@ class DrawerManager {
                     <label class="checkbox-label">
                     <input type="checkbox" id="col-dedup-checkbox">
                     <span class="checkmark"></span>
-                    列去重
+                    ${colDedupLabel}
                     </label>
                     <label class="checkbox-label">
                     <input type="checkbox" id="col-merge-checkbox">
                     <span class="checkmark"></span>
-                    列合并
+                    ${colMergeLabel}
                     </label>
                     <div class="input-group" id="col-merge-input-group" style="display: none;">
                     <input type="text" id="col-merge-template" placeholder="例如: ," value=",">
@@ -126,7 +297,7 @@ class DrawerManager {
                     <label class="checkbox-label">
                     <input type="checkbox" id="row-merge-checkbox">
                     <span class="checkmark"></span>
-                    行合并
+                    ${rowMergeLabel}
                     </label>
                     <div class="input-group" id="row-merge-input-group" style="display: none;">
                     <input type="text" id="row-merge-separator" placeholder="默认为换行符" value=";">
@@ -140,7 +311,7 @@ class DrawerManager {
           <!-- 第三个面板：集合操作 -->
           <div class="operation-group collapsible">
             <div class="group-title" id="set-group-title">
-              <span>集合操作</span>
+              <span>${setGroupTitle}</span>
               <span class="collapse-icon">▼</span>
             </div>
             <div class="collapsible-content">
@@ -148,22 +319,22 @@ class DrawerManager {
                 <label class="radio-label">
                   <input type="radio" name="set-operation" id="set-intersection" value="intersection">
                   <span class="radiomark"></span>
-                  交集
+                  ${setIntersectionLabel}
                 </label>
                 <label class="radio-label">
                   <input type="radio" name="set-operation" id="set-union" value="union">
                   <span class="radiomark"></span>
-                  并集
+                  ${setUnionLabel}
                 </label>
                 <label class="radio-label">
                   <input type="radio" name="set-operation" id="set-diff-ab" value="difference-a-b">
                   <span class="radiomark"></span>
-                  差集 (A - B)
+                  ${setDiffABLabel}
                 </label>
                 <label class="radio-label">
                   <input type="radio" name="set-operation" id="set-diff-ba" value="difference-b-a">
                   <span class="radiomark"></span>
-                  差集 (B - A)
+                  ${setDiffBALabel}
                 </label>
               </div>
             </div>
@@ -172,7 +343,7 @@ class DrawerManager {
           <!-- 第四个面板：SQL操作 -->
           <div class="operation-group collapsible">
             <div class="group-title" id="sql-group-title">
-              <span>SQL</span>
+              <span>${sqlGroupTitle}</span>
               <span class="collapse-icon">▼</span>
             </div>
             <div class="collapsible-content">
@@ -180,24 +351,24 @@ class DrawerManager {
                 <label class="radio-label">
                   <input type="radio" name="sql-operation" id="sql-insert" value="insert">
                   <span class="radiomark"></span>
-                  INSERT
+                  ${sqlInsertLabel}
                 </label>
                 <label class="radio-label">
                   <input type="radio" name="sql-operation" id="sql-select" value="select">
                   <span class="radiomark"></span>
-                  SELECT
+                  ${sqlSelectLabel}
                 </label>
                 <label class="radio-label">
                   <input type="radio" name="sql-operation" id="sql-update" value="update">
                   <span class="radiomark"></span>
-                  UPDATE
+                  ${sqlUpdateLabel}
                 </label>
               </div>
               
               <!-- 表名输入框 -->
               <div class="sql-operation-row">
                 <div class="operation-controls">
-                  <label style="margin-left: 8px;">表名:</label>
+                  <label style="margin-left: 8px;">${sqlTableNameLabel}</label>
                   <div class="input-group">
                     <input type="text" id="sql-table-name" placeholder="请输入表名" style="width: 100%;">
                   </div>
@@ -207,11 +378,11 @@ class DrawerManager {
               <div class="sql-operation-row" id="insert-columns-row" style="display: none;">
                 <div class="operation-controls">
                   <div class="input-group">
-                    <label>选中列 (逗号分隔):</label>
+                    <label>${sqlIncludeColumnsLabel}</label>
                     <input type="text" id="sql-insert-include-columns" placeholder="例如: id,name,age" style="width: 100%;">
                   </div>
                   <div class="input-group">
-                    <label>排除列 (逗号分隔):</label>
+                    <label>${sqlExcludeColumnsLabel}</label>
                     <input type="text" id="sql-insert-exclude-columns" placeholder="例如: password,temp" style="width: 100%;">
                   </div>
                 </div>
@@ -221,7 +392,7 @@ class DrawerManager {
               <div class="sql-operation-row" id="select-condition-row" style="display: none;">
                 <div class="operation-controls">
                   <div class="input-group">
-                    <label>查询条件 (逗号分隔):</label>
+                    <label>${sqlSelectConditionLabel}</label>
                     <input type="text" id="sql-select-condition" placeholder="用于构建查询条件的列，如name,age" style="width: 100%;">
                   </div>
                 </div>
@@ -231,11 +402,11 @@ class DrawerManager {
               <div class="sql-operation-row" id="update-columns-row" style="display: none;">
                 <div class="operation-controls">
                   <div class="input-group">
-                    <label>更新列 (逗号分隔):</label>
+                    <label>${sqlUpdateSetColumnsLabel}</label>
                     <input type="text" id="sql-update-set-columns" placeholder="例如: name,age" style="width: 100%;">
                   </div>
                   <div class="input-group">
-                    <label>查询列 (逗号分隔):</label>
+                    <label>${sqlUpdateWhereColumnsLabel}</label>
                     <input type="text" id="sql-update-where-columns" placeholder="例如: id,status" style="width: 100%;">
                   </div>
                 </div>
@@ -246,20 +417,20 @@ class DrawerManager {
           <!-- 第五个面板：结果展示 -->
           <div class="operation-group collapsible expanded">
             <div class="group-title" id="result-group-title">
-              <span>处理结果</span>
+              <span>${resultGroupTitle}</span>
               <span class="collapse-icon">▲</span>
             </div>
             <div class="collapsible-content" style="display: block;">
               <div class="result-area" id="result-area">
-                操作结果将显示在这里...
+                ${resultAreaPlaceholder}
               </div>
               <div class="result-actions">
-                <button class="result-action-btn" id="copy-result">复制结果</button>
-                <button class="result-action-btn" id="export-result">导出结果</button>
+                <button class="result-action-btn" id="copy-result">${resultCopyBtn}</button>
+                <button class="result-action-btn" id="export-result">${resultExportBtn}</button>
               </div>
               <!-- 提示信息展示区域 -->
               <div class="status-message" id="status-message" style="margin-top: 10px; padding: 10px; background-color: #f0f0f0; border-radius: 4px; display: none;">
-                操作状态信息将显示在这里...
+                ${statusMessagePlaceholder}
               </div>
             </div>
           </div>
@@ -297,6 +468,28 @@ class DrawerManager {
             content.style.display = 'none';
             icon.textContent = '▼';
         }
+    }
+
+    /**
+     * Apply current theme to drawer
+     * @private
+     */
+    _applyCurrentTheme() {
+        // Get the current theme from body class
+        const currentThemeClass = Array.from(document.body.classList)
+            .find(cls => cls.startsWith('st-theme-')) || 'st-theme-excel';
+
+        // Extract theme name
+        const themeName = currentThemeClass.replace('st-theme-', '');
+
+        // Apply theme class to drawer panel
+        this.drawerPanel?.classList.remove(
+            'st-theme-excel',
+            'st-theme-freshGreen',
+            'st-theme-dark',
+            'st-theme-metal'
+        );
+        this.drawerPanel?.classList.add(`st-theme-${themeName}`);
     }
 
     /**
@@ -543,6 +736,30 @@ class DrawerManager {
                 this.exportResult();
             });
         }
+
+        // Listen for theme changes by observing body class changes
+        this._setupThemeChangeListener();
+    }
+
+    /**
+     * Setup theme change listener
+     * @private
+     */
+    _setupThemeChangeListener() {
+        // Create a MutationObserver to watch for class changes on the body
+        this.themeObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    this._applyCurrentTheme();
+                }
+            });
+        });
+
+        // Start observing body class changes
+        this.themeObserver.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
     }
 
     /**
@@ -1365,6 +1582,22 @@ class DrawerManager {
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+        }
+    }
+
+    /**
+     * Destroy the drawer manager and clean up resources
+     */
+    destroy() {
+        // Disconnect the theme observer if it exists
+        if (this.themeObserver) {
+            this.themeObserver.disconnect();
+            this.themeObserver = null;
+        }
+
+        // Remove the drawer element
+        if (this.drawer && this.drawer.parentNode) {
+            this.drawer.parentNode.removeChild(this.drawer);
         }
     }
 }

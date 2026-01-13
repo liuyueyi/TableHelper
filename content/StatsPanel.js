@@ -38,14 +38,14 @@ class StatsPanel {
     // Create panel element
     this.panel = document.createElement('div');
     this.panel.className = 'stats-bar';
-    this.panel.innerHTML = this._getTemplate();
+    this.panel.innerHTML = this._getLocalizedTemplate();
     this.shadowRoot.appendChild(this.panel);
 
     // Create modal element separately (outside stats-bar to avoid transform issues)
     this.modal = document.createElement('div');
     this.modal.className = 'modal-overlay';
     this.modal.id = 'modal-overlay';
-    this.modal.innerHTML = this._getModalTemplate();
+    this.modal.innerHTML = this._getLocalizedModalTemplate();
     this.shadowRoot.appendChild(this.modal);
 
     // Append to body
@@ -652,10 +652,73 @@ class StatsPanel {
    * Get panel HTML template
    * @private
    */
-  _getTemplate() {
+  _getLocalizedTemplate() {
+    // Get current locale from navigator
+    const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+    let locale = 'en';
+    if (lang.startsWith('zh')) {
+      locale = 'zh';
+    } else if (lang.startsWith('ja')) {
+      locale = 'ja';
+    }
+
+    // Define translations
+    const translations = {
+      en: {
+        copied: 'Copied!',
+        downloadExcel: 'Download as Excel',
+        numeric: 'Numeric:',
+        sum: 'Sum:',
+        avg: 'Avg:',
+        min: 'Min:',
+        max: 'Max:',
+        topLabel: 'Top 5:',
+        showAllStatsTitle: 'Show all statistics',
+        showAllStats: 'All Stats',
+        switchStats: 'Switch between numeric and text statistics',
+        advancedTooltip: 'Advanced table operations',
+        refresh: 'Refresh',
+        advanced: 'Advanced'
+      },
+      zh: {
+        copied: '已复制！',
+        downloadExcel: '下载为Excel',
+        numeric: '数字:',
+        sum: '总和:',
+        avg: '平均:',
+        min: '最小:',
+        max: '最大:',
+        topLabel: '前5名:',
+        showAllStatsTitle: '显示所有统计项',
+        showAllStats: '统计全部',
+        switchStats: '在数字和文本统计之间切换',
+        advancedTooltip: '高级表格操作',
+        refresh: '刷新',
+        advanced: '高级'
+      },
+      ja: {
+        copied: 'コピーしました！',
+        downloadExcel: 'Excelとしてダウンロード',
+        numeric: '数値:',
+        sum: '合計:',
+        avg: '平均:',
+        min: '最小:',
+        max: '最大:',
+        topLabel: 'トップ5:',
+        showAllStatsTitle: 'すべての統計を表示',
+        showAllStats: 'すべて統計',
+        switchStats: '数値とテキストの統計を切り替える',
+        advancedTooltip: '高度な表操作',
+        refresh: '更新',
+        advanced: '詳細'
+      }
+    };
+
+    const t = translations[locale] || translations.en;
+
     return `
-      <div class="copy-toast" id="toast">Copied!</div>
-      <button class="download-btn" id="download-btn" title="Download as Excel">
+      <div class="copy-toast" id="toast">${t.copied}</div>
+      <button class="download-btn" id="download-btn" title="${t.downloadExcel}">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
           <polyline points="14 2 14 8 20 8" fill="none" stroke="#fff" stroke-width="2"/>
@@ -667,49 +730,49 @@ class StatsPanel {
       <!-- Numeric stats container -->
       <div class="numeric-stats-container" id="numeric-stats">
         <div class="stat-item" data-stat="numericCount" data-value="" title="Click to copy">
-          <span class="stat-label">Numeric:</span>
+          <span class="stat-label">${t.numeric}</span>
           <span class="stat-value" id="numeric-count">-</span>
         </div>
         <div class="stat-item" data-stat="sum" data-value="" title="Click to copy">
-          <span class="stat-label">Sum:</span>
+          <span class="stat-label">${t.sum}</span>
           <span class="stat-value" id="sum">-</span>
         </div>
         <div class="stat-item" data-stat="average" data-value="" title="Click to copy">
-          <span class="stat-label">Avg:</span>
+          <span class="stat-label">${t.avg}</span>
           <span class="stat-value" id="average">-</span>
         </div>
         <div class="stat-item" data-stat="min" data-value="" title="Click to copy">
-          <span class="stat-label">Min:</span>
+          <span class="stat-label">${t.min}</span>
           <span class="stat-value" id="min">-</span>
         </div>
         <div class="stat-item" data-stat="max" data-value="" title="Click to copy">
-          <span class="stat-label">Max:</span>
+          <span class="stat-label">${t.max}</span>
           <span class="stat-value" id="max">-</span>
         </div>
       </div>
       <!-- Text stats container (Top 5) -->
       <div class="text-stats-container" id="text-stats">
-        <span class="top-label">Top 5:</span>
+        <span class="top-label">${t.topLabel}</span>
         <div id="top-items"></div>
-        <button class="show-all-btn" id="show-all-btn" title="显示所有统计项">
-          统计全部
+        <button class="show-all-btn" id="show-all-btn" title="${t.showAllStatsTitle}">
+          ${t.showAllStats}
         </button>
       </div>
       <!-- Mode toggle button -->
       <div class="divider-right"></div>
-      <button class="mode-toggle" id="mode-toggle" title="Switch between numeric and text statistics">
+      <button class="mode-toggle" id="mode-toggle" title="${t.switchStats}">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
         </svg>
-        <span id="toggle-label">Top 5</span>
+        <span id="toggle-label">${t.topLabel}</span>
       </button>
       
       <!-- Advanced button -->
-      <button class="advanced-btn" id="advanced-btn" title="Advanced table operations">
+      <button class="advanced-btn mode-toggle" id="advanced-btn" title="${t.advancedTooltip}">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="12" height="12">
           <path fill="currentColor" d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
         </svg>
-        <span id="advanced-btn-text">高级</span>
+        <span id="advanced-btn-text">${t.advanced}</span>
       </button>
     `;
   }
@@ -718,22 +781,58 @@ class StatsPanel {
    * Get modal HTML template
    * @private
    */
-  _getModalTemplate() {
+  _getLocalizedModalTemplate() {
+    // Get current locale from navigator
+    const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+    let locale = 'en';
+    if (lang.startsWith('zh')) {
+      locale = 'zh';
+    } else if (lang.startsWith('ja')) {
+      locale = 'ja';
+    }
+
+    // Define translations
+    const translations = {
+      en: {
+        statsItems: 'Statistics Items',
+        copyAllResults: 'Copy all results',
+        copy: 'Copy',
+        close: 'Close',
+        esc: 'ESC'
+      },
+      zh: {
+        statsItems: '统计项',
+        copyAllResults: '复制全部统计结果',
+        copy: '复制',
+        close: '关闭',
+        esc: 'ESC'
+      },
+      ja: {
+        statsItems: '統計項目',
+        copyAllResults: 'すべての統計結果をコピー',
+        copy: 'コピー',
+        close: '閉じる',
+        esc: 'ESC'
+      }
+    };
+
+    const t = translations[locale] || translations.en;
+
     return `
       <div class="modal-content">
         <div class="modal-header">
           <div class="modal-title">
-            <span>统计项</span>
+            <span>${t.statsItems}</span>
             <span class="modal-title-count" id="modal-count">0</span>
-            <button class="modal-copy" id="modal-copy" title="复制全部统计结果">
+            <button class="modal-copy" id="modal-copy" title="${t.copyAllResults}">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
               </svg>
-              <span>复制</span>
+              <span>${t.copy}</span>
             </button>
           </div>
-          <button class="modal-close" id="modal-close" title="关闭 (ESC)">
+          <button class="modal-close" id="modal-close" title="${t.close} (${t.esc})">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
@@ -899,7 +998,34 @@ class StatsPanel {
   _updateAdvancedButtonText(isOpen) {
     const buttonText = this.shadowRoot.getElementById('advanced-btn-text');
     if (buttonText) {
-      buttonText.textContent = isOpen ? '刷新' : '高级';
+      let refreshText, advancedText;
+
+      if (window.i18n && typeof window.i18n.t === 'function') {
+        // Use i18n module for translations
+        refreshText = window.i18n.t('refresh');
+        advancedText = window.i18n.t('advanced');
+      } else {
+        // Fallback translations
+        const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+        let locale = 'en';
+        if (lang.startsWith('zh')) {
+          locale = 'zh';
+        } else if (lang.startsWith('ja')) {
+          locale = 'ja';
+        }
+
+        const translations = {
+          en: { refresh: 'Refresh', advanced: 'Advanced' },
+          zh: { refresh: '刷新', advanced: '高级' },
+          ja: { refresh: '更新', advanced: '詳細' }
+        };
+
+        const texts = translations[locale] || translations.en;
+        refreshText = texts.refresh;
+        advancedText = texts.advanced;
+      }
+
+      buttonText.textContent = isOpen ? refreshText : advancedText;
     }
   }
 

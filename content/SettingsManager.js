@@ -15,6 +15,9 @@ class SettingsManager {
       // Stats bar position: 'left', 'center', 'right'
       statsPosition: 'left',
 
+      // Theme: 'excel', 'freshGreen', 'dark', 'metal'
+      theme: 'excel',
+
       // Keyboard shortcuts (key combinations)
       shortcuts: {
         selectCell: { key: 'click', modifiers: ['cmd'] },
@@ -60,6 +63,7 @@ class SettingsManager {
       columnIncludeHeader: stored.columnIncludeHeader ?? this.defaults.columnIncludeHeader,
       copyKeepEmptyPlaceholders: stored.copyKeepEmptyPlaceholders ?? this.defaults.copyKeepEmptyPlaceholders,
       statsPosition: stored.statsPosition ?? this.defaults.statsPosition,
+      theme: stored.theme ?? this.defaults.theme,
       shortcuts: {
         ...this.defaults.shortcuts,
         ...(stored.shortcuts || {})
@@ -136,6 +140,34 @@ class SettingsManager {
         console.error('SuperTables: Settings listener error', e);
       }
     });
+  }
+
+  /**
+   * Get available themes
+   * @returns {Array} Array of available theme objects
+   */
+  getAvailableThemes() {
+    return [
+      { id: 'excel', name: 'Excel Theme', description: 'Classic Excel green theme' },
+      { id: 'freshGreen', name: 'Fresh Green', description: 'Fresh green theme' },
+      { id: 'dark', name: 'Dark Theme', description: 'Dark theme for comfortable viewing' },
+      { id: 'metal', name: 'Metallic', description: 'Metallic silver theme' }
+    ];
+  }
+
+  /**
+   * Apply theme to document
+   * @param {string} themeId The theme to apply
+   */
+  applyTheme(themeId) {
+    // Remove existing theme classes
+    document.body.classList.remove('st-theme-excel', 'st-theme-freshGreen', 'st-theme-dark', 'st-theme-metal');
+
+    // Add new theme class
+    document.body.classList.add(`st-theme-${themeId}`);
+
+    // Store current theme in settings
+    this.set('theme', themeId);
   }
 
   /**

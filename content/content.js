@@ -49,6 +49,9 @@
   let firstClickTime = null;
   let firstClickCell = null;
 
+  // Track currently applied theme to prevent loops
+  let currentAppliedTheme = null;
+
   // Select-all button element
   let selectAllButton = null;
   let currentHoveredTable = null;
@@ -112,7 +115,7 @@
       <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
         <path d="M3 3h18v18H3V3zm2 2v5h5V5H5zm7 0v5h7V5h-7zm-7 7v5h5v-5H5zm7 0v5h7v-5h-7z"/>
       </svg>
-      <span>Ctrl+双击单元格实现全选</span>
+      <span>Ctrl+Double Click to select all</span>
     `;
     selectAllButton.style.cssText = `
       position: absolute;
@@ -970,6 +973,18 @@
   }
 
   /**
+   * Apply theme to the document
+   * @param {string} themeId The theme to apply
+   */
+  function applyTheme(themeId) {
+    // Remove existing theme classes
+    document.body.classList.remove('st-theme-excel', 'st-theme-freshGreen', 'st-theme-dark', 'st-theme-metal');
+
+    // Add new theme class
+    document.body.classList.add(`st-theme-${themeId}`);
+  }
+
+  /**
    * Selection change callback
    */
   selectionManager.onSelectionChange = (cells) => {
@@ -1039,7 +1054,28 @@
       if (newSettings.statsPosition) {
         statsPanel.setPosition(newSettings.statsPosition);
       }
+
+      // Apply theme if it changed
+      if (newSettings.theme && newSettings.theme !== currentAppliedTheme) {
+        currentAppliedTheme = newSettings.theme;
+        applyTheme(newSettings.theme);
+      }
     });
+
+    // Listen for messages from popup
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      if (message.action === 'applyTheme') {
+        currentAppliedTheme = message.theme;
+        applyTheme(message.theme);
+        sendResponse({ status: 'success' });
+      }
+      return true; // Required for async responses
+    });
+
+    // Apply initial theme
+    const initialTheme = settingsManager.get('theme') || 'excel';
+    currentAppliedTheme = initialTheme;
+    applyTheme(currentAppliedTheme);
 
     // Use capture phase for better performance
     document.addEventListener('keydown', handleKeyDown, true);

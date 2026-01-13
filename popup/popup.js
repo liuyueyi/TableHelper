@@ -23,6 +23,7 @@
     columnIncludeHeader: false,
     copyKeepEmptyPlaceholders: false,
     statsPosition: 'left',
+    theme: 'excel',
     shortcuts: {
       selectCell: { key: 'click', modifiers: ['cmd'] },
       selectColumn: { key: 'click', modifiers: ['alt'] },
@@ -31,6 +32,39 @@
       copy: { key: 'c', modifiers: ['cmd'] }
     }
   };
+
+  // Debounce function to limit save operations
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+
+  // Function to apply theme to popup UI
+  function applyPopupTheme(themeId) {
+    // Remove existing theme classes
+    document.body.classList.remove('popup-theme-excel', 'popup-theme-freshGreen', 'popup-theme-dark', 'popup-theme-metal');
+
+    // Add new theme class
+    document.body.classList.add(`popup-theme-${themeId}`);
+  }
+
+  // Debounced save function to prevent exceeding storage quota
+  const debouncedSaveSettings = debounce(async function () {
+    try {
+      await chrome.storage.sync.set({ settings });
+      showToast(i18n.t('settingsSaved'));
+    } catch (e) {
+      console.error('Failed to save settings:', e);
+      showToast(i18n.t('saveFailed'));
+    }
+  }, 500); // 500ms delay to prevent too frequent saves
 
   let settings = JSON.parse(JSON.stringify(defaults));
   let editingShortcut = null;
@@ -46,6 +80,11 @@
   const shortcutList = document.getElementById('shortcut-list');
   const docLink = document.getElementById('doc-link');
   const tableToolLink = document.getElementById('table-tool-link');
+
+  // themeSelect will be accessed when needed to ensure DOM is loaded
+  function getThemeSelect() {
+    return document.getElementById('themeSelect');
+  }
 
   /**
    * Initialize i18n
@@ -102,14 +141,8 @@
   /**
    * Save settings to storage
    */
-  async function saveSettings() {
-    try {
-      await chrome.storage.sync.set({ settings });
-      showToast(i18n.t('settingsSaved'));
-    } catch (e) {
-      console.error('Failed to save settings:', e);
-      showToast(i18n.t('saveFailed'));
-    }
+  function saveSettings() {
+    debouncedSaveSettings();
   }
 
   /**
@@ -350,6 +383,12 @@
     columnIncludeHeaderToggle.checked = settings.columnIncludeHeader;
     copyKeepEmptyPlaceholdersToggle.checked = settings.copyKeepEmptyPlaceholders;
     statsPositionSelect.value = settings.statsPosition || 'center';
+    const themeSelect = getThemeSelect();
+    if (themeSelect) {
+      themeSelect.value = settings.theme || 'excel';
+      // Apply theme to popup UI
+      applyPopupTheme(themeSelect.value);
+    }
     renderShortcuts();
   }
 
@@ -405,11 +444,26 @@
       saveSettings();
     });
 
+    // Theme select
+    const themeSelect = getThemeSelect();
+    if (themeSelect) {
+      themeSelect.addEventListener('change', () => {
+        settings.theme = themeSelect.value;
+        saveSettings();
+        // Apply theme to popup UI
+        applyPopupTheme(settings.theme);
+        // Send message to content script to update theme
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          chrome.tabs.sendMessage(tabs[0].id, { action: 'applyTheme', theme: settings.theme });
+        });
+      });
+    }
+
     // Reset button
-    resetBtn.addEventListener('click', async () => {
+    resetBtn.addEventListener('click', () => {
       if (confirm(i18n.t('resetConfirm'))) {
         settings = JSON.parse(JSON.stringify(defaults));
-        await saveSettings();
+        saveSettings();
         updateUI();
         showToast(i18n.t('settingsReset'));
       }
