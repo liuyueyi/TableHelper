@@ -14,6 +14,7 @@
     { action: 'selectCell', labelKey: 'selectCell' },
     { action: 'selectColumn', labelKey: 'selectColumn' },
     { action: 'selectRow', labelKey: 'selectRow' },
+    { action: 'selectAll', labelKey: 'selectAll' },
     { action: 'copy', labelKey: 'copySelection' }
   ];
 
@@ -26,6 +27,7 @@
       selectCell: { key: 'click', modifiers: ['cmd'] },
       selectColumn: { key: 'click', modifiers: ['alt'] },
       selectRow: { key: 'click', modifiers: ['cmd', 'alt'] },
+      selectAll: { key: 'double click', modifiers: ['cmd'], doubleClick: true },
       copy: { key: 'c', modifiers: ['cmd'] }
     }
   };
@@ -130,8 +132,11 @@
   /**
    * Format shortcut key for display
    */
-  function formatKey(key) {
+  function formatKey(key, isDoubleClick = false) {
     if (key === 'click') {
+      if (isDoubleClick) {
+        return `<span class="key">${i18n.t('doubleClick')}</span>`;
+      }
       return `<span class="key">${i18n.t('click')}</span>`;
     }
     return `<span class="key">${key.toUpperCase()}</span>`;
@@ -144,7 +149,8 @@
     shortcutList.innerHTML = shortcutDefs.map(def => {
       const shortcut = settings.shortcuts[def.action];
       const modifiersHtml = formatModifiers(shortcut.modifiers);
-      const keyHtml = formatKey(shortcut.key);
+      const isDoubleClick = def.action === 'selectAll' && shortcut.doubleClick;
+      const keyHtml = formatKey(shortcut.key, isDoubleClick);
 
       return `
         <div class="shortcut-item" data-action="${def.action}">
@@ -203,7 +209,12 @@
     item.classList.add('editing');
 
     const input = item.querySelector('.shortcut-input');
-    input.value = i18n.t('pressModifier');
+    // For selectAll, show a special hint about double-click
+    if (action === 'selectAll') {
+      input.value = `${i18n.t('pressModifier')} (${i18n.t('doubleClick')}模式)`;
+    } else {
+      input.value = i18n.t('pressModifier');
+    }
     input.classList.add('recording');
 
     // Use requestAnimationFrame to ensure the element is visible before focusing
@@ -300,7 +311,13 @@
       return;
     }
 
-    settings.shortcuts[action] = { key, modifiers };
+    // For selectAll, preserve the doubleClick flag
+    if (action === 'selectAll') {
+      settings.shortcuts[action] = { key, modifiers, doubleClick: true };
+    } else {
+      settings.shortcuts[action] = { key, modifiers };
+    }
+
     await saveSettings();
 
     cancelEditingShortcut(item);

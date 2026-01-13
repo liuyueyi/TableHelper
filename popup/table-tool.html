@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>表格工具</title>
+    <title data-i18n="tableTool">表格工具</title>
     <style>
         /* 小清新护眼风格CSS */
         * {
@@ -356,34 +356,33 @@
         <div class="thp-header">
             <div class="thp-header-content">
                 <img class="logo" src="/icons/logo.png" alt="Logo">
-                <h1>表格助手-高级编辑工具</h1>
+                <h1 data-i18n="tableTool">表格助手-高级编辑工具</h1>
             </div>
             <a href="https://chromewebstore.google.com/" target="_blank" class="thp-install-btn">安装扩展</a>
         </div>
 
         <div class="thp-tabs">
-            <button class="thp-tab thp-tab-active" data-tab="basic-tab">基础操作</button>
-            <button class="thp-tab" data-tab="set-tab">集合操作</button>
-            <button class="thp-tab" data-tab="sql-tab">SQL操作</button>
+            <button class="thp-tab thp-tab-active" data-tab="basic-tab" data-i18n="basicOperation">基础操作</button>
+            <button class="thp-tab" data-tab="set-tab" data-i18n="setOperation">集合操作</button>
+            <button class="thp-tab" data-tab="sql-tab" data-i18n="sqlOperation">SQL操作</button>
         </div>
 
         <!-- 基础操作标签页 -->
         <div class="thp-tab-content thp-tab-content-active" id="thp-basic-tab">
             <div class="thp-input-result-container">
                 <div class="thp-input-section">
-                    <label for="thp-basic-input">输入表格数据（每行代表一行数据，使用制表符或空格分隔列）：</label>
-                    <textarea id="thp-basic-input" placeholder="示例：
-姓名    年龄    部门
-张三    25      IT部
-李四    30      销售部"></textarea>
+                    <label for="thp-basic-input" data-i18n="inputTableData">输入表格数据（每行代表一行数据，使用制表符或空格分隔列）：</label>
+                    <textarea id="thp-basic-input"
+                        placeholder="Example:\nName    Age    Department\nZhang    25      IT\nLi    30      Sales"
+                        data-i18n="basicInputPlaceholder" data-i18n-attr="placeholder"></textarea>
                 </div>
 
                 <div class="thp-result-section">
-                    <label for="thp-basic-result">操作结果：</label>
+                    <label for="thp-basic-result" data-i18n="operationResult">操作结果：</label>
                     <textarea id="thp-basic-result" class="thp-result-area" readonly></textarea>
                     <div class="thp-result-actions">
-                        <button class="thp-action-btn" id="thp-basic-copy">复制结果</button>
-                        <button class="thp-action-btn" id="thp-basic-export">导出结果</button>
+                        <button class="thp-action-btn" id="thp-basic-copy" data-i18n="copyResult">复制结果</button>
+                        <button class="thp-action-btn" id="thp-basic-export" data-i18n="exportResult">导出结果</button>
                     </div>
                     <div class="thp-status-message" id="thp-basic-status"></div>
                 </div>
@@ -394,69 +393,71 @@
                     <div class="thp-option-row">
                         <label class="thp-checkbox-label">
                             <input type="checkbox" id="thp-cell-transform-checkbox">
-                            单元格转换
+                            <span data-i18n="cellTransform">单元格转换</span>
                         </label>
                         <div class="thp-input-group" id="thp-cell-transform-input-group" style="display: none;">
-                            <input type="text" id="thp-cell-transform-rule" placeholder="例如: '$' 表示单元格使用单引号包裹"
-                                value="'$'">
+                            <input type="text" id="thp-cell-transform-rule"
+                                placeholder="Example: '$' means cells are wrapped in single quotes"
+                                data-i18n="cellTransformRulePlaceholder" data-i18n-attr="placeholder" value="'$'">
                         </div>
-                        <div class="thp-hint-text" id="thp-cell-transform-hint" style="display: none;">转换规则 ($ 表示单元格内容)
+                        <div class="thp-hint-text" id="thp-cell-transform-hint" style="display: none;">
+                            <span data-i18n="cellTransformHint">转换规则 ($ 表示单元格内容)</span>
                         </div>
                     </div>
 
                     <div class="thp-option-row">
                         <label class="thp-checkbox-label">
                             <input type="checkbox" id="thp-col-dedup-checkbox">
-                            列去重
+                            <span data-i18n="columnDedup">列去重</span>
                         </label>
                         <label class="thp-checkbox-label">
                             <input type="checkbox" id="thp-col-merge-checkbox">
-                            列合并
+                            <span data-i18n="columnMerge">列合并</span>
                         </label>
                         <div class="thp-input-group" id="thp-col-merge-input-group" style="display: none;">
-                            <input type="text" id="thp-col-merge-template" placeholder="例如: ," value=",">
+                            <input type="text" id="thp-col-merge-template" placeholder="Example: ,"
+                                data-i18n="colMergeTemplatePlaceholder" data-i18n-attr="placeholder" value=",">
                         </div>
                         <div class="thp-hint-text" id="thp-col-merge-hint" style="display: none;">
-                            默认使用英文逗号合并每一行的单元格，支持转义符
+                            <span data-i18n="colMergeHint">默认使用英文逗号合并每一行的单元格，支持转义符</span>
                         </div>
                     </div>
 
                     <div class="thp-option-row">
                         <label class="thp-checkbox-label">
                             <input type="checkbox" id="thp-row-merge-checkbox">
-                            行合并
+                            <span data-i18n="rowMerge">行合并</span>
                         </label>
                         <div class="thp-input-group" id="thp-row-merge-input-group" style="display: none;">
-                            <input type="text" id="thp-row-merge-separator" placeholder="默认为换行符" value=";">
+                            <input type="text" id="thp-row-merge-separator" placeholder="Default is newline"
+                                data-i18n="rowMergeSeparatorPlaceholder" data-i18n-attr="placeholder" value=";">
                         </div>
-                        <div class="thp-hint-text" id="thp-row-merge-hint" style="display: none;">默认使用 ; 拼接行内容，支持转义符
+                        <div class="thp-hint-text" id="thp-row-merge-hint" style="display: none;">
+                            <span data-i18n="rowMergeHint">默认使用 ; 拼接行内容，支持转义符</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <button class="thp-btn" id="thp-basic-execute">执行基础操作</button>
+            <button class="thp-btn" id="thp-basic-execute" data-i18n="executeBasicOperation">执行基础操作</button>
         </div>
 
         <!-- 集合操作标签页 -->
         <div class="thp-tab-content" id="thp-set-tab">
             <div class="thp-input-result-container">
                 <div class="thp-input-section">
-                    <label for="thp-set-input">输入两列数据（每行包含两列，用于集合操作）：</label>
-                    <textarea id="thp-set-input" placeholder="示例：
-A组    B组
-苹果    苹果
-香蕉    橙子
-橙子    西瓜
-葡萄    香蕉"></textarea>
+                    <label for="thp-set-input" data-i18n="inputTwoColumnsData">输入两列数据（每行包含两列，用于集合操作）：</label>
+                    <textarea id="thp-set-input"
+                        placeholder="Example:\nGroup A    Group B\nApple    Apple\nBanana    Orange\nOrange    Watermelon\nGrape    Banana"
+                        data-i18n="setInputPlaceholder" data-i18n-attr="placeholder"></textarea>
                 </div>
 
                 <div class="thp-result-section">
-                    <label for="thp-set-result">操作结果：</label>
+                    <label for="thp-set-result" data-i18n="operationResult">操作结果：</label>
                     <textarea id="thp-set-result" class="thp-result-area" readonly></textarea>
                     <div class="thp-result-actions">
-                        <button class="thp-action-btn" id="thp-set-copy">复制结果</button>
-                        <button class="thp-action-btn" id="thp-set-export">导出结果</button>
+                        <button class="thp-action-btn" id="thp-set-copy" data-i18n="copyResult">复制结果</button>
+                        <button class="thp-action-btn" id="thp-set-export" data-i18n="exportResult">导出结果</button>
                     </div>
                     <div class="thp-status-message" id="thp-set-status"></div>
                 </div>
@@ -467,52 +468,50 @@ A组    B组
                     <label class="thp-radio-label">
                         <input type="radio" name="set-operation" id="thp-set-no" value="no">
                         <span class="thp-radiomark"></span>
-                        无
+                        <span data-i18n="none">无</span>
                     </label>
                     <label class="thp-radio-label">
                         <input type="radio" name="set-operation" id="thp-set-intersection" value="intersection">
                         <span class="thp-radiomark"></span>
-                        交集
+                        <span data-i18n="intersection">交集</span>
                     </label>
                     <label class="thp-radio-label">
                         <input type="radio" name="set-operation" id="thp-set-union" value="union">
                         <span class="thp-radiomark"></span>
-                        并集
+                        <span data-i18n="union">并集</span>
                     </label>
                     <label class="thp-radio-label">
                         <input type="radio" name="set-operation" id="thp-set-diff-ab" value="difference-a-b">
                         <span class="thp-radiomark"></span>
-                        差集 (A - B)
+                        <span data-i18n="differenceAB">差集 (A - B)</span>
                     </label>
                     <label class="thp-radio-label">
                         <input type="radio" name="set-operation" id="thp-set-diff-ba" value="difference-b-a">
                         <span class="thp-radiomark"></span>
-                        差集 (B - A)
+                        <span data-i18n="differenceBA">差集 (B - A)</span>
                     </label>
                 </div>
             </div>
 
-            <button class="thp-btn" id="thp-set-execute">执行集合操作</button>
+            <button class="thp-btn" id="thp-set-execute" data-i18n="executeSetOperation">执行集合操作</button>
         </div>
 
         <!-- SQL操作标签页 -->
         <div class="thp-tab-content" id="thp-sql-tab">
             <div class="thp-input-result-container">
                 <div class="thp-input-section">
-                    <label for="thp-sql-input">输入表格数据（第一行为表头）：</label>
-                    <textarea id="thp-sql-input" placeholder="示例：
-name    age    department
-John    25     IT
-Alice   30     HR
-Bob     35     Finance"></textarea>
+                    <label for="thp-sql-input" data-i18n="inputTableDataWithHeader">输入表格数据（第一行为表头）：</label>
+                    <textarea id="thp-sql-input"
+                        placeholder="Example:\nname    age    department\nJohn    25     IT\nAlice   30     HR\nBob     35     Finance"
+                        data-i18n="sqlInputPlaceholder" data-i18n-attr="placeholder"></textarea>
                 </div>
 
                 <div class="thp-result-section">
-                    <label for="thp-sql-result">操作结果：</label>
+                    <label for="thp-sql-result" data-i18n="operationResult">操作结果：</label>
                     <textarea id="thp-sql-result" class="thp-result-area" readonly></textarea>
                     <div class="thp-result-actions">
-                        <button class="thp-action-btn" id="thp-sql-copy">复制结果</button>
-                        <button class="thp-action-btn" id="thp-sql-export">导出结果</button>
+                        <button class="thp-action-btn" id="thp-sql-copy" data-i18n="copyResult">复制结果</button>
+                        <button class="thp-action-btn" id="thp-sql-export" data-i18n="exportResult">导出结果</button>
                     </div>
                     <div class="thp-status-message" id="thp-sql-status"></div>
                 </div>
@@ -523,59 +522,72 @@ Bob     35     Finance"></textarea>
                     <label class="thp-radio-label">
                         <input type="radio" name="sql-operation" id="thp-sql-insert" value="insert">
                         <span class="thp-radiomark"></span>
-                        INSERT
+                        <span data-i18n="insertStatement">INSERT</span>
                     </label>
                     <label class="thp-radio-label">
                         <input type="radio" name="sql-operation" id="thp-sql-select" value="select">
                         <span class="thp-radiomark"></span>
-                        SELECT
+                        <span data-i18n="selectStatement">SELECT</span>
                     </label>
                     <label class="thp-radio-label">
                         <input type="radio" name="sql-operation" id="thp-sql-update" value="update">
                         <span class="thp-radiomark"></span>
-                        UPDATE
+                        <span data-i18n="updateStatement">UPDATE</span>
                     </label>
                 </div>
 
                 <div class="thp-input-group">
-                    <label for="thp-sql-table-name">表名:</label>
-                    <input type="text" id="thp-sql-table-name" placeholder="请输入表名" value="table_name">
+                    <label for="thp-sql-table-name" data-i18n="tableName">表名:</label>
+                    <input type="text" id="thp-sql-table-name" placeholder="Please enter table name"
+                        data-i18n="tableNamePlaceholder" data-i18n-attr="placeholder" value="table_name">
                 </div>
 
                 <div class="thp-sql-inputs" id="thp-insert-inputs">
                     <div class="thp-sql-input-row">
-                        <label for="thp-sql-insert-include-columns">选中列 (逗号分隔):</label>
-                        <input type="text" id="thp-sql-insert-include-columns" placeholder="例如: id,name,age">
+                        <label for="thp-sql-insert-include-columns" data-i18n="selectedColumnsCommaSeparated">选中列
+                            (逗号分隔):</label>
+                        <input type="text" id="thp-sql-insert-include-columns" placeholder="Example: id,name,age"
+                            data-i18n="includeColumnsPlaceholder" data-i18n-attr="placeholder">
                     </div>
                     <div class="thp-sql-input-row">
-                        <label for="thp-sql-insert-exclude-columns">排除列 (逗号分隔):</label>
-                        <input type="text" id="thp-sql-insert-exclude-columns" placeholder="例如: password,temp">
+                        <label for="thp-sql-insert-exclude-columns" data-i18n="excludedColumnsCommaSeparated">排除列
+                            (逗号分隔):</label>
+                        <input type="text" id="thp-sql-insert-exclude-columns" placeholder="Example: password,temp"
+                            data-i18n="excludeColumnsPlaceholder" data-i18n-attr="placeholder">
                     </div>
                 </div>
 
                 <div class="thp-sql-inputs" id="thp-select-inputs">
                     <div class="thp-sql-input-row">
-                        <label for="thp-sql-select-condition">查询条件 (逗号分隔):</label>
-                        <input type="text" id="thp-sql-select-condition" placeholder="用于构建查询条件的列，如name,age">
+                        <label for="thp-sql-select-condition" data-i18n="queryConditionsCommaSeparated">查询条件
+                            (逗号分隔):</label>
+                        <input type="text" id="thp-sql-select-condition"
+                            placeholder="Columns for query conditions, e.g. name,age"
+                            data-i18n="selectConditionPlaceholder" data-i18n-attr="placeholder">
                     </div>
                 </div>
 
                 <div class="thp-sql-inputs" id="thp-update-inputs">
                     <div class="thp-sql-input-row">
-                        <label for="thp-sql-update-set-columns">更新列 (逗号分隔):</label>
-                        <input type="text" id="thp-sql-update-set-columns" placeholder="例如: name,age">
+                        <label for="thp-sql-update-set-columns" data-i18n="updateColumnsCommaSeparated">更新列
+                            (逗号分隔):</label>
+                        <input type="text" id="thp-sql-update-set-columns" placeholder="Example: name,age"
+                            data-i18n="updateColumnsPlaceholder" data-i18n-attr="placeholder">
                     </div>
                     <div class="thp-sql-input-row">
-                        <label for="thp-sql-update-where-columns">查询列 (逗号分隔):</label>
-                        <input type="text" id="thp-sql-update-where-columns" placeholder="例如: id,status">
+                        <label for="thp-sql-update-where-columns" data-i18n="queryColumnsCommaSeparated">查询列
+                            (逗号分隔):</label>
+                        <input type="text" id="thp-sql-update-where-columns" placeholder="Example: id,status"
+                            data-i18n="whereColumnsPlaceholder" data-i18n-attr="placeholder">
                     </div>
                 </div>
             </div>
 
-            <button class="thp-btn" id="thp-sql-execute">执行SQL操作</button>
+            <button class="thp-btn" id="thp-sql-execute" data-i18n="executeSqlOperation">执行SQL操作</button>
         </div>
     </div>
 
+    <script src="i18n.js"></script>
     <script src="table-tool.js"></script>
 </body>
 

@@ -45,6 +45,10 @@
   // Track anchor cell for Shift range selection
   let anchorCell = null;
 
+  // Track double-click for selectAll
+  let firstClickTime = null;
+  let firstClickCell = null;
+
   // Select-all button element
   let selectAllButton = null;
   let currentHoveredTable = null;
@@ -61,10 +65,40 @@
 
   /**
    * Determine selection mode based on user's shortcut settings
-   * Returns: 'cell', 'row', 'column', or null
+   * Returns: 'cell', 'row', 'column', 'selectAll', or null
    */
-  function getSelectionMode(e) {
-    return settingsManager.getSelectionMode(e);
+  function getSelectionMode(e, isDoubleClick = false) {
+    const mode = settingsManager.getSelectionMode(e);
+
+    // Check if this is a selectAll action
+    if (mode === 'cell' && isDoubleClick) {
+      const shortcuts = settingsManager.get('shortcuts');
+      const shortcut = shortcuts && shortcuts.selectAll;
+      console.log('判断是否为双击:', shortcut)
+      if (shortcut && shortcut.doubleClick) {
+        // Check if the modifiers match
+        const isCmd = isMac ? e.metaKey : e.ctrlKey;
+        const isAlt = e.altKey;
+        const isShift = e.shiftKey;
+
+        const hasCmd = shortcut.modifiers.includes('cmd') && isCmd;
+        const hasAlt = shortcut.modifiers.includes('alt') && isAlt;
+        const hasShift = shortcut.modifiers.includes('shift') && isShift;
+
+        // Check if all required modifiers are pressed and no extra ones
+        const requiredMods = shortcut.modifiers.length;
+        const actualMods = (isCmd ? 1 : 0) + (isAlt ? 1 : 0) + (isShift ? 1 : 0);
+
+        if (hasCmd === (shortcut.modifiers.includes('cmd')) &&
+          hasAlt === (shortcut.modifiers.includes('alt')) &&
+          hasShift === (shortcut.modifiers.includes('shift')) &&
+          requiredMods === actualMods) {
+          return 'selectAll';
+        }
+      }
+    }
+
+    return mode;
   }
 
   /**
@@ -441,11 +475,14 @@
    * Handle click for selection
    */
   function handleClick(e) {
-    const mode = getSelectionMode(e);
-    if (!mode) return;
-
+    const currentTime = Date.now();
     const cell = tableDetector.findCell(e.target);
     if (!cell) return;
+
+    const isDoubleClick = (firstClickCell === cell && currentTime - firstClickTime < 500);
+    const mode = getSelectionMode(e, isDoubleClick);
+    console.log('判断是否为双击:', isDoubleClick, mode)
+    if (!mode) return;
 
     e.preventDefault();
     e.stopPropagation();
@@ -454,6 +491,19 @@
     const selection = window.getSelection();
     if (selection) {
       selection.removeAllRanges();
+    }
+
+    // Handle double click for selectAll
+    if (mode === 'selectAll') {
+      const table = tableDetector.getTableFromCell(cell);
+      if (table) {
+        selectionManager.selectTable(table, false);
+        anchorCell = null;
+        // Reset double click tracker
+        firstClickTime = null;
+        firstClickCell = null;
+      }
+      return;
     }
 
     const isShift = e.shiftKey;
@@ -479,8 +529,20 @@
       }
     }
 
-    // Normal selection (set new anchor)
+    // Handle single click
     anchorCell = cell;
+
+    // Update double click tracker
+    firstClickTime = currentTime;
+    firstClickCell = cell;
+
+    // Clear the double click tracker after delay
+    setTimeout(() => {
+      if (firstClickTime && currentTime === firstClickTime) {
+        firstClickTime = null;
+        firstClickCell = null;
+      }
+    }, 500);
 
     switch (mode) {
       case 'cell':

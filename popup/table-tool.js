@@ -673,3 +673,81 @@ document.addEventListener('DOMContentLoaded', function () {
         checkedRadio.dispatchEvent(new Event('change'));
     }
 });
+
+// 国际化处理函数
+function initializeI18n() {
+    // 等待 i18n 对象加载完成
+    if (typeof window.i18n !== 'undefined') {
+        // 初始化当前语言环境
+        window.i18n.init();
+
+        // 查找并翻译所有带有 data-i18n 属性的元素
+        const elements = document.querySelectorAll('[data-i18n]');
+        elements.forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            const translation = window.i18n.t(key);
+            if (translation && translation !== key) {
+                // 检查是否需要翻译属性（如placeholder）
+                if (element.hasAttribute('data-i18n-attr')) {
+                    const attrName = element.getAttribute('data-i18n-attr');
+                    element.setAttribute(attrName, translation);
+                } else {
+                    // 获取元素内的所有文本节点并替换
+                    const textNodes = getTextNodes(element);
+                    if (textNodes.length > 0) {
+                        // 替换第一个文本节点的内容
+                        textNodes[0].textContent = translation;
+                    } else {
+                        // 如果没有子文本节点，直接设置文本内容
+                        element.textContent = translation;
+                    }
+                }
+            }
+        });
+
+        // 更新页面标题
+        document.title = window.i18n.t('tableTool');
+    } else {
+        console.warn('i18n module not found');
+    }
+}
+
+// 获取元素内的所有文本节点
+function getTextNodes(element) {
+    const textNodes = [];
+    const walker = document.createTreeWalker(
+        element,
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+    );
+
+    let node;
+    while (node = walker.nextNode()) {
+        // 只获取直接的文本节点，不包括子元素内的文本节点
+        if (node.parentNode === element || !hasElementAncestorIn(element, node)) {
+            textNodes.push(node);
+        }
+    }
+
+    return textNodes;
+}
+
+// 检查文本节点是否有祖先元素在指定父元素内
+function hasElementAncestorIn(parent, textNode) {
+    let currentNode = textNode.parentNode;
+    while (currentNode && currentNode !== parent) {
+        if (currentNode.nodeType === Node.ELEMENT_NODE) {
+            return true;
+        }
+        currentNode = currentNode.parentNode;
+    }
+    return false;
+}
+
+// 等待 DOM 加载完成后初始化国际化
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeI18n);
+} else {
+    initializeI18n();
+}
