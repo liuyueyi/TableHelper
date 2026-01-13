@@ -1,6 +1,6 @@
 # Privacy Policy for TableHelper
 
-**Last Updated: December 27, 2024**
+**Last Updated: 2026-01-13**
 
 ## Overview
 
