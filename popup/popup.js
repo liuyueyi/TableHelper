@@ -166,7 +166,7 @@
    * Format shortcut key for display
    */
   function formatKey(key, isDoubleClick = false) {
-    if (key === 'click') {
+    if (key === 'click' || key === 'double click') {
       if (isDoubleClick) {
         return `<span class="key">${i18n.t('doubleClick')}</span>`;
       }
