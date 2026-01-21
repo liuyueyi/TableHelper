@@ -1,3 +1,125 @@
+﻿// Helper function for fallback translations
+const getTranslation = (key, defaultValue) => {
+    // Get current locale from navigator
+    const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+    let locale = 'en';
+    if (lang.startsWith('zh')) {
+        locale = 'zh';
+    } else if (lang.startsWith('ja')) {
+        locale = 'ja';
+    }
+
+    if (window.i18n && typeof window.i18n.t === 'function') {
+        return window.i18n.t(key);
+    }
+
+    // Fallback translations
+    const translations = {
+        en: {
+            copiedToClipboard: 'Copied to clipboard!',
+            resultExported: 'Result exported as text file!',
+            advancedTableOperations: 'Advanced Table Operations',
+            tableInfo: 'Table Info',
+            basicOperations: 'Basic Operations',
+            setOperations: 'Set Operations',
+            sql: 'SQL',
+            resultDisplay: 'Result Display',
+            noTableDataSelected: 'No table data selected',
+            cellTransform: 'Cell Transform',
+            columnDeduplication: 'Column Deduplication',
+            columnMerge: 'Column Merge',
+            rowMerge: 'Row Merge',
+            intersection: 'Intersection',
+            union: 'Union',
+            none: 'None',
+            differenceAB: 'Diff(A-B)',
+            differenceBA: 'Diff(B-A)',
+            insertStatement: 'INSERT',
+            selectStatement: 'SELECT',
+            updateStatement: 'UPDATE',
+            tableName: 'Table Name:',
+            selectedColumnsCommaSeparated: 'Selected Columns (comma separated):',
+            excludedColumnsCommaSeparated: 'Excluded Columns (comma separated):',
+            queryConditionsCommaSeparated: 'Query Conditions (comma separated):',
+            updateColumnsCommaSeparated: 'Update Columns (comma separated):',
+            queryColumnsCommaSeparated: 'Query Columns (comma separated):',
+            copyResult: 'Copy Result',
+            exportResult: 'Export Result',
+            operationResult: 'Operation result will be displayed here...',
+            operationStatusInfo: 'Operation status will be displayed here...'
+        },
+        zh: {
+            copiedToClipboard: '已复制到剪贴板！',
+            resultExported: '结果已导出为文本文件！',
+            advancedTableOperations: '高级表格操作',
+            tableInfo: '表格信息',
+            basicOperations: '基础操作',
+            setOperations: '集合操作',
+            sql: 'SQL',
+            resultDisplay: '结果展示',
+            noTableDataSelected: '未选择任何表格数据',
+            cellTransform: '单元格转换',
+            columnDeduplication: '列去重',
+            columnMerge: '列合并',
+            rowMerge: '行合并',
+            intersection: '交集',
+            union: '并集',
+            none: '无',
+            differenceAB: '差集 (A-B)',
+            differenceBA: '差集 (B-A)',
+            insertStatement: 'INSERT',
+            selectStatement: 'SELECT',
+            updateStatement: 'UPDATE',
+            tableName: '表名:',
+            selectedColumnsCommaSeparated: '选中列 (逗号分隔):',
+            excludedColumnsCommaSeparated: '排除列 (逗号分隔):',
+            queryConditionsCommaSeparated: '查询条件 (逗号分隔):',
+            updateColumnsCommaSeparated: '更新列 (逗号分隔):',
+            queryColumnsCommaSeparated: '查询列 (逗号分隔):',
+            copyResult: '复制结果',
+            exportResult: '导出结果',
+            operationResult: '操作结果将显示在这里...',
+            operationStatusInfo: '操作状态信息将显示在这里...'
+        },
+        ja: {
+            copiedToClipboard: 'クリップボードにコピーしました！',
+            resultExported: '結果をテキストファイルとしてエクスポートしました！',
+            advancedTableOperations: '高度な表操作',
+            tableInfo: '表情報',
+            basicOperations: '基本操作',
+            setOperations: '集合操作',
+            sql: 'SQL',
+            resultDisplay: '結果表示',
+            noTableDataSelected: 'テーブルデータが選択されていません',
+            cellTransform: 'セル変換',
+            columnDeduplication: '列の重複排除',
+            columnMerge: '列のマージ',
+            rowMerge: '行のマージ',
+            intersection: '積集合',
+            union: '和集合',
+            none: 'なし',
+            differenceAB: '差集合 (A-B)',
+            differenceBA: '差集合 (B-A)',
+            insertStatement: 'INSERT',
+            selectStatement: 'SELECT',
+            updateStatement: 'UPDATE',
+            tableName: 'テーブル名:',
+            selectedColumnsCommaSeparated: '選択された列（カンマ区切り）:',
+            excludedColumnsCommaSeparated: '除外された列（カンマ区切り）:',
+            queryConditionsCommaSeparated: 'クエリ条件（カンマ区切り）:',
+            updateColumnsCommaSeparated: '更新列（カンマ区隔）:',
+            queryColumnsCommaSeparated: 'クエリ列（カンマ区切り）:',
+            copyResult: '結果をコピー',
+            exportResult: '結果をエクスポート',
+            operationResult: '操作結果はここに表示されます...',
+            operationStatusInfo: '操作ステータス情報はここに表示されます...'
+        }
+    };
+
+    const t = translations[locale] || translations.en;
+    return t[key] || defaultValue;
+};
+
 /**
  * DrawerManager - Manage the advanced drawer panel for table operations
  */
@@ -60,173 +182,37 @@ class DrawerManager {
      * @private
      */
     _getDrawerTemplate() {
-        // Get current locale from navigator
-        const lang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
-        let locale = 'en';
-        if (lang.startsWith('zh')) {
-            locale = 'zh';
-        } else if (lang.startsWith('ja')) {
-            locale = 'ja';
-        }
-
-        // Get translations from i18n module if available, otherwise use fallback
-        let drawerTitle, infoGroupTitle, basicGroupTitle, setGroupTitle, sqlGroupTitle, resultGroupTitle, tableInfoPlaceholder, cellTransformLabel, colDedupLabel, colMergeLabel, rowMergeLabel, setIntersectionLabel, setUnionLabel, setDiffABLabel, setDiffBALabel, sqlInsertLabel, sqlSelectLabel, sqlUpdateLabel, sqlTableNameLabel, sqlIncludeColumnsLabel, sqlExcludeColumnsLabel, sqlSelectConditionLabel, sqlUpdateSetColumnsLabel, sqlUpdateWhereColumnsLabel, resultCopyBtn, resultExportBtn, resultAreaPlaceholder, statusMessagePlaceholder;
-
-        if (window.i18n && typeof window.i18n.t === 'function') {
-            // Use i18n module for translations
-            drawerTitle = window.i18n.t('advancedTableOperations');
-            infoGroupTitle = window.i18n.t('tableInfo');
-            basicGroupTitle = window.i18n.t('basicOperations');
-            setGroupTitle = window.i18n.t('setOperations');
-            sqlGroupTitle = window.i18n.t('sql');
-            resultGroupTitle = window.i18n.t('resultDisplay');
-            tableInfoPlaceholder = window.i18n.t('noTableDataSelected');
-            cellTransformLabel = window.i18n.t('cellTransform');
-            colDedupLabel = window.i18n.t('columnDeduplication');
-            colMergeLabel = window.i18n.t('columnMerge');
-            rowMergeLabel = window.i18n.t('rowMerge');
-            setIntersectionLabel = window.i18n.t('intersection');
-            setUnionLabel = window.i18n.t('union');
-            setDiffABLabel = window.i18n.t('differenceAB');
-            setDiffBALabel = window.i18n.t('differenceBA');
-            sqlInsertLabel = window.i18n.t('insertStatement');
-            sqlSelectLabel = window.i18n.t('selectStatement');
-            sqlUpdateLabel = window.i18n.t('updateStatement');
-            sqlTableNameLabel = window.i18n.t('tableName');
-            sqlIncludeColumnsLabel = window.i18n.t('selectedColumnsCommaSeparated');
-            sqlExcludeColumnsLabel = window.i18n.t('excludedColumnsCommaSeparated');
-            sqlSelectConditionLabel = window.i18n.t('queryConditionsCommaSeparated');
-            sqlUpdateSetColumnsLabel = window.i18n.t('updateColumnsCommaSeparated');
-            sqlUpdateWhereColumnsLabel = window.i18n.t('queryColumnsCommaSeparated');
-            resultCopyBtn = window.i18n.t('copyResult');
-            resultExportBtn = window.i18n.t('exportResult');
-            resultAreaPlaceholder = window.i18n.t('operationResult');
-            statusMessagePlaceholder = window.i18n.t('operationStatusInfo');
-        } else {
-            // Fallback translations
-            const translations = {
-                en: {
-                    drawerTitle: 'Advanced Table Operations',
-                    infoGroupTitle: 'Table Info',
-                    basicGroupTitle: 'Basic Operations',
-                    setGroupTitle: 'Set Operations',
-                    sqlGroupTitle: 'SQL',
-                    resultGroupTitle: 'Result Display',
-                    tableInfoPlaceholder: 'No table data selected',
-                    cellTransformLabel: 'Cell Transform',
-                    colDedupLabel: 'Column Deduplication',
-                    colMergeLabel: 'Column Merge',
-                    rowMergeLabel: 'Row Merge',
-                    setIntersectionLabel: 'Intersection',
-                    setUnionLabel: 'Union',
-                    setDiffABLabel: 'Difference (A - B)',
-                    setDiffBALabel: 'Difference (B - A)',
-                    sqlInsertLabel: 'INSERT',
-                    sqlSelectLabel: 'SELECT',
-                    sqlUpdateLabel: 'UPDATE',
-                    sqlTableNameLabel: 'Table Name:',
-                    sqlIncludeColumnsLabel: 'Selected Columns (comma separated):',
-                    sqlExcludeColumnsLabel: 'Excluded Columns (comma separated):',
-                    sqlSelectConditionLabel: 'Query Conditions (comma separated):',
-                    sqlUpdateSetColumnsLabel: 'Update Columns (comma separated):',
-                    sqlUpdateWhereColumnsLabel: 'Query Columns (comma separated):',
-                    resultCopyBtn: 'Copy Result',
-                    resultExportBtn: 'Export Result',
-                    resultAreaPlaceholder: 'Operation result will be displayed here...',
-                    statusMessagePlaceholder: 'Operation status will be displayed here...'
-                },
-                zh: {
-                    drawerTitle: '高级表格操作',
-                    infoGroupTitle: '表格信息',
-                    basicGroupTitle: '基础操作',
-                    setGroupTitle: '集合操作',
-                    sqlGroupTitle: 'SQL',
-                    resultGroupTitle: '结果展示',
-                    tableInfoPlaceholder: '未选择任何表格数据',
-                    cellTransformLabel: '单元格转换',
-                    colDedupLabel: '列去重',
-                    colMergeLabel: '列合并',
-                    rowMergeLabel: '行合并',
-                    setIntersectionLabel: '交集',
-                    setUnionLabel: '并集',
-                    setDiffABLabel: '差集 (A - B)',
-                    setDiffBALabel: '差集 (B - A)',
-                    sqlInsertLabel: 'INSERT',
-                    sqlSelectLabel: 'SELECT',
-                    sqlUpdateLabel: 'UPDATE',
-                    sqlTableNameLabel: '表名:',
-                    sqlIncludeColumnsLabel: '选中列 (逗号分隔):',
-                    sqlExcludeColumnsLabel: '排除列 (逗号分隔):',
-                    sqlSelectConditionLabel: '查询条件 (逗号分隔):',
-                    sqlUpdateSetColumnsLabel: '更新列 (逗号分隔):',
-                    sqlUpdateWhereColumnsLabel: '查询列 (逗号分隔):',
-                    resultCopyBtn: '复制结果',
-                    resultExportBtn: '导出结果',
-                    resultAreaPlaceholder: '操作结果将显示在这里...',
-                    statusMessagePlaceholder: '操作状态信息将显示在这里...'
-                },
-                ja: {
-                    drawerTitle: '高度な表操作',
-                    infoGroupTitle: '表情報',
-                    basicGroupTitle: '基本操作',
-                    setGroupTitle: '集合操作',
-                    sqlGroupTitle: 'SQL',
-                    resultGroupTitle: '結果表示',
-                    tableInfoPlaceholder: 'テーブルデータが選択されていません',
-                    cellTransformLabel: 'セル変換',
-                    colDedupLabel: '列の重複排除',
-                    colMergeLabel: '列のマージ',
-                    rowMergeLabel: '行のマージ',
-                    setIntersectionLabel: '積集合',
-                    setUnionLabel: '和集合',
-                    setDiffABLabel: '差集合 (A - B)',
-                    setDiffBALabel: '差集合 (B - A)',
-                    sqlInsertLabel: 'INSERT',
-                    sqlSelectLabel: 'SELECT',
-                    sqlUpdateLabel: 'UPDATE',
-                    sqlTableNameLabel: 'テーブル名:',
-                    sqlIncludeColumnsLabel: '選択された列（カンマ区切り）:',
-                    sqlExcludeColumnsLabel: '除外された列（カンマ区切り）:',
-                    sqlSelectConditionLabel: 'クエリ条件（カンマ区切り）:',
-                    sqlUpdateSetColumnsLabel: '更新列（カンマ区隔）:',
-                    sqlUpdateWhereColumnsLabel: 'クエリ列（カンマ区切り）:',
-                    resultCopyBtn: '結果をコピー',
-                    resultExportBtn: '結果をエクスポート',
-                    resultAreaPlaceholder: '操作結果はここに表示されます...',
-                    statusMessagePlaceholder: '操作ステータス情報はここに表示されます...'
-                }
-            };
-
-            const t = translations[locale] || translations.en;
-            drawerTitle = t.drawerTitle;
-            infoGroupTitle = t.infoGroupTitle;
-            basicGroupTitle = t.basicGroupTitle;
-            setGroupTitle = t.setGroupTitle;
-            sqlGroupTitle = t.sqlGroupTitle;
-            resultGroupTitle = t.resultGroupTitle;
-            tableInfoPlaceholder = t.tableInfoPlaceholder;
-            cellTransformLabel = t.cellTransformLabel;
-            colDedupLabel = t.colDedupLabel;
-            colMergeLabel = t.colMergeLabel;
-            rowMergeLabel = t.rowMergeLabel;
-            setIntersectionLabel = t.setIntersectionLabel;
-            setUnionLabel = t.setUnionLabel;
-            setDiffABLabel = t.setDiffABLabel;
-            setDiffBALabel = t.setDiffBALabel;
-            sqlInsertLabel = t.sqlInsertLabel;
-            sqlSelectLabel = t.sqlSelectLabel;
-            sqlUpdateLabel = t.sqlUpdateLabel;
-            sqlTableNameLabel = t.sqlTableNameLabel;
-            sqlIncludeColumnsLabel = t.sqlIncludeColumnsLabel;
-            sqlExcludeColumnsLabel = t.sqlExcludeColumnsLabel;
-            sqlSelectConditionLabel = t.sqlSelectConditionLabel;
-            sqlUpdateSetColumnsLabel = t.sqlUpdateSetColumnsLabel;
-            sqlUpdateWhereColumnsLabel = t.sqlUpdateWhereColumnsLabel;
-            resultCopyBtn = t.resultCopyBtn;
-            resultExportBtn = t.resultExportBtn;
-            resultAreaPlaceholder = t.resultAreaPlaceholder;
-            statusMessagePlaceholder = t.statusMessagePlaceholder;
-        }
+        // Get all translations using external helper function
+        const drawerTitle = getTranslation('advancedTableOperations', 'Advanced Table Operations');
+        const infoGroupTitle = getTranslation('tableInfo', 'Table Info');
+        const basicGroupTitle = getTranslation('basicOperations', 'Basic Operations');
+        const setGroupTitle = getTranslation('setOperations', 'Set Operations');
+        const sqlGroupTitle = getTranslation('sql', 'SQL');
+        const resultGroupTitle = getTranslation('resultDisplay', 'Result Display');
+        const tableInfoPlaceholder = getTranslation('noTableDataSelected', 'No table data selected');
+        const cellTransformLabel = getTranslation('cellTransform', 'Cell Transform');
+        const colDedupLabel = getTranslation('columnDeduplication', 'Column Deduplication');
+        const colMergeLabel = getTranslation('columnMerge', 'Column Merge');
+        const rowMergeLabel = getTranslation('rowMerge', 'Row Merge');
+        const setIntersectionLabel = getTranslation('intersection', 'Intersection');
+        const setUnionLabel = getTranslation('union', 'Union');
+        const setNoneLabel = getTranslation('none', 'None');
+        const setDiffABLabel = getTranslation('differenceAB', 'Diff(A-B)');
+        const setDiffBALabel = getTranslation('differenceBA', 'Diff(B-A)');
+        const sqlNoneLabel = getTranslation('none', 'None');
+        const sqlInsertLabel = getTranslation('insertStatement', 'INSERT');
+        const sqlSelectLabel = getTranslation('selectStatement', 'SELECT');
+        const sqlUpdateLabel = getTranslation('updateStatement', 'UPDATE');
+        const sqlTableNameLabel = getTranslation('tableName', 'Table Name:');
+        const sqlIncludeColumnsLabel = getTranslation('selectedColumnsCommaSeparated', 'Selected Columns (comma separated):');
+        const sqlExcludeColumnsLabel = getTranslation('excludedColumnsCommaSeparated', 'Excluded Columns (comma separated):');
+        const sqlSelectConditionLabel = getTranslation('queryConditionsCommaSeparated', 'Query Conditions (comma separated):');
+        const sqlUpdateSetColumnsLabel = getTranslation('updateColumnsCommaSeparated', 'Update Columns (comma separated):');
+        const sqlUpdateWhereColumnsLabel = getTranslation('queryColumnsCommaSeparated', 'Query Columns (comma separated):');
+        const resultCopyBtn = getTranslation('copyResult', 'Copy Result');
+        const resultExportBtn = getTranslation('exportResult', 'Export Result');
+        const resultAreaPlaceholder = getTranslation('operationResult', 'Operation result will be displayed here...');
+        const statusMessagePlaceholder = getTranslation('operationStatusInfo', 'Operation status will be displayed here...');
 
         return `
       <div class="drawer-panel" id="drawer-panel">
@@ -317,6 +303,11 @@ class DrawerManager {
             <div class="collapsible-content">
               <div class="operation-controls">
                 <label class="radio-label">
+                  <input type="radio" name="set-operation" id="set-none" value="no" checked>
+                  <span class="radiomark"></span>
+                  ${setNoneLabel}
+                </label>
+                <label class="radio-label">
                   <input type="radio" name="set-operation" id="set-intersection" value="intersection">
                   <span class="radiomark"></span>
                   ${setIntersectionLabel}
@@ -348,6 +339,11 @@ class DrawerManager {
             </div>
             <div class="collapsible-content">
               <div class="operation-controls">
+                <label class="radio-label">
+                  <input type="radio" name="sql-operation" id="sql-none" value="none" checked>
+                  <span class="radiomark"></span>
+                  ${sqlNoneLabel}
+                </label>
                 <label class="radio-label">
                   <input type="radio" name="sql-operation" id="sql-insert" value="insert">
                   <span class="radiomark"></span>
@@ -602,7 +598,6 @@ class DrawerManager {
         const colDupCheckbox = document.getElementById('col-dedup-checkbox');
         if (colDupCheckbox) {
             colDupCheckbox.addEventListener('change', (e) => {
-                console.log('Column duplicate checkbox changed:', e.target.checked);
                 this._autoExecuteOperation('basic-operations');
             });
         }
@@ -646,7 +641,11 @@ class DrawerManager {
         const setOperationRadios = document.querySelectorAll('input[name="set-operation"]');
         setOperationRadios.forEach(radio => {
             radio.addEventListener('change', () => {
-                this._autoExecuteOperation('set-operations');
+                if (radio.value === 'no') {
+                    this.autoDoOperationExcept('set-operations');
+                } else {
+                    this._autoExecuteOperation('set-operations');
+                }
             });
         });
 
@@ -676,8 +675,11 @@ class DrawerManager {
                     if (selectRow) selectRow.style.display = 'none';
                     if (updateRow) updateRow.style.display = 'none';
                 }
-
-                this._autoExecuteOperation('sql-operations');
+                if (radio.value === 'none') {
+                    this.autoDoOperationExcept('sql-operations');
+                } else {
+                    this._autoExecuteOperation('sql-operations');
+                }
             });
         });
 
@@ -833,6 +835,29 @@ class DrawerManager {
         }
     }
 
+    autoDoOperationExcept(exceptOperateType) {
+        // 执行默认的操作
+        if (exceptOperateType !== 'basic-operations') {
+            this._autoExecuteOperation('basic-operations');
+        }
+
+        // Auto-execute if any operation is already selected
+        if (exceptOperateType !== 'set-operations') {
+            const setOperationSelected = document.querySelector('input[name="set-operation"]:checked');
+            if (setOperationSelected && setOperationSelected.value !== 'no') {
+                this._autoExecuteOperation('set-operations');
+            }
+        }
+
+        if (exceptOperateType !== 'sql-operations') {
+            // sql选中，且不是none操作
+            const sqlOperationSelected = document.querySelector('input[name="sql-operation"]:checked');
+            if (sqlOperationSelected && sqlOperationSelected.value !== 'none') {
+                this._autoExecuteOperation('sql-operations');
+            }
+        }
+    }
+
     /**
      * Update operation buttons based on current selection
      * @private
@@ -858,14 +883,8 @@ class DrawerManager {
             }
         }
 
-        // Auto-execute if any operation is already selected
-        if (document.querySelector('input[name="set-operation"]:checked')) {
-            this._autoExecuteOperation('set-operations');
-        }
-
-        if (document.querySelector('input[name="sql-operation"]:checked')) {
-            this._autoExecuteOperation('sql-operations');
-        }
+        // 触发一次自动执行
+        this.autoDoOperationExcept(null);
     }
 
     /**
@@ -900,7 +919,6 @@ class DrawerManager {
             } else {
                 tableInfoEl.value = cellTextDisplay;
             }
-            console.log('Table info updated with global selection data', cellTextDisplay);
         } else {
             tableInfoEl.value = '未选择任何表格数据';
         }
@@ -988,7 +1006,9 @@ class DrawerManager {
                     break;
             }
 
-            this.showResult(result, 'success');
+            if (result != null) {
+                this.showResult(result, 'success');
+            }
         } catch (error) {
             this.showResult(`操作失败: ${error.message}`, 'error');
         }
@@ -1000,15 +1020,12 @@ class DrawerManager {
      * @returns {string}
      */
     executeBasicOperations(cells2D) {
-        console.log('Executing basic operations on 2D selected cells:', cells2D);
-
         // 记录原始数据的行列数
         const originalRowCount = cells2D.length;
         const originalColCount = cells2D.length > 0 ? Math.max(...cells2D.map(row => row.length)) : 0;
 
         // 将二维单元格数组转换为二维文本值数组
         const result2D = cells2D.map(row => row.map(cell => cell.textContent.trim()));
-        console.log('Initial 2D result from cells:', result2D);
 
         // Cell transform - transform each cell value based on the rule
         const cellTransformCheckbox = document.getElementById('cell-transform-checkbox');
@@ -1020,7 +1037,6 @@ class DrawerManager {
                     result2D[r][c] = transformRule.replace(/(\$)/g, result2D[r][c]);
                 }
             }
-            console.log('After cell transform:', result2D);
         }
 
         // Column merge - merge values in each column with a template
@@ -1036,7 +1052,6 @@ class DrawerManager {
             for (let i = 0; i < aaa.length; i++) {
                 result2D[i] = [aaa[i]];
             }
-            console.log('After column merge:', result2D);
         }
 
         // Column deduplication - remove duplicate rows
@@ -1060,7 +1075,6 @@ class DrawerManager {
                 result2D.length = 0; // 清空原数组
                 uniqueRows.forEach(row => result2D.push(row)); // 添加去重后的行
             }
-            console.log('After column deduplication:', result2D);
         }
 
         // Row merge - merge values in each row with a separator
@@ -1087,7 +1101,6 @@ class DrawerManager {
                 result2D.length = 0; // 清空原数组
                 result2D.push([ans]); // 添加合并后的结果作为单行
             }
-            console.log('After row merge:', result2D);
         }
 
         if (result2D.length === 0 || result2D.every(row => row.length === 0)) {
@@ -1101,7 +1114,6 @@ class DrawerManager {
         for (const item of result2D) {
             flatResult.push(item.join('\t'))
         }
-        console.log('Final flattened result:', flatResult);
 
         // 显示操作结果统计
         const finalRowCount = result2D.length;
@@ -1121,10 +1133,13 @@ class DrawerManager {
         const selectedOp = document.querySelector('input[name="set-operation"]:checked');
 
         if (!selectedOp) {
-            return '请选择集合操作类型';
+            return null;
         }
 
         const operation = selectedOp.value;
+        if (operation == 'no') {
+            return null;
+        }
 
         // Convert 2D array to values for set operations
         // We need at least 2 columns for set operations
@@ -1134,7 +1149,6 @@ class DrawerManager {
 
         // 将二维单元格数组转换为二维文本值数组
         const result2D = cells2D.map(row => row.map(cell => cell.textContent.trim()));
-        console.log('Initial 2D result from cells:', result2D);
         if (result2D[0].length != 2) {
             return '集合操作请选择两列数据';
         }
@@ -1193,10 +1207,13 @@ class DrawerManager {
         const selectedOp = document.querySelector('input[name="sql-operation"]:checked');
 
         if (!selectedOp) {
-            return '请选择SQL操作类型';
+            return null;
         }
 
         const operation = selectedOp.value;
+        if (operation == 'none') {
+            return null;
+        }
 
         // 检查是否至少有一行数据作为表头
         if (cells2D.length === 0) {
@@ -1245,6 +1262,8 @@ class DrawerManager {
 
         // 根据操作类型生成SQL
         switch (operation) {
+            case 'none':
+                return '未选择任何SQL操作，当前为“无”模式';
             case 'insert':
                 if (dataRows.length === 0) {
                     return '没有数据行用于INSERT操作，请确保选择的表格包含表头和至少一行数据';
@@ -1557,12 +1576,49 @@ class DrawerManager {
         if (resultArea) {
             const text = resultArea.textContent;
             navigator.clipboard.writeText(text).then(() => {
-                // Show a temporary message or update UI to indicate success
-                console.log('结果已复制到剪贴板');
+                // Show a toast message to indicate success
+                this.showToast(getTranslation('copiedToClipboard', 'Copied to clipboard!'), 'success')
             }).catch(err => {
                 console.error('复制失败:', err);
+                this.showToast(getTranslation('copyFailed', 'Copy failed'), 'error');
             });
         }
+    }
+
+    /**
+     * Show a toast notification
+     * @param {string} message - The message to display
+     * @param {string} type - The type of toast ('success' or 'error')
+     */
+    showToast(message, type = 'success') {
+        // Remove any existing toast
+        const existingToast = document.querySelector('.toast');
+        if (existingToast) {
+            existingToast.remove();
+        }
+
+        // Create toast element
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+
+        // Add toast to body
+        document.body.appendChild(toast);
+
+        // Trigger the show animation
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 10);
+
+        // Remove toast after 3 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, 3000);
     }
 
     /**
@@ -1582,6 +1638,7 @@ class DrawerManager {
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            this.showToast(getTranslation('resultExported', 'Result exported as text file!'), 'success');
         }
     }
 

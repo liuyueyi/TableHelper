@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Helper 演示 - 员工数据表</title>
+    <style>
+        /* 小清新护眼风格CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #e0f2f1 0%, #d1e8e4 100%);
+            min-height: 100vh;
+            padding: 10px 10px;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 90vw;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #88d3ce 0%, #6cbaba 100%);
+            color: #fff;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .header-text h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-text p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 32px;
+        }
+
+        .section {
+            margin-bottom: 36px;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e0f2f1;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #88d3ce 0%, #6cbaba 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .section-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #6cbaba;
+        }
+
+        .instructions {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #88d3ce;
+        }
+
+        .instructions h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .instructions ul {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #88d3ce;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #88d3ce;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feature-card h4 svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .feature-card p {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f1f3f4;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 2px solid #e8eaed;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #f1f3f4;
+            color: #2c3e50;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        tr:hover {
+            background-color: #f8faf9;
+        }
+
+        .department-sales {
+            background-color: #e3f2fd;
+        }
+
+        .department-marketing {
+            background-color: #f3e5f5;
+        }
+
+        .department-engineering {
+            background-color: #e8f5e8;
+        }
+
+        .department-hr {
+            background-color: #fff3e0;
+        }
+
+        .department-finance {
+            background-color: #fce4ec;
+        }
+
+        .department-operations {
+            background-color: #f1f8e9;
+        }
+
+        .salary-high {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .salary-medium {
+            color: #f57c00;
+        }
+
+        .salary-low {
+            color: #d32f2f;
+        }
+
+        .stats-panel {
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            color: #6BCB77;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #aaa;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .highlight {
+            animation: highlight 2s ease-in-out;
+        }
+
+        @keyframes highlight {
+            0% {
+                background-color: #ffffcc;
+            }
+
+            100% {
+                background-color: transparent;
+            }
+        }
+
+        .sql-generator {
+            background: #2b2b2b;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .sql-keyword {
+            color: #f92672;
+            font-weight: bold;
+        }
+
+        .sql-function {
+            color: #66d9ef;
+        }
+
+        .sql-string {
+            color: #e6db74;
+        }
+
+        .sql-input-container {
+            margin-bottom: 20px;
+        }
+
+        .sql-input-container textarea {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            width: calc(100% - 120px);
+            transition: border-color 0.3s;
+            margin-right: 10px;
+            resize: vertical;
+        }
+
+        .sql-input-container textarea:focus {
+            outline: none;
+            border-color: #88d3ce;
+        }
+
+        .sql-input-container button {
+            padding: 12px 20px;
+            background: linear-gradient(180deg, #88d3ce 0%, #6bcb77 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            box-shadow: 0 2px 4px rgba(136, 211, 206, 0.3);
+        }
+
+        .sql-input-container button:hover {
+            background: linear-gradient(180deg, #77c2bd 0%, #5bb866 100%);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 24px 40px;
+            border-top: 1px solid #e0f2f1;
+            color: #7f8c8d;
+            font-size: 13px;
+            background-color: #f8f9fa;
+        }
+
+        .footer a {
+            color: #88d3ce;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 900px) {
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<div class="container">
+    <div class="header">
+        <div class="header-logo">
+            <img src="../icons/icon128.png" alt="TableHelper">
+        </div>
+        <div class="header-text">
+            <h1 id="doc-title">Table Helper 演示 - 员工数据表</h1>
+            <p id="doc-subtitle">掌控每一个网页表格 - 精确选择与智能处理</p>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z" />
+                    </svg>
+                </div>
+                <h2 class="section-title" id="section-shortcuts">使用说明</h2>
+            </div>
+            <div class="instructions">
+                <ul>
+                    <li><strong>单击单元格</strong>：选择单个单元格（按住Ctrl/Cmd可多选）</li>
+                    <li><strong>按住Alt + 点击</strong>：选择整列</li>
+                    <li><strong>按住Ctrl + Alt + 点击</strong>：选择整行</li>
+                    <li><strong>按住Ctrl、Shift + 点击</strong>：选择范围（从选中单元格到当前点击）</li>
+                    <li><strong>按住Ctrl + 双击单元格</strong>：选择整个表格</li>
+                    <li><strong>选择数据后</strong>：底部会显示统计面板和SQL生成器</li>
+                    <li><strong>按 Ctrl+C</strong>：复制选中的表格数据</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M3 5h2V3c-1.1 0-2 .9-2 2zm0 8h2v-2H3v2zm4 8h2v-2H7v2zM3 9h2V7H3v2zm10-6h-2v2h2V3zm6 0v2h2c0-1.1-.9-2-2-2zM5 21v-2H3c0 1.1.9 2 2 2zm-2-4h2v-2H3v2zM9 3H7v2h2V3zm2 18h2v-2h-2v2zm8-8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2zm0-12h2V7h-2v2zm0 8h2v-2h-2v2zm-4 4h2v-2h-2v2zm0-16h2V3h-2v2z" />
+                    </svg>
+                </div>
+                <h2 class="section-title" id="section-multiselect">功能特性</h2>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                        </svg>
+                        <span>精确选择</span>
+                    </h4>
+                    <p>像Excel一样在网页表格中进行精确选择，支持单元格、行列、区域等多种选择模式</p>
+                </div>
+                <div class="feature-card">
+                    <h4>
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" />
+                        </svg>
+                        <span>智能统计</span>
+                    </h4>
+                    <p>自动计算选中数据的统计信息，包括总数、平均值、最值等</p>
+                </div>
+                <div class="feature-card">
+                    <h4>
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M7,3H21V5H19V7H21V9H19V11H21V13H19V15H21V17H19V19H21V21H7V3M9,5V7H11V5H9M13,5V7H15V5H13M17,5V7H17V5H17M9,9V11H11V9H9M13,9V11H15V9H13M17,9V11H17V9H17M9,13V15H11V13H9M13,13V15H15V13H13M17,13V15H17V13H17M9,17V19H11V17H9M13,17V19H15V17H13M17,17V19H17V17H17Z" />
+                        </svg>
+                        <span>SQL生成</span>
+                    </h4>
+                    <p>一键生成标准SQL语句，便于数据导入数据库或进一步处理</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sql-input-container">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <textarea id="sqlInput" placeholder="这里可以粘贴生成的SQL..." style="flex: 1; height: 80px; resize: vertical;"
+                    rows="3"></textarea>
+                <button id="beautifySql">美化SQL</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z" />
+                    </svg>
+                </div>
+                <h2 class="section-title" id="section-table">员工数据表</h2>
+            </div>
+            <div class="table-container">
+                <table id="employeeTable">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>name</th>
+                            <th>department</th>
+                            <th>job</th>
+                            <th>salary</th>
+                            <th>hire_date</th>
+                            <th>email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Employee 1</td>
+                            <td class="department-engineering">Engineering</td>
+                            <td>Director</td>
+                            <td class="salary-high">74,518.90</td>
+                            <td>2025-09-24</td>
+                            <td>employee1@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Employee 2</td>
+                            <td class="department-finance">Finance</td>
+                            <td>Senior</td>
+                            <td class="salary-medium">44,359.74</td>
+                            <td>2024-08-05</td>
+                            <td>employee2@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Employee 3</td>
+                            <td class="department-hr">HR</td>
+                            <td>Associate</td>
+                            <td class="salary-high">107,247.83</td>
+                            <td>2024-02-20</td>
+                            <td>employee3@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Employee 4</td>
+                            <td class="department-sales">Sales</td>
+                            <td>Intern</td>
+                            <td class="salary-low">69,582.34</td>
+                            <td>2024-06-07</td>
+                            <td>employee4@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Employee 5</td>
+                            <td class="department-engineering">Engineering</td>
+                            <td>Intern</td>
+                            <td class="salary-high">104,234.13</td>
+                            <td>2021-05-19</td>
+                            <td>employee5@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Employee 6</td>
+                            <td class="department-marketing">Marketing</td>
+                            <td>Manager</td>
+                            <td class="salary-medium">88,456.20</td>
+                            <td>2023-11-15</td>
+                            <td>employee6@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Employee 7</td>
+                            <td class="department-operations">Operations</td>
+                            <td>Senior</td>
+                            <td class="salary-medium">92,345.67</td>
+                            <td>2022-03-22</td>
+                            <td>employee7@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>Employee 8</td>
+                            <td class="department-sales">Sales</td>
+                            <td>Director</td>
+                            <td class="salary-high">115,678.90</td>
+                            <td>2020-07-30</td>
+                            <td>employee8@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Employee 9</td>
+                            <td class="department-hr">HR</td>
+                            <td>Senior</td>
+                            <td class="salary-medium">76,543.21</td>
+                            <td>2023-05-18</td>
+                            <td>employee9@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>Employee 10</td>
+                            <td class="department-finance">Finance</td>
+                            <td>Manager</td>
+                            <td class="salary-high">95,432.10</td>
+                            <td>2021-12-10</td>
+                            <td>employee10@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>Employee 11</td>
+                            <td class="department-engineering">Engineering</td>
+                            <td>Senior</td>
+                            <td class="salary-medium">87,654.32</td>
+                            <td>2022-08-25</td>
+                            <td>employee11@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>Employee 12</td>
+                            <td class="department-marketing">Marketing</td>
+                            <td>Associate</td>
+                            <td class="salary-low">54,321.09</td>
+                            <td>2024-01-14</td>
+                            <td>employee12@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td>Employee 13</td>
+                            <td class="department-operations">Operations</td>
+                            <td>Manager</td>
+                            <td class="salary-medium">91,234.56</td>
+                            <td>2021-09-08</td>
+                            <td>employee13@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td>Employee 14</td>
+                            <td class="department-sales">Sales</td>
+                            <td>Senior</td>
+                            <td class="salary-medium">82,345.67</td>
+                            <td>2023-02-28</td>
+                            <td>employee14@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td>Employee 15</td>
+                            <td class="department-hr">HR</td>
+                            <td>Manager</td>
+                            <td class="salary-high">98,765.43</td>
+                            <td>2020-11-03</td>
+                            <td>employee15@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td>Employee 16</td>
+                            <td class="department-finance">Finance</td>
+                            <td>Associate</td>
+                            <td class="salary-low">61,234.56</td>
+                            <td>2024-04-12</td>
+                            <td>employee16@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>17</td>
+                            <td>Employee 17</td>
+                            <td class="department-engineering">Engineering</td>
+                            <td>Manager</td>
+                            <td class="salary-high">105,678.90</td>
+                            <td>2021-06-17</td>
+                            <td>employee17@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>18</td>
+                            <td>Employee 18</td>
+                            <td class="department-marketing">Marketing</td>
+                            <td>Intern</td>
+                            <td class="salary-low">45,678.90</td>
+                            <td>2024-10-05</td>
+                            <td>employee18@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>19</td>
+                            <td>Employee 19</td>
+                            <td class="department-operations">Operations</td>
+                            <td>Associate</td>
+                            <td class="salary-medium">73,456.78</td>
+                            <td>2023-07-19</td>
+                            <td>employee19@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>20</td>
+                            <td>Employee 20</td>
+                            <td class="department-sales">Sales</td>
+                            <td>Manager</td>
+                            <td class="salary-high">96,789.01</td>
+                            <td>2022-01-30</td>
+                            <td>employee20@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>21</td>
+                            <td>Employee 21</td>
+                            <td class="department-hr">HR</td>
+                            <td>Intern</td>
+                            <td class="salary-low">52,345.67</td>
+                            <td>2024-09-14</td>
+                            <td>employee21@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>22</td>
+                            <td>Employee 22</td>
+                            <td class="department-finance">Finance</td>
+                            <td>Director</td>
+                            <td class="salary-high">112,456.78</td>
+                            <td>2020-04-23</td>
+                            <td>employee22@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>23</td>
+                            <td>Employee 23</td>
+                            <td class="department-engineering">Engineering</td>
+                            <td>Associate</td>
+                            <td class="salary-medium">79,876.54</td>
+                            <td>2022-11-08</td>
+                            <td>employee23@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>24</td>
+                            <td>Employee 24</td>
+                            <td class="department-marketing">Marketing</td>
+                            <td>Senior</td>
+                            <td class="salary-medium">85,432.10</td>
+                            <td>2023-03-16</td>
+                            <td>employee24@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>25</td>
+                            <td>Employee 25</td>
+                            <td class="department-operations">Operations</td>
+                            <td>Director</td>
+                            <td class="salary-high">108,987.65</td>
+                            <td>2021-10-01</td>
+                            <td>employee25@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>26</td>
+                            <td>Employee 26</td>
+                            <td class="department-sales">Sales</td>
+                            <td>Associate</td>
+                            <td class="salary-medium">71,234.56</td>
+                            <td>2023-12-09</td>
+                            <td>employee26@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>27</td>
+                            <td>Employee 27</td>
+                            <td class="department-hr">HR</td>
+                            <td>Senior</td>
+                            <td class="salary-medium">83,456.78</td>
+                            <td>2022-05-24</td>
+                            <td>employee27@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>28</td>
+                            <td>Employee 28</td>
+                            <td class="department-finance">Finance</td>
+                            <td>Intern</td>
+                            <td class="salary-low">58,765.43</td>
+                            <td>2024-07-02</td>
+                            <td>employee28@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>29</td>
+                            <td>Employee 29</td>
+                            <td class="department-engineering">Engineering</td>
+                            <td>Director</td>
+                            <td class="salary-high">118,543.21</td>
+                            <td>2020-02-18</td>
+                            <td>employee29@company.com</td>
+                        </tr>
+                        <tr>
+                            <td>30</td>
+                            <td>Employee 30</td>
+                            <td class="department-marketing">Marketing</td>
+                            <td>Manager</td>
+                            <td class="salary-high">94,321.09</td>
+                            <td>2021-08-11</td>
+                            <td>employee30@company.com</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M7,3H21V5H19V7H21V9H19V11H21V13H19V15H21V17H19V19H21V21H7V3M9,5V7H11V5H9M13,5V7H15V5H13M17,5V7H17V5H17M9,9V11H11V9H9M13,9V11H15V9H13M17,9V11H17V9H17M9,13V15H11V13H9M13,13V15H15V13H13M17,13V15H17V13H17M9,17V19H11V17H9M13,17V19H15V17H13M17,17V19H17V17H17Z" />
+                    </svg>
+                </div>
+                <h2 class="section-title" id="section-sql">SQL生成器</h2>
+            </div>
+            <div class="sql-generator" id="sqlGenerator">
+                <pre id="sqlOutput">SELECT * FROM employees WHERE id IN (1, 2, 3);</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <p>TableHelper v2.0.0 by <a href="https://github.com/liuyueyi/TableHelper">YiHui</a></p>
+</div>
+</div>
+
+<script>
+    // 简单的演示脚本，实际功能由Table Helper插件提供
+    document.addEventListener('DOMContentLoaded', function () {
+        // 模拟插件功能的提示
+        console.log('欢迎使用Table Helper演示页面！\n\n安装Table Helper插件后，您可以：\n1. 在表格上进行精确选择\n2. 查看数据统计\n3. 生成SQL语句\n4. 复制表格数据到Excel');
+
+        // 为了演示目的，添加一些交互
+        const cells = document.querySelectorAll('td, th');
+        cells.forEach(cell => {
+            cell.addEventListener('click', function () {
+                // 添加选中效果（实际由插件处理）
+                this.classList.toggle('highlight');
+
+                // 显示统计面板（实际由插件处理）
+                document.getElementById('statsPanel').style.display = 'block';
+                document.getElementById('sqlGenerator').style.display = 'block';
+
+                // 模拟统计数据
+                document.getElementById('countValue').textContent = '5';
+                document.getElementById('sumValue').textContent = '386,543.21';
+                document.getElementById('avgValue').textContent = '77,308.64';
+                document.getElementById('maxValue').textContent = '118,543.21';
+                document.getElementById('minValue').textContent = '44,359.74';
+
+                // 模拟SQL生成
+                const sqlQuery = 'SELECT id, name, department, position, salary, hire_date, email FROM employees WHERE id IN (1, 2, 3, 5, 8);';
+                document.getElementById('sqlOutput').innerHTML =
+                    '<span class="sql-keyword">SELECT</span> id, name, department, position, salary, hire_date, email <span class="sql-keyword">FROM</span> employees <span class="sql-keyword">WHERE</span> id <span class="sql-keyword">IN</span> (1, 2, 3, 5, 8);';
+
+                // 同时更新顶部的SQL输入框
+                document.getElementById('sqlInput').value = sqlQuery;
+            });
+        });
+    });
+
+    // 美化SQL功能
+    document.getElementById('beautifySql').addEventListener('click', function () {
+        const sqlInput = document.getElementById('sqlInput');
+        const originalSql = sqlInput.value;
+        const beautifiedSql = beautifySql(originalSql);
+        sqlInput.value = beautifiedSql;
+
+        // 也可以更新下方的SQL输出显示
+        document.getElementById('sqlOutput').textContent = beautifiedSql;
+    });
+
+    function beautifySql(sql) {
+        if (!sql) return sql;
+
+        // 将SQL关键字转换为大写
+        let formattedSql = sql.toUpperCase()
+            // 在SQL关键字前后添加适当的换行和缩进
+            .replace(/\b(SELECT|FROM|WHERE|JOIN|INNER JOIN|LEFT JOIN|RIGHT JOIN|ON|ORDER BY|GROUP BY|HAVING|UNION|UNION ALL|INSERT INTO|VALUES|UPDATE|SET|DELETE FROM|CREATE TABLE|DROP TABLE|ALTER TABLE|ADD COLUMN|MODIFY COLUMN|PRIMARY KEY|FOREIGN KEY|REFERENCES|AS|DISTINCT|CASE|WHEN|THEN|ELSE|END|AND|OR|NOT|IN|EXISTS|BETWEEN|LIKE|IS NULL|IS NOT NULL)\b/g, '\n$1 ')
+            // 处理逗号，使其后面换行
+            .replace(/,/g, ',\n  ')
+            // 去除多余的空格
+            .replace(/\s+/g, ' ')
+            // 清理多余的换行符
+            .replace(/\n\s*\n/g, '\n')
+            // 去除开头的换行符
+            .trim();
+
+        // 再次处理格式，使输出更美观
+        formattedSql = formattedSql
+            .replace(/\b(FROM|WHERE|ORDER BY|GROUP BY|HAVING)\b/g, '\n  $1')
+            .replace(/\b(JOIN|INNER JOIN|LEFT JOIN|RIGHT JOIN)\b/g, '\n$1')
+            .replace(/\b(AND|OR)\b/g, '\n    $1');
+
+        return formattedSql;
+    }
+</script>
+</body>
+
+</html>

@@ -587,6 +587,32 @@ body.st-theme-metal .status-message.warning {
   border-left-color: #ffc107;
 }
 
+/* Toast notification styles */
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  padding: 12px 20px;
+  border-radius: 6px;
+  background-color: #28a745;
+  color: white;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 2147483646;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.toast.error {
+  background-color: #dc3545;
+}
+
 /* Selected cell highlight */
 .st-selected {
   outline: 1px solid #6BCB77 !important;
