@@ -8,10 +8,10 @@
 
   // Mark extension as installed
   document.documentElement.setAttribute('data-supertables-installed', 'true');
-  document.documentElement.setAttribute('data-supertables-version', '2.0.0');
+  document.documentElement.setAttribute('data-supertables-version', '2.0.1');
 
   // Dispatch custom event for pages that want to listen
   document.dispatchEvent(new CustomEvent('supertables-ready', {
-    detail: { version: '2.0.0' }
+    detail: { version: '2.0.1' }
   }));
 })();
